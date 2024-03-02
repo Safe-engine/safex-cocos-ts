@@ -1,0 +1,29 @@
+{
+  "name": "safex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean:build": "rimraf ./dist",
+    "dev": "nodemon",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "jest",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202"
+  },
+  "dependencies": {
+    "@esotericsoftware/spine-core": "^4.1.50",
+    "entityx-ts": "workspace:*",
+    "cocos-html5-ts": "1.0.12",
+    "lodash": "^4.17.21"
+  },
+  "author": "",
+  "license": "ISC"
+}
