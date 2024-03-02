@@ -1,5 +1,5 @@
 {
-  "name": "safex",
+  "name": "@safex/cocos",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@esotericsoftware/spine-core": "^4.1.50",
     "entityx-ts": "workspace:*",
-    "cocos-html5-ts": "1.0.12",
+    "cocos-html5-ts": "workspace:*",
     "lodash": "^4.17.21"
   },
   "author": "",
