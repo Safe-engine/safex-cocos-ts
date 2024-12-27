@@ -1,0 +1,65 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@esotericsoftware/spine-core':
+        specifier: ^4.1.50
+        version: 4.2.70
+      cocos-html5-ts:
+        specifier: ^1.0.16
+        version: 1.0.16
+      entityx-ts:
+        specifier: ^1.0.0
+        version: 1.0.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.17.13
+      typescript:
+        specifier: ^5.2.2
+        version: 5.7.2
+
+packages:
+
+  '@esotericsoftware/spine-core@4.2.70':
+    resolution: {integrity: sha512-J7DS6Z5tlZTOyqio1naY8K8OeRByE62AtBix/4aNUgrIFSHjPj0yDrp87UjOPKc5V5cJPasoqpmFO8By0N9egw==}
+
+  '@types/lodash@4.17.13':
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
+
+  cocos-html5-ts@1.0.16:
+    resolution: {integrity: sha512-/ONpMeE9L31v74VGFNL3mPeBxRVj6TvD2Mo9UrceamtJDje33fnsi+6Zi/GoLWqM3pvvTokjgj+eReunehLkJA==}
+
+  entityx-ts@1.0.0:
+    resolution: {integrity: sha512-AKLlU5OD1MxEoSlWOnA1pBXAfEu6gwE+gRAQ7IYZ85ZY4lFo4jXZxUOISGDW263FeMELWOV1UxpYiP6SRXaUcA==}
+
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
+  typescript@5.7.2:
+    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  '@esotericsoftware/spine-core@4.2.70': {}
+
+  '@types/lodash@4.17.13': {}
+
+  cocos-html5-ts@1.0.16: {}
+
+  entityx-ts@1.0.0: {}
+
+  lodash@4.17.21: {}
+
+  typescript@5.7.2: {}

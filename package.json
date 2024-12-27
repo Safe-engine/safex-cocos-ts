@@ -16,7 +16,8 @@
     "typecheck": "tsc"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.202"
+    "@types/lodash": "^4.14.202",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@esotericsoftware/spine-core": "^4.1.50",
