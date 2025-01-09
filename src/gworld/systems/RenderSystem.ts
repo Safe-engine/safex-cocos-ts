@@ -38,16 +38,9 @@ export class RenderSystem implements System {
         // console.log('SpriteRender', event);
         const spriteComp = event.entity.getComponent(SpriteRender)
         const { spriteFrame, texType, type } = spriteComp
-        let node
-        if (type === SpriteTypes.ANIMATION) {
-          node = new cc.Sprite(spriteFrame)
-        } else {
-          const sprite = new cc.Sprite(spriteFrame)
-          node = new ccui.ImageView(spriteFrame, texType)
-          // node.setScale9Enabled(true);
-          ;(node as ccui.ImageView).setContentSize(sprite.getContentSize())
-          // node.ignoreContentAdaptWithSize(true);
-        }
+        const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
+        // console.log('frame', spriteFrame, frame)
+        const node = new cc.Sprite(frame)
         const ett = event.entity
         spriteComp.node = ett.assign(new NodeComp(node, ett))
         break
