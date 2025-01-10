@@ -1,4 +1,5 @@
 import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+
 import { SkeletonAnimation } from '../../spine/CCSkeletonAnimation'
 import { NodeComp } from '../components/NodeComp'
 import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender } from '../components/RenderComponent'

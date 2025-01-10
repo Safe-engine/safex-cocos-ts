@@ -1,10 +1,4 @@
-import {
-  ComponentAddedEvent,
-  EntityManager,
-  EventManager,
-  EventReceive,
-  System,
-} from 'entityx-ts'
+import { ComponentAddedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
 
 import { TouchEventRegister } from '../..'
 import { Touch, Vec2 } from '../../polyfills'
@@ -66,22 +60,13 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const bar = ett.getComponent(ProgressTimerComp)
-        const {
-          spriteFrame,
-          fillType = FillType.HORIZONTAL,
-          fillRange = 1,
-          fillCenter = Vec2(0, 0),
-        } = bar
+        const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar
         const sprite = new cc.Sprite(spriteFrame)
         const pTimer = new cc.ProgressTimer(sprite)
-        const ptt =
-          fillType === FillType.RADIAL
-            ? cc.ProgressTimer.TYPE_RADIAL
-            : cc.ProgressTimer.TYPE_BAR
+        const ptt = fillType === FillType.RADIAL ? cc.ProgressTimer.TYPE_RADIAL : cc.ProgressTimer.TYPE_BAR
         pTimer.setType(ptt)
         if (fillType !== FillType.RADIAL) {
-          const rate =
-            fillType === FillType.HORIZONTAL ? cc.p(1, 0) : cc.p(0, 1)
+          const rate = fillType === FillType.HORIZONTAL ? cc.p(1, 0) : cc.p(0, 1)
           pTimer.setBarChangeRate(rate)
         }
         pTimer.setPercentage(fillRange * 100)
@@ -150,6 +135,8 @@ export class GUISystem implements System {
         const rich = ett.getComponent(RichTextComp)
         const { string = '' } = rich as any
         const node = new ccui.RichText()
+        node.width = 500
+        node.height = 300
         node.ignoreContentAdaptWithSize(false)
         rich.node = ett.assign(new NodeComp(node, ett))
         rich.setString(string)

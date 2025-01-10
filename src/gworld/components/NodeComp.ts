@@ -1,6 +1,6 @@
+import { Constructor, Entity } from 'entityx-ts'
 import remove from 'lodash/remove'
 
-import { Constructor, Entity } from 'entityx-ts'
 import { Vec2 } from '../../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 import { ExtraDataComp } from './NoRenderComponent'

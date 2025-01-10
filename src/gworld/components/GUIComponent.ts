@@ -92,17 +92,9 @@ export class RichTextComp extends ComponentX {
       this.node.instance.formatText()
       for (let index = 0; index < newTextArray.length; index++) {
         const { style, text } = newTextArray[index]
-        const color =
-          style && style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
+        const color = style && style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
         const fontName = cc.path.basename(this.font, '.ttf')
-        const richText = ccui.RichElementText.create(
-          index,
-          color,
-          255,
-          text,
-          fontName,
-          this.size || 64,
-        )
+        const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.size || 64)
         // if (style && style.newline) {
         // console.log('newline')
         // this.node.instance._addNewLine()
