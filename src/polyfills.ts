@@ -153,4 +153,6 @@ export function Size(x?: number, y?: number): Size {
   return new _Size(x, y)
 }
 
-export type Touch = cc.Touch
+export class Touch extends cc.Touch {
+  declare getLocation: () => Vec2
+}

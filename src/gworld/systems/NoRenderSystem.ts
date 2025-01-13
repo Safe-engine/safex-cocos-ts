@@ -1,6 +1,8 @@
 import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
-import { ExtraDataComp, TouchEventRegister } from '../components/NoRenderComponent'
+
+import { Touch } from '../../polyfills'
 import { NodeComp } from '../components/NodeComp'
+import { ExtraDataComp, TouchEventRegister } from '../components/NoRenderComponent'
 
 export class NoRenderSystem implements System {
   configure(event_manager: EventManager) {
@@ -21,7 +23,7 @@ export class NoRenderSystem implements System {
           {
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
-            onTouchBegan: function (touch: cc.Touch) {
+            onTouchBegan: function (touch: Touch) {
               // console.log('onTouchBegan', p)
               if (!nodeComp.parent) {
                 if (touchComp.onTouchStart) {
