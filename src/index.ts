@@ -10,26 +10,14 @@ export {
   LabelShadowComp,
   ProgressTimerComp,
   RichTextComp,
-  ScrollViewComp,
+  ScrollViewComp
 } from './gworld/components/GUIComponent'
 export { NodeComp } from './gworld/components/NodeComp'
-export {
-  EventRegister,
-  ExtraDataComp,
-  TouchEventRegister,
-} from './gworld/components/NoRenderComponent'
-export {
-  GraphicsRender,
-  NodeRender,
-  ParticleComp,
-  SpineSkeleton,
-  SpriteRender,
-} from './gworld/components/RenderComponent'
+export { EventRegister, ExtraDataComp, TouchEventRegister } from './gworld/components/NoRenderComponent'
+export { GraphicsRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender } from './gworld/components/RenderComponent'
 export { ComponentX, NoRenderComponentX } from './gworld/core/decorator'
 export { SceneComponent } from './gworld/core/Scene'
 export { CollideSystem } from './gworld/systems/CollideSystem'
-export {
-  instantiate,
-  registerSystemFnc as registerSystem,
-} from './helper/utils'
-export { Color4B, Size, type Touch, Vec2 } from './polyfills'
+export { instantiate, registerSystemFnc as registerSystem } from './helper/utils'
+export { Color4B, Size, Vec2, winSize, type Touch } from './polyfills'
+

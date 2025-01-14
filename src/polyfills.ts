@@ -102,7 +102,7 @@ export function Vec2(x?: number, y?: number): Vec2 {
   return new _Vec2(x, y)
 }
 cc.Vec2 = _Vec2
-cc.Vec2.ZERO = Object.freeze(Vec2(0, 0))
+Vec2.ZERO = cc.Vec2.ZERO = Object.freeze(Vec2(0, 0))
 
 export enum SpriteType {
   SIMPLE,
@@ -156,3 +156,5 @@ export function Size(x?: number, y?: number): Size {
 export class Touch extends cc.Touch {
   declare getLocation: () => Vec2
 }
+
+export const winSize: Size = cc.winSize
