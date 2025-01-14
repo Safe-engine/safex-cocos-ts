@@ -1,23 +1,13 @@
-export { initWorld } from './app'
-export { GameWorld } from './gworld'
-export { BoxCollider, Collider } from './gworld/components/CollideComponent'
-export {
-  BlockInputEventsComp,
-  ButtonComp,
-  FillType,
-  LabelComp,
-  LabelOutlineComp,
-  LabelShadowComp,
-  ProgressTimerComp,
-  RichTextComp,
-  ScrollViewComp
-} from './gworld/components/GUIComponent'
-export { NodeComp } from './gworld/components/NodeComp'
-export { EventRegister, ExtraDataComp, TouchEventRegister } from './gworld/components/NoRenderComponent'
-export { GraphicsRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender } from './gworld/components/RenderComponent'
-export { ComponentX, NoRenderComponentX } from './gworld/core/decorator'
-export { SceneComponent } from './gworld/core/Scene'
-export { CollideSystem } from './gworld/systems/CollideSystem'
+export * from './app'
+export * from './gworld'
+export * from './gworld/components/CollideComponent'
+export * from './gworld/components/GUIComponent'
+export * from './gworld/components/NodeComp'
+export * from './gworld/components/NoRenderComponent'
+export * from './gworld/components/RenderComponent'
+export * from './gworld/core/decorator'
+export * from './gworld/core/Scene'
+export * from './gworld/systems/CollideSystem'
 export { instantiate, registerSystemFnc as registerSystem } from './helper/utils'
-export { Color4B, Size, Vec2, winSize, type Touch } from './polyfills'
+export { Color4B, getWinSize, Size, Vec2, type Touch } from './polyfills'
 

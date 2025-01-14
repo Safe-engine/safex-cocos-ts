@@ -157,7 +157,6 @@ export class Touch extends cc.Touch {
   declare getLocation: () => Vec2
 }
 
-export let winSize: Size
-export function setWinSize(s: Size) {
-  winSize = s
+export function getWinSize(): Size {
+  return cc.director.getWinSize()
 }
