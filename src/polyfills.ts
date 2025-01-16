@@ -90,7 +90,7 @@ class _Vec2 {
 
     const dot = this.dot(other)
     let theta = dot / Math.sqrt(magSqr1 * magSqr2)
-    theta = cc.misc.clampf(theta, -1.0, 1.0)
+    theta = cc.clampf(theta, -1.0, 1.0)
     return Math.acos(theta)
   }
   public distance(other: _Vec2) {
@@ -160,3 +160,5 @@ export class Touch extends cc.Touch {
 export function getWinSize(): Size {
   return cc.director.getWinSize()
 }
+
+export const degreesToRadians = cc.degreesToRadians

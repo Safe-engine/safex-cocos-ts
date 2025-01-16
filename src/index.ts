@@ -9,5 +9,6 @@ export * from './gworld/core/decorator'
 export * from './gworld/core/Scene'
 export * from './gworld/systems/CollideSystem'
 export { instantiate, registerSystemFnc as registerSystem } from './helper/utils'
-export { Color4B, getWinSize, Size, Vec2, type Touch } from './polyfills'
+export * from './polyfills'
+export { type Touch } from './polyfills'
 
