@@ -1,19 +1,5 @@
-interface Window {
-  oipfObjectFactory: any
-  messaging: any
-  FBInstant: any
-}
-
-declare let __API_HOST__: string
-
-declare type Float = number
-declare type float = number
-declare type int = number
-declare type bool = boolean
-declare type Integer = number
-declare type Destructor = any
-declare type ComponentEvent = any
-declare type BulletArray = Array<Obstacle>
+type Float = number & { __floatBrand: 'Float' };
+type Integer = number & { __integerBrand: 'Integer' };
 
 declare namespace cc {
   declare let v2: (x?: number | any, y?: number) => Vec2
