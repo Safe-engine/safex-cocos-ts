@@ -1,3 +1,5 @@
+import { ColorSource, GraphicsRenderProps, SpriteRenderProps } from '../../../@types/safex'
+import { Vec2 } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
@@ -7,6 +9,10 @@ export class SpriteRender extends ComponentX {
   spriteFrame: string
   texType: number
   type: number
+
+  constructor(props: SpriteRenderProps) {
+    super(props)
+  }
 
   getSpriteFrame() {
     return this.spriteFrame
@@ -63,9 +69,12 @@ export class SpineSkeleton extends ComponentX {
 
 export class GraphicsRender extends ComponentX {
   lineWidth: number
-  strokeColor: cc.Color
-  fillColor: cc.Color
-  from: cc.Point
+  strokeColor: ColorSource
+  fillColor: ColorSource
+  from: Vec2
+  constructor(props: GraphicsRenderProps) {
+    super(props)
+  }
 
   circle(x, y, r) {
     if (this.node.instance instanceof cc.DrawNode) {
@@ -74,7 +83,7 @@ export class GraphicsRender extends ComponentX {
   }
 
   moveTo(x, y) {
-    this.from = cc.p(x, y)
+    this.from = Vec2(x, y)
   }
 
   lineTo(x, y) {

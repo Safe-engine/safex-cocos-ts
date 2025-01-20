@@ -1,3 +1,4 @@
+import { ButtonCompProps, LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps } from '../../../@types/safex'
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
@@ -21,6 +22,10 @@ export class ButtonComp extends NoRenderComponentX {
   clickEvents = []
   onPress: (target: NodeComp) => void
 
+  constructor(props: ButtonCompProps) {
+    super(props)
+  }
+
   setOnPress(cb: (target: NodeComp) => void) {
     this.onPress = cb
   }
@@ -36,7 +41,9 @@ export class ProgressTimerComp extends ComponentX {
   fillRange: number
   fillCenter: Vec2
   isReverse: boolean
-
+  constructor(props: ProgressTimerProps & { $ref?: ProgressTimerComp }) {
+    super(props)
+  }
   getFillRange() {
     if (this.node.instance instanceof cc.ProgressTimer) {
       return this.node.instance.getPercentage() * 0.01
@@ -60,7 +67,9 @@ export class LabelComp extends ComponentX {
   protected font: string
   protected string: string
   protected size: number
-
+  constructor(props: LabelCompProps) {
+    super(props)
+  }
   getString() {
     return this.string
   }
@@ -77,7 +86,9 @@ export class RichTextComp extends ComponentX {
   protected font: string
   protected string: string
   protected size: number
-
+  constructor(props: LabelCompProps) {
+    super(props)
+  }
   getString() {
     return this.string
   }
@@ -108,12 +119,18 @@ export class RichTextComp extends ComponentX {
 export class LabelOutlineComp extends NoRenderComponentX {
   color: typeof Color4B
   width: Float
+  constructor(props: LabelOutlineCompProps) {
+    super(props)
+  }
 }
 
 export class LabelShadowComp extends NoRenderComponentX {
   color: typeof Color4B
   blur: Float
   offset: Size
+  constructor(props: LabelShadowCompProps) {
+    super(props)
+  }
 }
 
 export class ScrollViewComp extends ComponentX {

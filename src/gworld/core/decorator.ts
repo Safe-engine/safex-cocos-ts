@@ -9,7 +9,9 @@ export class NoRenderComponentX extends EnhancedComponent {
 }
 
 export class ComponentX extends EnhancedComponent {
+  render?(data?: any): any
   static create(data?: any) {
+    if (this.prototype.render) return this.prototype.render(data)
     const world = GameWorld.Instance
     const root = world.entities.create()
     const comp = root.assign(new this(data))
