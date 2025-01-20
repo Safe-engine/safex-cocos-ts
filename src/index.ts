@@ -1,4 +1,5 @@
 export * from './app'
+export * from './dragonbones'
 export * from './gworld'
 export * from './gworld/components/CollideComponent'
 export * from './gworld/components/GUIComponent'

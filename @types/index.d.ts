@@ -17,6 +17,7 @@ declare namespace cc {
   }
   declare interface TextureCache {
     addImage(texturePath: string): Texture2D
+    getTextureForKey(key: string): Texture2D
   }
 
   declare let misc: Misc
