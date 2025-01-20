@@ -6,17 +6,15 @@ import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 import { ExtraDataComp } from './NoRenderComponent'
 
 export type EventCallbackType = (...args) => void
-export class NodeComp {
+export class NodeComp<C extends cc.Node = cc.Node> {
   entity: Entity
-  instance: cc.Node
+  instance: C
   parent: NodeComp
   children: NodeComp[] = []
-  // offset: cc.Point = Vec2(0, 0);
   name: string
-  private lastMove: { x: any; y: any }
   private _group
 
-  constructor(instance: cc.Node, entity: Entity) {
+  constructor(instance: C, entity: Entity) {
     this.entity = entity
     this.instance = instance
   }

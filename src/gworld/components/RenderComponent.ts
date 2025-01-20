@@ -5,7 +5,7 @@ export class NodeRender extends ComponentX {
   nodeName: string
 }
 
-export class SpriteRender extends ComponentX {
+export class SpriteRender extends ComponentX<cc.Sprite> {
   spriteFrame: string
   texType: number
   type: number
@@ -20,29 +20,29 @@ export class SpriteRender extends ComponentX {
 
   setSpriteFrame(frame) {
     this.spriteFrame = frame
-    if (this.node.instance instanceof cc.Sprite) {
-      this.node.instance.setTexture(frame)
-    } else if (this.node.instance instanceof ccui.ImageView) {
-      if (this.texType) {
-        this.node.instance.loadTexture(frame, this.texType)
-      } else {
-        this.node.instance.loadTexture(frame)
-      }
-      const sprite = new cc.Sprite(frame)
-      this.node.setContentSize(sprite.getContentSize())
-    } else if (this.node.instance instanceof ccui.Button) {
-      this.node.instance.loadTextureNormal(frame)
-    }
+    // if (this.node.instance instanceof cc.Sprite) {
+    this.node.instance.setTexture(frame)
+    // } else if (this.node.instance instanceof ccui.ImageView) {
+    //   if (this.texType) {
+    //     this.node.instance.loadTexture(frame, this.texType)
+    //   } else {
+    //     this.node.instance.loadTexture(frame)
+    //   }
+    //   const sprite = new cc.Sprite(frame)
+    //   this.node.setContentSize(sprite.getContentSize())
+    // } else if (this.node.instance instanceof ccui.Button) {
+    //   this.node.instance.loadTextureNormal(frame)
+    // }
   }
 }
 
-export class MaskRender extends ComponentX {
+export class MaskRender extends ComponentX<cc.ClippingNode> {
   type: number
   segments: number
   inverted: boolean
 }
 
-export class ParticleComp extends ComponentX {
+export class ParticleComp extends ComponentX<cc.ParticleSystem> {
   plistFile: string
 }
 
@@ -67,7 +67,7 @@ export class SpineSkeleton extends ComponentX {
   }
 }
 
-export class GraphicsRender extends ComponentX {
+export class GraphicsRender extends ComponentX<cc.DrawNode> {
   lineWidth: number
   strokeColor: ColorSource
   fillColor: ColorSource
@@ -92,9 +92,9 @@ export class GraphicsRender extends ComponentX {
     }
   }
 
-  fill() {}
+  fill() { }
 
-  stroke() {}
+  stroke() { }
 
   clear() {
     if (this.node.instance instanceof cc.DrawNode) {

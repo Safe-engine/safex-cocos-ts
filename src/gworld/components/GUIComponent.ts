@@ -63,7 +63,7 @@ export class ProgressTimerComp extends ComponentX {
   }
 }
 
-export class LabelComp extends ComponentX {
+export class LabelComp extends ComponentX<ccui.Text> {
   protected font: string
   protected string: string
   protected size: number
@@ -82,7 +82,7 @@ export class LabelComp extends ComponentX {
   }
 }
 
-export class RichTextComp extends ComponentX {
+export class RichTextComp extends ComponentX<ccui.RichText> {
   protected font: string
   protected string: string
   protected size: number
@@ -133,7 +133,7 @@ export class LabelShadowComp extends NoRenderComponentX {
   }
 }
 
-export class ScrollViewComp extends ComponentX {
+export class ScrollViewComp extends ComponentX<cc.ScrollView> {
   protected viewSize: Size
   protected contentSize: Size
 }

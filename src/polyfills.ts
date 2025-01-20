@@ -161,4 +161,3 @@ export function getWinSize(): Size {
   return cc.director.getWinSize()
 }
 
-export const degreesToRadians = cc.degreesToRadians
