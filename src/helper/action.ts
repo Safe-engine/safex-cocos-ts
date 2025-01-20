@@ -1,4 +1,4 @@
-import { Vec2 } from 'safex'
+import { Vec2 } from "../polyfills"
 
 export function moveTo(t: number, to: Vec2) {
   return cc.moveTo(t, to)

@@ -20,7 +20,7 @@ export class AnimationSystem implements System {
         break
     }
   }
-  update(entities: EntityManager, events: EventManager, dt: number) {
+  update(entities: EntityManager, events: EventManager, dt: Float) {
     const animations = entities.entities_with_components(AnimationComp)
     // cc.log(animations);
     animations.forEach((ett) => {

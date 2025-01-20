@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@esotericsoftware/spine-core':
-        specifier: ^4.1.50
+        specifier: ^4.2.70
         version: 4.2.70
       cocos-html5-ts:
-        specifier: ^1.0.16
-        version: 1.0.16
+        specifier: ^1.1.3
+        version: 1.1.3
       entityx-ts:
         specifier: ^1.0.0
         version: 1.0.0
@@ -22,22 +22,22 @@ importers:
         version: 4.17.21
     devDependencies:
       '@types/lodash':
-        specifier: ^4.14.202
-        version: 4.17.13
+        specifier: ^4.17.14
+        version: 4.17.14
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.2
+        specifier: ^5.7.3
+        version: 5.7.3
 
 packages:
 
   '@esotericsoftware/spine-core@4.2.70':
     resolution: {integrity: sha512-J7DS6Z5tlZTOyqio1naY8K8OeRByE62AtBix/4aNUgrIFSHjPj0yDrp87UjOPKc5V5cJPasoqpmFO8By0N9egw==}
 
-  '@types/lodash@4.17.13':
-    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
+  '@types/lodash@4.17.14':
+    resolution: {integrity: sha512-jsxagdikDiDBeIRaPYtArcT8my4tN1og7MtMRquFT3XNA6axxyHDRUemqDz/taRDdOUn0GnGHRCuff4q48sW9A==}
 
-  cocos-html5-ts@1.0.16:
-    resolution: {integrity: sha512-/ONpMeE9L31v74VGFNL3mPeBxRVj6TvD2Mo9UrceamtJDje33fnsi+6Zi/GoLWqM3pvvTokjgj+eReunehLkJA==}
+  cocos-html5-ts@1.1.3:
+    resolution: {integrity: sha512-41eWG1wwZVFuQJZ+jTvaDpxII/8840L3TPnEPxT4dXmBYdZe4u4QWjqJW7XXdNCrxTSS7eKVbNklEaI+Pi/H0A==}
 
   entityx-ts@1.0.0:
     resolution: {integrity: sha512-AKLlU5OD1MxEoSlWOnA1pBXAfEu6gwE+gRAQ7IYZ85ZY4lFo4jXZxUOISGDW263FeMELWOV1UxpYiP6SRXaUcA==}
@@ -45,8 +45,8 @@ packages:
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
-  typescript@5.7.2:
-    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+  typescript@5.7.3:
+    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -54,12 +54,12 @@ snapshots:
 
   '@esotericsoftware/spine-core@4.2.70': {}
 
-  '@types/lodash@4.17.13': {}
+  '@types/lodash@4.17.14': {}
 
-  cocos-html5-ts@1.0.16: {}
+  cocos-html5-ts@1.1.3: {}
 
   entityx-ts@1.0.0: {}
 
   lodash@4.17.21: {}
 
-  typescript@5.7.2: {}
+  typescript@5.7.3: {}

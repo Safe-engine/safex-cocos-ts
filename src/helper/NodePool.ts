@@ -1,4 +1,4 @@
-import { NodeComp } from "safex"
+import { NodeComp } from "../gworld/components/NodeComp"
 
 export class NodePool {
   items: NodeComp[] = []
