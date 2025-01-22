@@ -1,3 +1,4 @@
+import { setupDragonBones } from './dragonbones'
 import { GameWorld } from './gworld'
 import { CollideSystem } from './gworld/systems/CollideSystem'
 import { GUISystem } from './gworld/systems/GUISystem'
@@ -17,4 +18,5 @@ export function initWorld() {
   GameWorld.Instance.systems.configureOnce(CollideSystem)
   GameWorld.Instance.systems.configureOnce(GUISystem)
   GameWorld.Instance.systems.configureOnce(NoRenderSystem)
+  setupDragonBones()
 }

@@ -8,6 +8,7 @@ import {
   System,
 } from 'entityx-ts'
 
+import { DragonBonesData, DragonBonesProps } from '../../@types/safex'
 import { GameWorld } from '../gworld'
 import { NodeComp } from '../gworld/components/NodeComp'
 import { ComponentX } from '../gworld/core/decorator'
@@ -16,12 +17,16 @@ import { CocosFactory } from './cocos/CocosFactory'
 // import { dragonBones } from './dragonBones'
 
 export class DragonBones extends ComponentX {
-  data: string
+  data: DragonBonesData
   atlas: string
   skin: string
   animation: string
   loop: boolean
   timeScale: number
+
+  constructor(props: DragonBonesProps) {
+    super(props)
+  }
 
   setAnimation(name: string, loop = false) {
     const skel: any = this.node.instance
@@ -50,33 +55,23 @@ export class DragonBonesSystem implements System {
         console.log('DragonBones', event);
         const ett = event.entity
         const dbComp = event.entity.getComponent(DragonBones)
-        const { data: skel, atlas, animation, loop, timeScale } = dbComp
-        const texturePath = atlas.replace('.json', '.png')
-        console.log(skel, atlas, texturePath);
-        cc.textureCache.addImage(texturePath)
+        const { data, animation, loop, timeScale } = dbComp
+        // const texturePath = atlas.replace('.json', '.png')
+        const { atlas, skeleton, texture } = data
+        // cc.textureCache.addImage(texture)
         const factory = CocosFactory.factory;
-        const dataSkel = cc.loader.getRes(skel);
+        const dataSkel = cc.loader.getRes(skeleton);
         const dataAtlas = cc.loader.getRes(atlas);
-        const texture = cc.textureCache.getTextureForKey(texturePath)
+        const textureCache = cc.textureCache.getTextureForKey(texture)
         // texture.initWithFile(texturePath);
         factory.parseDragonBonesData(dataSkel);
 
-        factory.parseTextureAtlasData(dataAtlas, texture);
+        factory.parseTextureAtlasData(dataAtlas, textureCache);
 
         // factory.loadDragonBonesData(skel);
-
-        const armature = factory.buildArmature('armatureName');
+        // console.log(skeleton, dataSkel);
+        const armature = factory.buildArmature(dataSkel.armature[0].name);
         // console.log('armature', armature)
-        // this.addChild(armature.getDisplay());
-
-        // const texture = cc.TextureCache.getInstance().addImage(texturePath);
-        // const textureData = getJsonData('texture.json');
-        // const skeletonData = getJsonData('skeleton.json');
-
-        // const factory = new dragonBones.factorys.Cocos2DFactory();
-        // factory.addSkeletonData(dragonBones.objects.DataParser.parseSkeletonData(skeletonData));
-        // factory.addTextureAtlas(new dragonBones.textures.Cocos2DTextureAtlas(texture, textureData));
-        // const armature = factory.buildArmature('Dragon');
         const node = armature.getDisplay();
         console.log('node', node)
         WorldClock.clock.add(armature);
