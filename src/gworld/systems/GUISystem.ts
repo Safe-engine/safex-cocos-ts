@@ -37,14 +37,14 @@ export class GUISystem implements System {
         button.node = nodeComp
         const touchComp = ett.assign(new TouchEventRegister())
         touchComp.setOnTouchStart(function (touch: Touch) {
-          // console.log('onTouchBegan', p)
           const p = touch.getLocation()
+          // console.log('onTouchBegan', p, nodeComp)
           const rect = nodeComp.getBoundingBox()
           const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
           if (rect.contains(nodeSpaceLocation)) {
             const scale = cc.scaleTo(0.3, 1.2)
             nodeComp.runAction(scale)
-            button.onPress(nodeComp)
+            button.onPress(button)
             return true
           }
         })

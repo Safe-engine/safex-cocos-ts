@@ -210,7 +210,7 @@ gworld.Skeleton = cc.Node.extend(
         const attachment = slot.attachment
         if (!attachment || !(attachment instanceof spine.RegionAttachment)) continue
         vertices = spine.Utils.setArraySize([], 8, 0)
-        attachment.computeWorldVertices(slot.bone, vertices, 0, 2)
+        attachment.computeWorldVertices(slot, vertices, 0, 2)
         minX = Math.min(
           minX,
           vertices[VERTEX.X1] * scaleX,

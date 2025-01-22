@@ -1,4 +1,4 @@
-import spine from '@esotericsoftware/spine-core'
+import spine from '@esotericsoftware/spine-core';
 /****************************************************************************
  Copyright (c) 2013-2014 Chukong Technologies Inc.
 
@@ -114,7 +114,7 @@ var gworld = gworld || {}
     if (!points) return
 
     const vertices = spine.Utils.setArraySize([], 8, 0)
-    attachment.computeWorldVertices(slot.bone, vertices, 0, 2)
+    attachment.computeWorldVertices(slot, vertices, 0, 2)
     const VERTEX = spine.RegionAttachment
     points.length = 0
     points.push(cc.p(vertices[VERTEX.X1], vertices[VERTEX.Y1]))

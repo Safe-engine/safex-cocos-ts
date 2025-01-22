@@ -2,7 +2,6 @@ import { ButtonCompProps, LabelCompProps, LabelOutlineCompProps, LabelShadowComp
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
-import { NodeComp } from './NodeComp'
 
 export const FillType = {
   HORIZONTAL: 0,
@@ -20,13 +19,13 @@ export class ButtonComp extends NoRenderComponentX {
   zoomScale: number
   texType: ccui.Widget.TextureType
   clickEvents = []
-  onPress: (target: NodeComp) => void
+  onPress: (target: ButtonComp) => void
 
   constructor(props: ButtonCompProps) {
     super(props)
   }
 
-  setOnPress(cb: (target: NodeComp) => void) {
+  setOnPress(cb: (target: ButtonComp) => void) {
     this.onPress = cb
   }
 

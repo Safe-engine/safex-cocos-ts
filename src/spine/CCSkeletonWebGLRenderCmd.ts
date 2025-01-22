@@ -1,4 +1,4 @@
-import * as spine from '@esotericsoftware/spine-core'
+import * as spine from '@esotericsoftware/spine-core';
 /****************************************************************************
  Copyright (c) 2013-2014 Chukong Technologies Inc.
 
@@ -238,7 +238,7 @@ var gworld = gworld || {}
       nodeA = this._displayedOpacity
 
     const vertices = spine.Utils.setArraySize([], 8, 0)
-    attachment.computeWorldVertices(slot.bone, vertices, 0, 2)
+    attachment.computeWorldVertices(slot, vertices, 0, 2)
 
     const uvs = attachment.uvs
 

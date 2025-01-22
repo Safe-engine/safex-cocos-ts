@@ -69,13 +69,13 @@ export class RenderSystem implements System {
       }
 
       case ComponentAddedEvent(SpineSkeleton): {
-        // cc.log('MaskRender', event.component);
+        // console.log('SpineSkeleton', event.component);
         const ett = event.entity
         const spine = event.entity.getComponent(SpineSkeleton)
-        const { data: skel, skin, animation, loop, timeScale } = spine
-        const atlas = skel.replace('.json', '.atlas')
+        const { data, skin, animation, loop, timeScale = 1 } = spine
+        const { atlas, skeleton } = data
         // cc.log(skel, atlas);
-        const node = SkeletonAnimation.createWithJsonFile(skel, atlas, timeScale)
+        const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
         if (skin) {
           node.setSkin(skin)
         }

@@ -1,4 +1,4 @@
-import { ColorSource, GraphicsRenderProps, SpriteRenderProps } from '../../../@types/safex'
+import { ColorSource, GraphicsRenderProps, SpineData, SpriteRenderProps } from '../../../@types/safex'
 import { Vec2 } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
@@ -47,7 +47,7 @@ export class ParticleComp extends ComponentX<cc.ParticleSystem> {
 }
 
 export class SpineSkeleton extends ComponentX {
-  data: string
+  data: SpineData
   skin: string
   animation: string
   loop: boolean
