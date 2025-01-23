@@ -3,7 +3,7 @@ import flatten from 'lodash/flatten'
 import max from 'lodash/max'
 import min from 'lodash/min'
 
-import { BoxColliderProps, CircleColliderProps, ColliderProps, PolygonColliderProps } from '../../../@types/safex'
+import { BoxColliderProps, CircleColliderProps, PolygonColliderProps } from '../../../@types/safex'
 import { Vec2 } from '../../polyfills'
 import { NoRenderComponentX } from '../core/decorator'
 import { NodeComp } from './NodeComp'
@@ -19,7 +19,7 @@ function cloneRect(origin) {
   return cc.rect(origin.x, origin.y, origin.width, origin.height)
 }
 
-export class Collider extends NoRenderComponentX {
+export class Collider<T = {}> extends NoRenderComponentX<T> {
   offset: Vec2
   tag: number
   enabled = true
@@ -31,10 +31,7 @@ export class Collider extends NoRenderComponentX {
   onCollisionEnter?: (other?: NodeComp, target?: NodeComp) => void
   onCollisionExit?: (other?: NodeComp, target?: NodeComp) => void
   onCollisionStay?: (other?: NodeComp, target?: NodeComp) => void
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(props: ColliderProps) {
-    super(props)
-  }
+
   update(dt: number, draw?: cc.DrawNode) { }
   getAABB() {
     return this._AABB
@@ -59,12 +56,10 @@ export class Collider extends NoRenderComponentX {
   }
 }
 
-export class BoxCollider extends Collider {
+export class BoxCollider extends Collider<BoxColliderProps> {
   width: number
   height: number
-  constructor(props: BoxColliderProps) {
-    super(props)
-  }
+
   get size() {
     return cc.size(this.width, this.height)
   }
@@ -104,11 +99,9 @@ export class BoxCollider extends Collider {
   }
 }
 
-export class CircleCollider extends Collider {
+export class CircleCollider extends Collider<CircleColliderProps> {
   radius: number
-  constructor(props: CircleColliderProps) {
-    super(props)
-  }
+
   update(dt, draw: cc.DrawNode) {
     if (!this.node) {
       return
@@ -132,11 +125,9 @@ export class CircleCollider extends Collider {
   }
 }
 
-export class PolygonCollider extends Collider {
+export class PolygonCollider extends Collider<PolygonColliderProps> {
   _points: number[]
-  constructor(props: PolygonColliderProps) {
-    super(props)
-  }
+
   get points(): cc.Vec2[] {
     const { x, y } = this.offset
     const pointsList = chunk(this._points, 2).map(([px, py]) => Vec2(px + x, py + y))

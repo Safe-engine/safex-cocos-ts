@@ -12,7 +12,7 @@ type Keys = keyof typeof FillType
 type Values = (typeof FillType)[Keys]
 const _htmlTextParser = new HtmlTextParser()
 
-export class ButtonComp extends NoRenderComponentX {
+export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
   normalImage: string
   selectedImage: string
   disableImage: string
@@ -20,10 +20,6 @@ export class ButtonComp extends NoRenderComponentX {
   texType: ccui.Widget.TextureType
   clickEvents = []
   onPress: (target: ButtonComp) => void
-
-  constructor(props: ButtonCompProps) {
-    super(props)
-  }
 
   setOnPress(cb: (target: ButtonComp) => void) {
     this.onPress = cb
@@ -34,15 +30,13 @@ export class ButtonComp extends NoRenderComponentX {
   }
 }
 
-export class ProgressTimerComp extends ComponentX {
+export class ProgressTimerComp extends ComponentX<ProgressTimerProps & { $ref?: ProgressTimerComp }> {
   spriteFrame: string
   fillType: Values
   fillRange: number
   fillCenter: Vec2
   isReverse: boolean
-  constructor(props: ProgressTimerProps & { $ref?: ProgressTimerComp }) {
-    super(props)
-  }
+
   getFillRange() {
     if (this.node.instance instanceof cc.ProgressTimer) {
       return this.node.instance.getPercentage() * 0.01
@@ -62,13 +56,11 @@ export class ProgressTimerComp extends ComponentX {
   }
 }
 
-export class LabelComp extends ComponentX<ccui.Text> {
+export class LabelComp extends ComponentX<LabelCompProps, ccui.Text> {
   protected font: string
   protected string: string
   protected size: number
-  constructor(props: LabelCompProps) {
-    super(props)
-  }
+
   getString() {
     return this.string
   }
@@ -81,13 +73,11 @@ export class LabelComp extends ComponentX<ccui.Text> {
   }
 }
 
-export class RichTextComp extends ComponentX<ccui.RichText> {
+export class RichTextComp extends ComponentX<LabelCompProps, ccui.RichText> {
   protected font: string
   protected string: string
   protected size: number
-  constructor(props: LabelCompProps) {
-    super(props)
-  }
+
   getString() {
     return this.string
   }
@@ -115,21 +105,15 @@ export class RichTextComp extends ComponentX<ccui.RichText> {
   }
 }
 
-export class LabelOutlineComp extends NoRenderComponentX {
+export class LabelOutlineComp extends NoRenderComponentX<LabelOutlineCompProps> {
   color: typeof Color4B
   width: Float
-  constructor(props: LabelOutlineCompProps) {
-    super(props)
-  }
 }
 
-export class LabelShadowComp extends NoRenderComponentX {
+export class LabelShadowComp extends NoRenderComponentX<LabelShadowCompProps> {
   color: typeof Color4B
   blur: Float
   offset: Size
-  constructor(props: LabelShadowCompProps) {
-    super(props)
-  }
 }
 
 export class ScrollViewComp extends ComponentX<cc.ScrollView> {

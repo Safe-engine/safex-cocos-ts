@@ -1,4 +1,5 @@
 import { Constructor, Entity } from 'entityx-ts'
+import { BaseComponentProps } from '../../../@types/safex'
 import { NodeComp } from './NodeComp'
 
 export interface BaseNode<C> {
@@ -12,9 +13,8 @@ export interface BaseNode<C> {
   // isEqual(other: EnhancedComponent): boolean
 }
 
-export class EnhancedComponent<N extends BaseNode<any> = BaseNode<any>> {
-  constructor(...args: any[]) {
-    const [data] = args
+export class EnhancedComponent<Props = Object, N extends BaseNode<any> = BaseNode<any>> {
+  constructor(data?: BaseComponentProps & Props) {
     if (data) {
       // console.log('constructor', this.constructor.name, data)
       Object.keys(data).forEach((key) => {

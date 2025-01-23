@@ -16,17 +16,13 @@ import { CocosFactory } from './cocos/CocosFactory'
 
 // import { dragonBones } from './dragonBones'
 
-export class DragonBones extends ComponentX {
+export class DragonBones extends ComponentX<DragonBonesProps> {
   data: DragonBonesData
   atlas: string
   skin: string
   animation: string
   loop: boolean
   timeScale: number
-
-  constructor(props: DragonBonesProps) {
-    super(props)
-  }
 
   setAnimation(name: string, loop = false) {
     const skel: any = this.node.instance

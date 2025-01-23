@@ -398,7 +398,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     }
   }
 
-  resolveComponent(component: EnhancedComponent<NodeComp>) {
+  resolveComponent(component: EnhancedComponent<{}, NodeComp>) {
     if ((component.constructor as any).hasRender) {
       this.addChild(component.node)
     } else {

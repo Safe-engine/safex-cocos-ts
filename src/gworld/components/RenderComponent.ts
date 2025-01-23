@@ -1,18 +1,14 @@
-import { ColorSource, GraphicsRenderProps, SpineData, SpriteRenderProps } from '../../../@types/safex'
+import { ColorSource, GraphicsRenderProps, SpineData, SpineSkeletonProps, SpriteRenderProps } from '../../../@types/safex'
 import { Vec2 } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
 }
 
-export class SpriteRender extends ComponentX<cc.Sprite> {
+export class SpriteRender extends ComponentX<SpriteRenderProps, cc.Sprite> {
   spriteFrame: string
   texType: number
   type: number
-
-  constructor(props: SpriteRenderProps) {
-    super(props)
-  }
 
   getSpriteFrame() {
     return this.spriteFrame
@@ -46,7 +42,7 @@ export class ParticleComp extends ComponentX<cc.ParticleSystem> {
   plistFile: string
 }
 
-export class SpineSkeleton extends ComponentX {
+export class SpineSkeleton extends ComponentX<SpineSkeletonProps> {
   data: SpineData
   skin: string
   animation: string
@@ -67,7 +63,7 @@ export class SpineSkeleton extends ComponentX {
   }
 }
 
-export class GraphicsRender extends ComponentX<cc.DrawNode> {
+export class GraphicsRender extends ComponentX<GraphicsRenderProps, cc.DrawNode> {
   lineWidth: number
   strokeColor: ColorSource
   fillColor: ColorSource
