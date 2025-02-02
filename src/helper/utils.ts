@@ -2,7 +2,7 @@ import { ComponentAddedEvent, ComponentRemovedEvent, Constructor, EntityManager,
 import { CollideSystem, Collider, ComponentX, NodeComp } from '..'
 import { GameWorld } from '../gworld'
 
-export function registerSystemFnc<T extends ComponentX>(component: Constructor<T>) {
+export function registerSystem<T extends ComponentX>(component: Constructor<T>) {
   if (GameWorld.Instance.systems.isRegistered(`${component.name}System`)) {
     return
   }

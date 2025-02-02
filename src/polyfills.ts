@@ -9,13 +9,14 @@ class _Vec2 {
   x: number
   y: number
   static ZERO
-  constructor(x = 0, y = 0) {
+  constructor(x: number | object = 0, y = 0) {
     if (!(this instanceof _Vec2)) {
       return new _Vec2(x, y)
     }
-    if (y === undefined) {
+    if (typeof x === 'object') {
       this.x = (x as any).x
       this.y = (x as any).y
+      return
     }
     this.x = x
     this.y = y
@@ -131,6 +132,8 @@ cc.Intersection = {
 export function Color4B(r: number, g: number, b: number, a: number) {
   return cc.color(r, g, b, a)
 }
+export type Color4B = ReturnType<typeof Color4B>
+
 class _Size {
   width: number
   height: number

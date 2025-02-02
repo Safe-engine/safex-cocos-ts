@@ -13,7 +13,7 @@ export * from './helper/action'
 export * from './helper/director'
 export * from './helper/math'
 export * from './helper/NodePool'
-export { instantiate, registerSystemFnc as registerSystem } from './helper/utils'
+export * from './helper/utils'
 export * from './polyfills'
 export { type Touch } from './polyfills'
 
