@@ -1,6 +1,7 @@
 import { Constructor, Entity } from 'entityx-ts'
 import remove from 'lodash/remove'
 
+import { instantiate } from '../../helper/utils'
 import { Vec2 } from '../../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 import { ExtraDataComp } from './NoRenderComponent'
@@ -392,7 +393,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   setData<T>(key: string, value: T) {
     const data = this.getComponent(ExtraDataComp)
     if (!data) {
-      this.addComponent(ExtraDataComp.create({ key, value }))
+      this.addComponent(instantiate(ExtraDataComp,{ key, value }))
     } else {
       data.setData(key, value)
     }

@@ -1,5 +1,5 @@
-import { ColorSource, GraphicsRenderProps, SpineData, SpineSkeletonProps, SpriteRenderProps } from '../../../@types/safex'
-import { Vec2 } from '../../polyfills'
+import { GraphicsRenderProps, SpineData, SpineSkeletonProps, SpriteRenderProps } from '../../../@types/safex'
+import { BLUE, RED } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
@@ -64,24 +64,13 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps> {
 }
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps, cc.DrawNode> {
-  lineWidth: number
-  strokeColor: ColorSource
-  fillColor: ColorSource
-  from: Vec2
+  lineWidth = 5
+  strokeColor = RED
+  fillColor = BLUE
 
   circle(x, y, r) {
     if (this.node.instance instanceof cc.DrawNode) {
       this.node.instance.drawDot(cc.p(x, y), r, this.fillColor)
-    }
-  }
-
-  moveTo(x, y) {
-    this.from = Vec2(x, y)
-  }
-
-  lineTo(x, y) {
-    if (this.node.instance instanceof cc.DrawNode) {
-      this.node.instance.drawSegment(this.from, cc.p(x, y), this.lineWidth, this.strokeColor)
     }
   }
 

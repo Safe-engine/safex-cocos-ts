@@ -113,11 +113,11 @@ export enum SpriteType {
   MESH,
 }
 
-cc.Color.WHITE = cc.color(255, 255, 255, 255)
-cc.Color.BLACK = cc.color(0, 0, 0, 255)
-cc.Color.RED = cc.color(255, 0, 0, 255)
-cc.Color.GREEN = cc.color(0, 255, 0, 255)
-cc.Color.BLUE = cc.color(0, 0, 255, 255)
+export const RED = Color4B(255, 0, 0, 255)
+export const BLACK = Color4B(0, 0, 0, 255)
+export const WHITE = Color4B(255, 255, 255, 255)
+export const GREEN = Color4B(0, 255, 0, 255)
+export const BLUE = Color4B(0, 0, 255, 255)
 cc.Color.DEBUG_FILL_COLOR = cc.color(255, 255, 0, 150)
 cc.Color.DEBUG_BORDER_COLOR = cc.color(255, 0, 0, 255)
 cc.Color.prototype.fromHEX = cc.hexToColor
