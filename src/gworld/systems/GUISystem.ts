@@ -1,7 +1,7 @@
 import { ComponentAddedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
 
 import { TouchEventRegister } from '../..'
-import { Touch, Vec2 } from '../../polyfills'
+import { Vec2 } from '../../polyfills'
 import {
   BlockInputEventsComp,
   ButtonComp,
@@ -36,7 +36,7 @@ export class GUISystem implements System {
         // const { normalImage, selectedImage, disableImage, texType, zoomScale } = button
         button.node = nodeComp
         const touchComp = ett.assign(new TouchEventRegister())
-        touchComp.setOnTouchStart(function (touch: Touch) {
+        touchComp.props.onTouchStart = function (touch) {
           const p = touch.getLocation()
           // console.log('onTouchBegan', p, nodeComp)
           const rect = nodeComp.getBoundingBox()
@@ -44,23 +44,23 @@ export class GUISystem implements System {
           if (rect.contains(nodeSpaceLocation)) {
             const scale = cc.scaleTo(0.3, 1.2)
             nodeComp.runAction(scale)
-            button.onPress(button)
-            return true
+            button.props.onPress(button)
+            // return true
           }
-        })
-        touchComp.setOnTouchEnd(function () {
+        }
+        touchComp.props.onTouchEnd = function () {
           const scale = cc.scaleTo(0.3, 1)
           nodeComp.runAction(scale)
-          return true
-        })
-        touchComp.setOnTouchCancel(touchComp.onTouchEnd)
+          // return true
+        }
+        touchComp.props.onTouchCancel = touchComp.props.onTouchEnd
         break
       }
       case ComponentAddedEvent(ProgressTimerComp): {
         console.log(event.component)
         const ett = event.entity
         const bar = ett.getComponent(ProgressTimerComp)
-        const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar
+        const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar.props
         const sprite = new cc.Sprite(spriteFrame)
         const pTimer = new cc.ProgressTimer(sprite)
         const ptt = fillType === FillType.RADIAL ? cc.ProgressTimer.TYPE_RADIAL : cc.ProgressTimer.TYPE_BAR
@@ -87,7 +87,7 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const label = ett.getComponent(LabelComp)
-        const { string = '', font = '', size = 64 } = label as any
+        const { string = '', font = '', size = 64 } = label.props
         const fontName = cc.path.basename(font, '.ttf')
         const node = new ccui.Text(string, fontName, size)
         node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
@@ -98,7 +98,7 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const outline = ett.getComponent(LabelOutlineComp)
-        const { color, width } = outline
+        const { color, width } = outline.props
         const node = event.entity.getComponent(NodeComp)
         if (node.instance instanceof ccui.Text) {
           node.instance.enableOutline(color, width)
@@ -109,7 +109,7 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const outline = ett.getComponent(LabelShadowComp)
-        const { color, blur, offset } = outline
+        const { color, blur, offset } = outline.props
         const node = event.entity.getComponent(NodeComp)
         if (node.instance instanceof ccui.Text) {
           node.instance.enableShadow(color, offset, blur)
@@ -133,13 +133,13 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const rich = ett.getComponent(RichTextComp)
-        const { string = '' } = rich as any
+        const { string = '' } = rich.props
         const node = new ccui.RichText()
         node.width = 500
         node.height = 300
         node.ignoreContentAdaptWithSize(false)
         rich.node = ett.assign(new NodeComp(node, ett))
-        rich.setString(string)
+        rich.string = string
         break
       }
 

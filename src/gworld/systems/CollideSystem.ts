@@ -1,4 +1,5 @@
 import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+
 import { shouldCollider } from '../../helper/utils'
 import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from '../components/CollideComponent'
 import { NodeComp } from '../components/NodeComp'
@@ -30,8 +31,10 @@ export class CollideSystem implements System {
       case ComponentAddedEvent(CircleCollider):
       case ComponentAddedEvent(PolygonCollider): {
         // cc.log(type, event)
-        const collider = ett.assign(new Collider(comp))
+        const collider = ett.assign(new Collider(comp as any))
         collider.node = ett.getComponent(NodeComp)
+        collider.props = comp.props
+        // collider.props.enable = true
         comp.node = ett.getComponent(NodeComp)
         this.addCollider(collider)
         break
@@ -124,28 +127,28 @@ export class CollideSystem implements System {
       const type = contract.updateState()
       switch (type) {
         case CollisionType.ENTER: {
-          if (col1.onCollisionEnter) {
-            col1.onCollisionEnter(col2.node, col1.node)
+          if (col1.props.onCollisionEnter) {
+            col1.props.onCollisionEnter(col2.node)
           }
-          if (col2.onCollisionEnter) {
-            col2.onCollisionEnter(col1.node, col2.node)
+          if (col2.props.onCollisionEnter) {
+            col2.props.onCollisionEnter(col1.node)
           }
           break
         }
         case CollisionType.STAY:
-          if (col1.onCollisionStay) {
-            col1.onCollisionStay(col2.node, col1.node)
+          if (col1.props.onCollisionStay) {
+            col1.props.onCollisionStay(col2.node)
           }
-          if (col2.onCollisionStay) {
-            col2.onCollisionStay(col1.node, col2.node)
+          if (col2.props.onCollisionStay) {
+            col2.props.onCollisionStay(col1.node)
           }
           break
         case CollisionType.EXIT:
-          if (col1.onCollisionExit) {
-            col1.onCollisionExit(col2.node, col1.node)
+          if (col1.props.onCollisionExit) {
+            col1.props.onCollisionExit(col2.node)
           }
-          if (col2.onCollisionExit) {
-            col2.onCollisionExit(col1.node, col2.node)
+          if (col2.props.onCollisionExit) {
+            col2.props.onCollisionExit(col1.node)
           }
           break
 

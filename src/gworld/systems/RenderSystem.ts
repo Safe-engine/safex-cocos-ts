@@ -38,7 +38,7 @@ export class RenderSystem implements System {
       case ComponentAddedEvent(SpriteRender): {
         // console.log('SpriteRender', event);
         const spriteComp = event.entity.getComponent(SpriteRender)
-        const { spriteFrame, texType, type } = spriteComp
+        const { spriteFrame, texType, type } = spriteComp.props
         const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
         // console.log('frame', spriteFrame, frame)
         const node = new cc.Sprite(frame)
@@ -51,7 +51,7 @@ export class RenderSystem implements System {
         // cc.log('MaskRender', event.component);
         const ett = event.entity
         const maskComp = event.entity.getComponent(MaskRender)
-        const { type, segments, inverted } = maskComp
+        const { type, segments, inverted } = maskComp.props
         const node = new cc.ClippingNode()
         node.setInverted(inverted)
         maskComp.node = ett.assign(new NodeComp(node, ett))
@@ -72,7 +72,7 @@ export class RenderSystem implements System {
         // console.log('SpineSkeleton', event.component);
         const ett = event.entity
         const spine = event.entity.getComponent(SpineSkeleton)
-        const { data, skin, animation, loop, timeScale = 1 } = spine
+        const { data, skin, animation, loop, timeScale = 1 } = spine.props
         const { atlas, skeleton } = data
         // cc.log(skel, atlas);
         const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)

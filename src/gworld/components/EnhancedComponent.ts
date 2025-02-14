@@ -1,24 +1,18 @@
-import { Constructor, Entity } from 'entityx-ts'
+import { Constructor } from 'entityx-ts'
+
 import { BaseComponentProps } from '../../../@types/safex'
 import { NodeComp } from './NodeComp'
 
-export interface BaseNode<C> {
-  active: boolean
-  entity: Entity
-  instance: C
-  addComponent<T extends EnhancedComponent>(instance: T): T
-  getComponent<T extends ComponentType>(component: Constructor<T>): T
-  getComponentsInChildren<T extends ComponentType>(component: Constructor<T>): T[]
-  getComponentInChildren<T extends ComponentType>(component: Constructor<T>): T
-  // isEqual(other: EnhancedComponent): boolean
-}
-
-export class EnhancedComponent<Props = Object, N extends BaseNode<any> = BaseNode<any>> {
+export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeComp<any>> {
+  props: Props = {} as any
   constructor(data?: BaseComponentProps & Props) {
+    this.init(data)
+  }
+  init(data?: Props) {
     if (data) {
       // console.log('constructor', this.constructor.name, data)
       Object.keys(data).forEach((key) => {
-        this[key] = data[key]
+        this.props[key] = data[key]
       })
     }
   }

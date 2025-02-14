@@ -1,4 +1,4 @@
-import { Constructor, World, System } from 'entityx-ts'
+import { Constructor, System, World } from 'entityx-ts'
 
 export class GameWorld extends World {
   listUpdate: (System | Constructor<System>)[] = []

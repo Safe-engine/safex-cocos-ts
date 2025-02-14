@@ -24,10 +24,11 @@ export class NoRenderSystem implements System {
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
             onTouchBegan: function (touch: Touch) {
-              // console.log('onTouchBegan', p)
+              const { onTouchStart } = touchComp.props
+              // console.log('onTouchBegan', onTouchStart)
               if (!nodeComp.parent) {
-                if (touchComp.onTouchStart) {
-                  touchComp.onTouchStart(touch, nodeComp)
+                if (onTouchStart) {
+                  onTouchStart(touch, nodeComp)
                 }
                 return true
               }
@@ -35,25 +36,28 @@ export class NoRenderSystem implements System {
               const rect = nodeComp.getBoundingBox()
               const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
               if (rect.contains(nodeSpaceLocation)) {
-                if (touchComp.onTouchStart) {
-                  touchComp.onTouchStart(touch, nodeComp)
+                if (onTouchStart) {
+                  onTouchStart(touch, nodeComp)
                 }
                 return true
               }
             },
             onTouchMoved: function (touch) {
-              if (!touchComp.onTouchMove) return false
-              touchComp.onTouchMove(touch, nodeComp)
+              const { onTouchMove } = touchComp.props
+              if (!onTouchMove) return false
+              onTouchMove(touch, nodeComp)
               return true
             },
             onTouchEnded: function (touch) {
-              if (!touchComp.onTouchEnd) return false
-              touchComp.onTouchEnd(touch, nodeComp)
+              const { onTouchEnd } = touchComp.props
+              if (!onTouchEnd) return false
+              onTouchEnd(touch, nodeComp)
               return true
             },
             onTouchCancelled: function (touch) {
-              if (!touchComp.onTouchEnd) return false
-              touchComp.onTouchEnd(touch, nodeComp)
+              const { onTouchCancel } = touchComp.props
+              if (!onTouchCancel) return false
+              onTouchCancel(touch, nodeComp)
               return true
             },
           },
@@ -73,7 +77,7 @@ export class NoRenderSystem implements System {
       }
       case ComponentAddedEvent(ExtraDataComp): {
         const extra = event.component as ExtraDataComp
-        const { key, value } = extra
+        const { key, value } = extra.props
         extra.data[key] = value
         break
       }

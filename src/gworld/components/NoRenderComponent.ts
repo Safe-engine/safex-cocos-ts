@@ -1,4 +1,3 @@
-import { ExtraDataProps, TouchEventProps } from '../../../@types/safex'
 import { Touch } from '../../polyfills'
 import { NoRenderComponentX } from '../core/decorator'
 import { EventCallbackType, NodeComp } from './NodeComp'
@@ -33,34 +32,22 @@ export class EventRegister extends NoRenderComponentX {
   }
 }
 
-export class TouchEventRegister extends NoRenderComponentX<TouchEventProps> {
+interface TouchEventProps {
   onTouchStart?: TouchEVentCallback
   onTouchMove?: TouchEVentCallback
   onTouchEnd?: TouchEVentCallback
   onTouchCancel?: TouchEVentCallback
+}
+export class TouchEventRegister extends NoRenderComponentX<TouchEventProps> {
   listener: cc.EventListener
   touch: cc.Touch
-
-  setOnTouchStart(cb: TouchEVentCallback) {
-    this.onTouchStart = cb
-  }
-
-  setOnTouchMove(cb: TouchEVentCallback) {
-    this.onTouchMove = cb
-  }
-
-  setOnTouchEnd(cb: TouchEVentCallback) {
-    this.onTouchEnd = cb
-  }
-
-  setOnTouchCancel(cb: TouchEVentCallback) {
-    this.onTouchCancel = cb
-  }
 }
 
-export class ExtraDataComp extends NoRenderComponentX<ExtraDataProps> {
+interface ExtraDataProps {
   key: string
-  value: any
+  value: Integer | Float | string
+}
+export class ExtraDataComp extends NoRenderComponentX<ExtraDataProps> {
   data: { [key: string]: any } = {}
   getData<T>(key: string): T {
     return this.data[key]

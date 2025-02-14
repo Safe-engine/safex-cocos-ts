@@ -1,5 +1,6 @@
 import { ComponentAddedEvent, ComponentRemovedEvent, Constructor, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
-import { CollideSystem, Collider, ComponentX, NoRenderComponentX, NodeComp } from '..'
+
+import { Collider, CollideSystem, ComponentX, NodeComp, NoRenderComponentX, SceneComponent } from '..'
 import { GameWorld } from '../gworld'
 
 export function registerSystem<T extends ComponentX>(component: Constructor<T>) {
@@ -49,16 +50,22 @@ export function registerSystem<T extends ComponentX>(component: Constructor<T>) 
   return NewSystem
 }
 
-export type GetProps<T> = T extends ComponentX<infer P> ? P : T extends NoRenderComponentX<infer Q> ? Q : never;
+export type GetProps<T> = T extends ComponentX<infer P> ? P : T extends NoRenderComponentX<infer Q> ? Q : never
 
 export function instantiate<T extends ComponentX>(ComponentType: Constructor<T>, data?: GetProps<T>): T {
   const instance = new ComponentType(data)
+  instance.init(data)
   if (!instance.render) {
     return instance
   }
   return instance.render()
 }
-
+export function loadScene<T extends SceneComponent>(ComponentType: Constructor<T>) {
+  const world = GameWorld.Instance
+  world.entities.reset()
+  const instance = new ComponentType()
+  instance.render()
+}
 export function shouldCollider(colA: Collider, colB: Collider) {
   const groupA = colA.node.group
   const groupB = colB.node.group

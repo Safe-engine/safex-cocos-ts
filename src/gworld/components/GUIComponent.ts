@@ -1,4 +1,4 @@
-import { ButtonCompProps, LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps } from '../../../@types/safex'
+import { LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps } from '../../../@types/safex'
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
@@ -12,17 +12,19 @@ type Keys = keyof typeof FillType
 type Values = (typeof FillType)[Keys]
 const _htmlTextParser = new HtmlTextParser()
 
+interface ButtonCompProps {
+  normalImage?: string
+  selectedImage?: string
+  disableImage?: string
+  zoomScale?: number
+  onPress?: (target: ButtonComp) => void
+}
 export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
-  normalImage: string
-  selectedImage: string
-  disableImage: string
-  zoomScale: number
   texType: ccui.Widget.TextureType
   clickEvents = []
-  onPress: (target: ButtonComp) => void
 
   setOnPress(cb: (target: ButtonComp) => void) {
-    this.onPress = cb
+    this.props.onPress = cb
   }
 
   set enabled(val) {
@@ -56,17 +58,17 @@ export class ProgressTimerComp extends ComponentX<ProgressTimerProps & { $ref?: 
   }
 }
 
-export class LabelComp extends ComponentX<LabelCompProps, ccui.Text> {
-  protected font: string
-  protected string: string
-  protected size: number
+export class LabelComp extends ComponentX<LabelCompProps & { $ref?: LabelComp }, ccui.Text> {
+  // protected font: string
+  // protected string: string
+  // protected size: number
 
   getString() {
-    return this.string
+    return this.props.string
   }
 
   setString(val: string) {
-    this.string = val
+    this.props.string = val
     if (this.node.instance instanceof ccui.Text) {
       this.node.instance.setString(val)
     }
@@ -74,16 +76,12 @@ export class LabelComp extends ComponentX<LabelCompProps, ccui.Text> {
 }
 
 export class RichTextComp extends ComponentX<LabelCompProps, ccui.RichText> {
-  protected font: string
-  protected string: string
-  protected size: number
-
-  getString() {
-    return this.string
+  get string() {
+    return this.props.string
   }
 
-  setString(val: string) {
-    this.string = val
+  set string(val: string) {
+    this.props.string = val
     if (this.node.instance instanceof ccui.RichText) {
       const newTextArray = _htmlTextParser.parse(val)
       console.log(newTextArray)
@@ -93,8 +91,8 @@ export class RichTextComp extends ComponentX<LabelCompProps, ccui.RichText> {
       for (let index = 0; index < newTextArray.length; index++) {
         const { style, text } = newTextArray[index]
         const color = style && style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
-        const fontName = cc.path.basename(this.font, '.ttf')
-        const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.size || 64)
+        const fontName = cc.path.basename(this.props.font, '.ttf')
+        const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.props.size || 64)
         // if (style && style.newline) {
         // console.log('newline')
         // this.node.instance._addNewLine()

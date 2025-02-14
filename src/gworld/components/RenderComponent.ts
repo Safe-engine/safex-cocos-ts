@@ -5,19 +5,16 @@ export class NodeRender extends ComponentX {
   nodeName: string
 }
 
-export class SpriteRender extends ComponentX<SpriteRenderProps, cc.Sprite> {
-  spriteFrame: string
-  texType: number
-  type: number
-
-  getSpriteFrame() {
-    return this.spriteFrame
+export class SpriteRender extends ComponentX<SpriteRenderProps & { $ref?: SpriteRender }, cc.Sprite> {
+  get spriteFrame() {
+    return this.props.spriteFrame
   }
 
-  setSpriteFrame(frame) {
-    this.spriteFrame = frame
-    // if (this.node.instance instanceof cc.Sprite) {
-    this.node.instance.setTexture(frame)
+  set spriteFrame(frame) {
+    this.props.spriteFrame = frame
+    if (this.node && this.node.instance instanceof cc.Sprite) {
+      this.node.instance.setTexture(frame)
+    }
     // } else if (this.node.instance instanceof ccui.ImageView) {
     //   if (this.texType) {
     //     this.node.instance.loadTexture(frame, this.texType)
@@ -28,15 +25,14 @@ export class SpriteRender extends ComponentX<SpriteRenderProps, cc.Sprite> {
     //   this.node.setContentSize(sprite.getContentSize())
     // } else if (this.node.instance instanceof ccui.Button) {
     //   this.node.instance.loadTextureNormal(frame)
-    // }
   }
 }
-
-export class MaskRender extends ComponentX<cc.ClippingNode> {
-  type: number
-  segments: number
-  inverted: boolean
+interface MaskRenderProps {
+  type?: number
+  segments?: number
+  inverted?: boolean
 }
+export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
 
 export class ParticleComp extends ComponentX<cc.ParticleSystem> {
   plistFile: string
@@ -74,9 +70,9 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps, cc.DrawNode>
     }
   }
 
-  fill() { }
+  // fill() { }
 
-  stroke() { }
+  // stroke() { }
 
   // drawPoint(position: Vec2, pointSize: Float, color:  Color4B, pointType = PointType.Rect) {
 

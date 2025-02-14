@@ -1,11 +1,12 @@
-import { Color4B, NodeComp, TouchEVentCallback } from "../src";
+import { Color4B, NodeComp } from '../src'
 
 type ColorSource = ReturnType<typeof Color4B>
 
 interface BaseComponentProps {
-  $ref?: object;
-  $push?: object[];
-  node?: Partial<NodeComp>;
+  $ref?: unknown
+  $refNode?: NodeComp<any>
+  $push?: unknown[]
+  node?: Partial<NodeComp>
   // [$key: `$${string}`]: string
 }
 
@@ -15,18 +16,14 @@ interface NodeCompProps {
 
 interface SpriteRenderProps {
   spriteFrame: string
+  texType?: number
+  type?: number
 }
 
 interface GraphicsRenderProps {
   lineWidth?: number
   strokeColor?: ColorSource
   fillColor?: ColorSource
-}
-
-interface MaskRenderProps {
-  type?: number
-  segments?: number
-  inverted?: boolean
 }
 
 interface ProgressTimerProps {
@@ -37,8 +34,7 @@ interface ProgressTimerProps {
   isReverse?: boolean
 }
 
-interface LoadingBarProps {
-}
+// interface LoadingBarProps {}
 
 interface LabelCompProps {
   font?: string
@@ -69,11 +65,6 @@ interface ColliderProps {
   onCollisionEnter?: (other: Collider) => void
   onCollisionExit?: (other: Collider) => void
   onCollisionStay?: (other: Collider) => void
-}
-
-interface BoxColliderProps extends ColliderProps {
-  width: number
-  height: number
 }
 
 interface CircleColliderProps extends ColliderProps {
@@ -110,26 +101,6 @@ interface DragonBonesProps {
   onAnimationStart?: (event: { name: string }) => void
   onAnimationEnd?: (event: { name: string }) => void
   onAnimationComplete?: (event: { name: string }) => void
-}
-
-interface ExtraDataProps {
-  key: string
-  value: any
-}
-
-interface ButtonCompProps {
-  normalImage?: string
-  selectedImage?: string
-  disableImage?: string
-  zoomScale?: number
-  onPress: (target: ButtonComp) => void
-}
-
-interface TouchEventProps {
-  onTouchStart?: TouchEVentCallback
-  onTouchMove?: TouchEVentCallback
-  onTouchEnd?: TouchEVentCallback
-  onTouchCancel?: TouchEVentCallback
 }
 
 interface PhysicsMaterialProps {

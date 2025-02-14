@@ -13,7 +13,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   parent: NodeComp
   children: NodeComp[] = []
   name: string
-  private _group
+  _group
 
   constructor(instance: C, entity: Entity) {
     this.entity = entity
@@ -390,16 +390,16 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return data.getData(key)
   }
 
-  setData<T>(key: string, value: T) {
+  setData<T extends Integer | Float | string>(key: string, value: T) {
     const data = this.getComponent(ExtraDataComp)
     if (!data) {
-      this.addComponent(instantiate(ExtraDataComp,{ key, value }))
+      this.addComponent(instantiate(ExtraDataComp, { key, value }))
     } else {
       data.setData(key, value)
     }
   }
 
-  resolveComponent(component: EnhancedComponent<{}, NodeComp>) {
+  resolveComponent(component: EnhancedComponent<object, NodeComp>) {
     if ((component.constructor as any).hasRender) {
       this.addChild(component.node)
     } else {

@@ -3,7 +3,7 @@ import flatten from 'lodash/flatten'
 import max from 'lodash/max'
 import min from 'lodash/min'
 
-import { BoxColliderProps, CircleColliderProps, PolygonColliderProps } from '../../../@types/safex'
+import { CircleColliderProps, ColliderProps, PolygonColliderProps } from '../../../@types/safex'
 import { Vec2 } from '../../polyfills'
 import { NoRenderComponentX } from '../core/decorator'
 import { NodeComp } from './NodeComp'
@@ -19,20 +19,14 @@ function cloneRect(origin) {
   return cc.rect(origin.x, origin.y, origin.width, origin.height)
 }
 
-export class Collider<T = {}> extends NoRenderComponentX<T> {
-  offset: Vec2
-  tag: number
-  enabled = true
+export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
   _worldPoints: cc.Vec2[] | cc.Point[] = []
   _worldPosition: cc.Vec2 | cc.Point
   _worldRadius
   _AABB: cc.Rect = cc.rect(0, 0, 0, 0)
   _preAabb: cc.Rect = cc.rect(0, 0, 0, 0)
-  onCollisionEnter?: (other?: NodeComp, target?: NodeComp) => void
-  onCollisionExit?: (other?: NodeComp, target?: NodeComp) => void
-  onCollisionStay?: (other?: NodeComp, target?: NodeComp) => void
 
-  update(dt: number, draw?: cc.DrawNode) { }
+  // update(dt: number, draw?: cc.DrawNode) {}
   getAABB() {
     return this._AABB
   }
@@ -42,31 +36,32 @@ export class Collider<T = {}> extends NoRenderComponentX<T> {
       preAabb: this._preAabb,
     }
   }
-  setOnCollisionEnter(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionEnter(cb: (other?: NodeComp, target?: NodeComp) => void) {
     const collider = this.getComponent(Collider)
-    collider.onCollisionEnter = cb
+    collider.props.onCollisionEnter = cb
   }
-  setOnCollisionExit(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionExit(cb: (other?: NodeComp, target?: NodeComp) => void) {
     const collider = this.getComponent(Collider)
-    collider.onCollisionExit = cb
+    collider.props.onCollisionExit = cb
   }
-  setOnCollisionStay(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionStay(cb: (other?: NodeComp, target?: NodeComp) => void) {
     const collider = this.getComponent(Collider)
-    collider.onCollisionStay = cb
+    collider.props.onCollisionStay = cb
   }
 }
 
-export class BoxCollider extends Collider<BoxColliderProps> {
+interface BoxColliderProps extends ColliderProps {
   width: number
   height: number
-
+}
+export class BoxCollider extends Collider<BoxColliderProps> {
   get size() {
-    return cc.size(this.width, this.height)
+    return cc.size(this.props.width, this.props.height)
   }
 
   set size(s: cc.Size) {
-    this.width = s.width
-    this.height = s.height
+    this.props.width = s.width
+    this.props.height = s.height
   }
 
   update(dt, draw: cc.DrawNode) {
@@ -74,11 +69,11 @@ export class BoxCollider extends Collider<BoxColliderProps> {
       return
     }
     const collider = this.getComponent(Collider)
-    const { x, y } = collider.offset || Vec2(0, 0)
-    const hw = this.width * 0.5
-    const hh = this.height * 0.5
+    const { x, y } = collider.props.offset || Vec2(0, 0)
+    const hw = this.props.width * 0.5
+    const hh = this.props.height * 0.5
     const transform = getNodeToWorldTransformAR(this.node)
-    const rect = cc.rect(x - hw, y - hh, this.width, this.height)
+    const rect = cc.rect(x - hw, y - hh, this.props.width, this.props.height)
     const rectTrs = cc.rectApplyAffineTransform(rect, transform)
     // cc.log(rectTrs);
     collider._worldPoints[0] = Vec2(rectTrs.x, rectTrs.y)
@@ -100,16 +95,14 @@ export class BoxCollider extends Collider<BoxColliderProps> {
 }
 
 export class CircleCollider extends Collider<CircleColliderProps> {
-  radius: number
-
   update(dt, draw: cc.DrawNode) {
     if (!this.node) {
       return
     }
     const transform = getNodeToWorldTransformAR(this.node)
     const collider = this.getComponent(Collider)
-    collider._worldRadius = this.radius * this.node.scaleX
-    collider._worldPosition = cc.pointApplyAffineTransform(collider.offset, transform)
+    collider._worldRadius = this.props.radius * this.node.scaleX
+    collider._worldPosition = cc.pointApplyAffineTransform(collider.props.offset, transform)
     if (draw) {
       draw.drawDot(collider._worldPosition, collider._worldRadius, cc.Color.DEBUG_FILL_COLOR)
       draw.drawCircle(collider._worldPosition, collider._worldRadius, 0, 64, true, 3, cc.Color.DEBUG_BORDER_COLOR)
@@ -126,16 +119,14 @@ export class CircleCollider extends Collider<CircleColliderProps> {
 }
 
 export class PolygonCollider extends Collider<PolygonColliderProps> {
-  _points: number[]
-
   get points(): cc.Vec2[] {
-    const { x, y } = this.offset
-    const pointsList = chunk(this._points, 2).map(([px, py]) => Vec2(px + x, py + y))
+    const { x, y } = this.props.offset
+    const pointsList = chunk(this.props.points, 2).map(([px, py]) => Vec2(px + x, py + y))
     return pointsList
   }
 
   set points(points: cc.Vec2[]) {
-    this._points = flatten(points.map(({ x, y }) => [x, y]))
+    this.props.points = flatten(points.map(({ x, y }) => [x, y]))
   }
 
   update(dt, draw: cc.DrawNode) {
