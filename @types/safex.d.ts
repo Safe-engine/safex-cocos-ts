@@ -14,12 +14,6 @@ interface NodeCompProps {
   nodeName?: string
 }
 
-interface SpriteRenderProps {
-  spriteFrame: string
-  texType?: number
-  type?: number
-}
-
 interface GraphicsRenderProps {
   lineWidth?: number
   strokeColor?: ColorSource
@@ -63,13 +57,7 @@ interface SpineData {
   skeleton: string
   texture?: string
 }
-interface SpineSkeletonProps {
-  data: SpineData
-  skin?: string
-  animation?: string
-  timeScale?: number
-  loop?: boolean
-}
+
 interface DragonBonesData {
   atlas: string
   skeleton: string

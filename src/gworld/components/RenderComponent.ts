@@ -1,8 +1,14 @@
-import { GraphicsRenderProps, SpineData, SpineSkeletonProps, SpriteRenderProps } from '../../../@types/safex'
+import { GraphicsRenderProps, SpineData } from '../../../@types/safex'
 import { BLUE, RED } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
+}
+
+interface SpriteRenderProps {
+  spriteFrame: string
+  texType?: number
+  type?: number
 }
 
 export class SpriteRender extends ComponentX<SpriteRenderProps & { $ref?: SpriteRender }, cc.Sprite> {
@@ -37,8 +43,14 @@ export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
 export class ParticleComp extends ComponentX<cc.ParticleSystem> {
   plistFile: string
 }
-
-export class SpineSkeleton extends ComponentX<SpineSkeletonProps> {
+interface SpineSkeletonProps {
+  data: SpineData
+  skin?: string
+  animation?: string
+  timeScale?: number
+  loop?: boolean
+}
+export class SpineSkeleton extends ComponentX<SpineSkeletonProps & { $ref: SpineSkeleton }> {
   data: SpineData
   skin: string
   animation: string

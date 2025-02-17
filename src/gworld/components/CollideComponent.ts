@@ -39,18 +39,6 @@ export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
       preAabb: this._preAabb,
     }
   }
-  set onCollisionEnter(cb: (other?: Collider) => void) {
-    const collider = this.getComponent(Collider)
-    collider.props.onCollisionEnter = cb
-  }
-  set onCollisionExit(cb: (other?: Collider) => void) {
-    const collider = this.getComponent(Collider)
-    collider.props.onCollisionExit = cb
-  }
-  set onCollisionStay(cb: (other?: Collider) => void) {
-    const collider = this.getComponent(Collider)
-    collider.props.onCollisionStay = cb
-  }
 }
 
 interface BoxColliderProps extends ColliderProps {
