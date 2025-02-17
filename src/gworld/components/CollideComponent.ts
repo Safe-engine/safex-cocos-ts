@@ -1,12 +1,8 @@
-import chunk from 'lodash/chunk'
-import flatten from 'lodash/flatten'
 import max from 'lodash/max'
 import min from 'lodash/min'
 
-import { CircleColliderProps, ColliderProps, PolygonColliderProps } from '../../../@types/safex'
 import { Vec2 } from '../../polyfills'
 import { NoRenderComponentX } from '../core/decorator'
-import { NodeComp } from './NodeComp'
 
 function getNodeToWorldTransformAR(node) {
   const t = node.instance.getNodeToWorldTransform()
@@ -18,7 +14,14 @@ function getNodeToWorldTransformAR(node) {
 function cloneRect(origin) {
   return cc.rect(origin.x, origin.y, origin.width, origin.height)
 }
-
+interface ColliderProps {
+  offset?: Vec2
+  tag?: number
+  enabled?: boolean
+  onCollisionEnter?: (other: Collider) => void
+  onCollisionExit?: (other: Collider) => void
+  onCollisionStay?: (other: Collider) => void
+}
 export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
   _worldPoints: cc.Vec2[] | cc.Point[] = []
   _worldPosition: cc.Vec2 | cc.Point
@@ -36,15 +39,15 @@ export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
       preAabb: this._preAabb,
     }
   }
-  set onCollisionEnter(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionEnter(cb: (other?: Collider) => void) {
     const collider = this.getComponent(Collider)
     collider.props.onCollisionEnter = cb
   }
-  set onCollisionExit(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionExit(cb: (other?: Collider) => void) {
     const collider = this.getComponent(Collider)
     collider.props.onCollisionExit = cb
   }
-  set onCollisionStay(cb: (other?: NodeComp, target?: NodeComp) => void) {
+  set onCollisionStay(cb: (other?: Collider) => void) {
     const collider = this.getComponent(Collider)
     collider.props.onCollisionStay = cb
   }
@@ -94,6 +97,9 @@ export class BoxCollider extends Collider<BoxColliderProps> {
   }
 }
 
+interface CircleColliderProps extends ColliderProps {
+  radius: number
+}
 export class CircleCollider extends Collider<CircleColliderProps> {
   update(dt, draw: cc.DrawNode) {
     if (!this.node) {
@@ -118,15 +124,19 @@ export class CircleCollider extends Collider<CircleColliderProps> {
   }
 }
 
+interface PolygonColliderProps extends ColliderProps {
+  points: Array<Vec2>
+}
+
 export class PolygonCollider extends Collider<PolygonColliderProps> {
-  get points(): cc.Vec2[] {
+  get points(): Vec2[] {
     const { x, y } = this.props.offset
-    const pointsList = chunk(this.props.points, 2).map(([px, py]) => Vec2(px + x, py + y))
+    const pointsList = this.props.points.map((p) => Vec2(p.x + x, p.y + y))
     return pointsList
   }
 
-  set points(points: cc.Vec2[]) {
-    this.props.points = flatten(points.map(({ x, y }) => [x, y]))
+  set points(points: Vec2[]) {
+    this.props.points = points
   }
 
   update(dt, draw: cc.DrawNode) {

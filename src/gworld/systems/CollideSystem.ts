@@ -128,27 +128,27 @@ export class CollideSystem implements System {
       switch (type) {
         case CollisionType.ENTER: {
           if (col1.props.onCollisionEnter) {
-            col1.props.onCollisionEnter(col2.node)
+            col1.props.onCollisionEnter(col2)
           }
           if (col2.props.onCollisionEnter) {
-            col2.props.onCollisionEnter(col1.node)
+            col2.props.onCollisionEnter(col1)
           }
           break
         }
         case CollisionType.STAY:
           if (col1.props.onCollisionStay) {
-            col1.props.onCollisionStay(col2.node)
+            col1.props.onCollisionStay(col2)
           }
           if (col2.props.onCollisionStay) {
-            col2.props.onCollisionStay(col1.node)
+            col2.props.onCollisionStay(col1)
           }
           break
         case CollisionType.EXIT:
           if (col1.props.onCollisionExit) {
-            col1.props.onCollisionExit(col2.node)
+            col1.props.onCollisionExit(col2)
           }
           if (col2.props.onCollisionExit) {
-            col2.props.onCollisionExit(col1.node)
+            col2.props.onCollisionExit(col1)
           }
           break
 

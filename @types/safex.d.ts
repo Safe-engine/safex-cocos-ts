@@ -58,23 +58,6 @@ interface LabelShadowCompProps {
   offset: Point
 }
 
-interface ColliderProps {
-  offset?: Point
-  tag?: number
-  enabled?: boolean
-  onCollisionEnter?: (other: Collider) => void
-  onCollisionExit?: (other: Collider) => void
-  onCollisionStay?: (other: Collider) => void
-}
-
-interface CircleColliderProps extends ColliderProps {
-  radius: number
-}
-
-interface PolygonColliderProps extends ColliderProps {
-  points: Array<Point>
-}
-
 interface SpineData {
   atlas: string
   skeleton: string
