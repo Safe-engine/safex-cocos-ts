@@ -1,5 +1,5 @@
-type Float = number & { __floatBrand: 'Float' };
-type Integer = number & { __integerBrand: 'Integer' };
+type Float = number
+type Integer = number
 
 declare namespace cc {
   declare let v2: (x?: number | any, y?: number) => Vec2
@@ -54,7 +54,7 @@ declare namespace cc {
     public signAngle(other: Vec2)
   }
 
-  export class Vec3 extends Vec2 { }
+  export class Vec3 extends Vec2 {}
   export class ParticleSystem extends Node {
     constructor(file: string)
   }

@@ -1,19 +1,20 @@
 {
-  "name": "@safex/cocos",
-  "version": "2.0.2",
-  "description": "",
+  "name": "@safe-engine/cocos",
+  "version": "1.0.2",
+  "description": "safe-engine with cocos renderer support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "@types"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "clean:build": "rimraf ./dist",
-    "dev": "nodemon",
-    "lint": "eslint . --ext .js,.ts",
-    "lint:fix": "pnpm lint --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
-    "test": "jest",
-    "typecheck": "tsc"
+    "lint": "eslint . --ext .js,.ts  --fix",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.14",
