@@ -120,12 +120,13 @@ export class GUISystem implements System {
         console.log(event.component)
         const ett = event.entity
         const scrollView = ett.getComponent(ScrollViewComp)
-        const { viewSize, contentSize } = scrollView as any
+        const { viewSize, contentSize, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
         const node = new cc.ScrollView(viewSize)
         node.setContentSize(contentSize)
         node.setViewSize(viewSize)
-        node.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL)
-        node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
+        node.setDirection(direction as number)
+        // node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
+        // node.setTouchEnabled(false)
         scrollView.node = ett.assign(new NodeComp(node, ett))
         break
       }

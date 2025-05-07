@@ -163,4 +163,3 @@ export class Touch extends cc.Touch {
 export function getWinSize(): Size {
   return cc.director.getWinSize()
 }
-

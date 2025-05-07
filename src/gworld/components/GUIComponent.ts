@@ -114,9 +114,23 @@ export class LabelShadowComp extends NoRenderComponentX<LabelShadowCompProps> {
   offset: Size
 }
 
-export class ScrollViewComp extends ComponentX<cc.ScrollView> {
-  protected viewSize: Size
-  protected contentSize: Size
+export enum ScrollViewDirection {
+  NONE = cc.SCROLLVIEW_DIRECTION_NONE,
+  HORIZONTAL = cc.SCROLLVIEW_DIRECTION_HORIZONTAL,
+  VERTICAL = cc.SCROLLVIEW_DIRECTION_VERTICAL,
+  BOTH = cc.SCROLLVIEW_DIRECTION_BOTH,
+}
+interface ScrollViewProps {
+  viewSize: Size
+  contentSize: Size
+  direction?: ScrollViewDirection
+}
+export class ScrollViewComp extends ComponentX<ScrollViewProps, cc.ScrollView> {
+  zoom(scale: number) {
+    if (this.node.instance instanceof cc.ScrollView) {
+      this.node.instance.getContainer().setScale(scale)
+    }
+  }
 }
 
 export class BlockInputEventsComp extends NoRenderComponentX {}

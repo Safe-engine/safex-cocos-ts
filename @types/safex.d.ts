@@ -36,11 +36,6 @@ interface LabelCompProps {
   size?: number
 }
 
-interface ScrollViewProps {
-  width: number
-  height: number
-}
-
 interface LabelOutlineCompProps {
   color: ColorSource
   width: number
