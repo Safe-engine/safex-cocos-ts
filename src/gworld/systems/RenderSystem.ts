@@ -2,7 +2,7 @@ import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager
 
 import { SkeletonAnimation } from '../../spine/CCSkeletonAnimation'
 import { NodeComp } from '../components/NodeComp'
-import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender } from '../components/RenderComponent'
+import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender, TiledMap } from '../components/RenderComponent'
 
 export enum SpriteTypes {
   SIMPLE,
@@ -21,6 +21,7 @@ export class RenderSystem implements System {
     event_manager.subscribe(ComponentAddedEvent(SpineSkeleton), this)
     event_manager.subscribe(ComponentAddedEvent(GraphicsRender), this)
     event_manager.subscribe(ComponentAddedEvent(ParticleComp), this)
+    event_manager.subscribe(ComponentAddedEvent(TiledMap), this)
     event_manager.subscribe(ComponentRemovedEvent(NodeComp), this)
   }
 
@@ -38,7 +39,7 @@ export class RenderSystem implements System {
       case ComponentAddedEvent(SpriteRender): {
         // console.log('SpriteRender', event);
         const spriteComp = event.entity.getComponent(SpriteRender)
-        const { spriteFrame, texType, type } = spriteComp.props
+        const { spriteFrame } = spriteComp.props
         const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
         // console.log('frame', spriteFrame, frame)
         const node = new cc.Sprite(frame)
@@ -51,7 +52,7 @@ export class RenderSystem implements System {
         // cc.log('MaskRender', event.component);
         const ett = event.entity
         const maskComp = event.entity.getComponent(MaskRender)
-        const { type, segments, inverted } = maskComp.props
+        const { inverted } = maskComp.props
         const node = new cc.ClippingNode()
         node.setInverted(inverted)
         maskComp.node = ett.assign(new NodeComp(node, ett))
@@ -62,9 +63,18 @@ export class RenderSystem implements System {
         console.log('ParticleComp', event.component)
         const ett = event.entity
         const particleComp = event.component as ParticleComp
-        const { plistFile } = particleComp
+        const { plistFile } = particleComp.props
         const node = new cc.ParticleSystem(plistFile)
         particleComp.node = ett.assign(new NodeComp(node, ett))
+        break
+      }
+      case ComponentAddedEvent(TiledMap): {
+        console.log('TiledMap', event.component)
+        const ett = event.entity
+        const tiledMapComp = event.component as TiledMap
+        const { mapFile } = tiledMapComp.props
+        const node = new cc.TMXTiledMap(mapFile)
+        tiledMapComp.node = ett.assign(new NodeComp(node, ett))
         break
       }
 

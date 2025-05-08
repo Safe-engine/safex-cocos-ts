@@ -40,9 +40,11 @@ interface MaskRenderProps {
 }
 export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
 
-export class ParticleComp extends ComponentX<cc.ParticleSystem> {
+interface ParticleCompProps {
   plistFile: string
 }
+export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
+
 interface SpineSkeletonProps {
   data: SpineData
   skin?: string
@@ -138,3 +140,9 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps, cc.DrawNode>
     }
   }
 }
+
+interface TiledMapProps {
+  mapFile: string
+}
+
+export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
