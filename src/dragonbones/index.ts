@@ -8,22 +8,28 @@ import {
   System,
 } from 'entityx-ts'
 
-import { DragonBonesData, DragonBonesProps } from '../../@types/safex'
 import { GameWorld } from '../gworld'
 import { NodeComp } from '../gworld/components/NodeComp'
 import { ComponentX } from '../gworld/core/decorator'
 import { CocosFactory } from './cocos/CocosFactory'
 
-// import { dragonBones } from './dragonBones'
-
-export class DragonBones extends ComponentX<DragonBonesProps> {
-  data: DragonBonesData
+interface DragonBonesData {
   atlas: string
-  skin: string
-  animation: string
-  loop: boolean
-  timeScale: number
+  skeleton: string
+  texture: string
+}
+interface DragonBonesProps {
+  data: DragonBonesData
+  skin?: string
+  animation?: string
+  playTimes?: number
+  timeScale?: number
 
+  onAnimationStart?: (event: { name: string }) => void
+  onAnimationEnd?: (event: { name: string }) => void
+  onAnimationComplete?: (event: { name: string }) => void
+}
+export class DragonBones extends ComponentX<DragonBonesProps> {
   setAnimation(name: string, loop = false) {
     const skel: any = this.node.instance
     if (skel.setAnimation) {
@@ -42,37 +48,42 @@ export class DragonBonesSystem implements System {
   configure(event_manager: EventManager) {
     event_manager.subscribe(ComponentAddedEvent(DragonBones), this)
     event_manager.subscribe(ComponentRemovedEvent(DragonBones), this)
-    // const factory = CocosFactory.factory;
+    // const factory = CocosFactory.factory
   }
 
   receive(type: string, event: EventReceive) {
     switch (type) {
       case ComponentAddedEvent(DragonBones): {
-        console.log('DragonBones', event);
+        console.log('DragonBones', event)
         const ett = event.entity
         const dbComp = event.entity.getComponent(DragonBones)
-        const { data, animation, loop, timeScale } = dbComp
+        const { data, animation, playTimes = 0 } = dbComp.props
         // const texturePath = atlas.replace('.json', '.png')
         const { atlas, skeleton, texture } = data
         // cc.textureCache.addImage(texture)
-        const factory = CocosFactory.factory;
-        const dataSkel = cc.loader.getRes(skeleton);
-        const dataAtlas = cc.loader.getRes(atlas);
+        const factory = CocosFactory.factory
+        const dataSkel = cc.loader.getRes(skeleton)
+        const dataAtlas = cc.loader.getRes(atlas)
         const textureCache = cc.textureCache.getTextureForKey(texture)
-        // texture.initWithFile(texturePath);
-        factory.parseDragonBonesData(dataSkel);
+        // texture.initWithFile(texturePath)
+        factory.parseDragonBonesData(dataSkel)
 
-        factory.parseTextureAtlasData(dataAtlas, textureCache);
+        factory.parseTextureAtlasData(dataAtlas, textureCache)
 
-        // factory.loadDragonBonesData(skel);
-        // console.log(skeleton, dataSkel);
-        const armature = factory.buildArmature(dataSkel.armature[0].name);
+        // factory.loadDragonBonesData(skel)
+        // console.log(skeleton, dataSkel)
+        const armature = factory.buildArmature(dataSkel.armature[0].name)
         // console.log('armature', armature)
-        const node = armature.getDisplay();
+        const node = armature.getDisplay()
         console.log('node', node)
-        WorldClock.clock.add(armature);
-        // armature.animation.gotoAndPlay('walk', 0.2);
-        const state = armature.animation.gotoAndPlay(animation, 0, 0, 0);
+        WorldClock.clock.add(armature)
+        // armature.animation.gotoAndPlay('walk', 0.2)
+        const state = armature.animation.gotoAndPlay(
+          animation,
+          0,
+          0,
+          playTimes
+        )
         console.log('state', state)
         // if (skin) {
         //   node.setSkin(skin)
@@ -94,10 +105,10 @@ export class DragonBonesSystem implements System {
     }
   }
   update(entities: EntityManager, events: EventManager, dt: number) {
-    // throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.')
     // console.log('update', dt)
-    WorldClock.clock.advanceTime(dt);
-    // CocosFactory.advanceTime(dt);
+    WorldClock.clock.advanceTime(dt)
+    // CocosFactory.advanceTime(dt)
   }
 }
 
@@ -105,5 +116,4 @@ export function setupDragonBones() {
   GameWorld.Instance.systems.add(DragonBonesSystem)
   GameWorld.Instance.listUpdate.push(DragonBonesSystem)
   GameWorld.Instance.systems.configureOnce(DragonBonesSystem)
-
 }

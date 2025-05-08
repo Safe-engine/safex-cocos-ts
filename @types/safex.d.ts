@@ -53,22 +53,6 @@ interface SpineData {
   texture?: string
 }
 
-interface DragonBonesData {
-  atlas: string
-  skeleton: string
-  texture: string
-}
-interface DragonBonesProps {
-  data: DragonBonesData
-  skin?: string
-  animation?: string
-  playTimes?: number
-  timeScale?: number
-  onAnimationStart?: (event: { name: string }) => void
-  onAnimationEnd?: (event: { name: string }) => void
-  onAnimationComplete?: (event: { name: string }) => void
-}
-
 interface PhysicsMaterialProps {
   friction?: number
   restitution?: number
