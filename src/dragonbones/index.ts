@@ -67,20 +67,16 @@ export class DragonBonesSystem implements System {
         const textureCache = cc.textureCache.getTextureForKey(texture)
         // texture.initWithFile(texturePath)
         factory.parseDragonBonesData(dataSkel)
-
         factory.parseTextureAtlasData(dataAtlas, textureCache)
-
         // factory.loadDragonBonesData(skel)
         // console.log(skeleton, dataSkel)
-        const armature = factory.buildArmature(dataSkel.armature[0].name)
+        const node = factory.buildArmatureDisplay(dataSkel.armature[0].name)
         // console.log('armature', armature)
-        const node = armature.getDisplay()
         console.log('node', node)
-        WorldClock.clock.add(armature)
-        // armature.animation.gotoAndPlay('walk', 0.2)
-        const state = armature.animation.gotoAndPlay(
+        WorldClock.clock.add(node.armature)
+        // armature.animation.gotoAndPlay('run', 0.2)
+        const state = node.armature.animation.gotoAndPlayByTime(
           animation,
-          0,
           0,
           playTimes
         )
@@ -89,15 +85,14 @@ export class DragonBonesSystem implements System {
         //   node.setSkin(skin)
         // }
         if (animation) {
-          // node.setAnimation(0, animation, loop)
+          // node.setAnimation(0, animation, playTimes)
         }
         dbComp.node = ett.assign(new NodeComp(node, ett))
         break
       }
 
       case ComponentRemovedEvent(DragonBones): {
-        const { component } = event
-
+        // const { component } = event
         break
       }
       default:
