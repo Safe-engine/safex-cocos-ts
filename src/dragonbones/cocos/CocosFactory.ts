@@ -69,7 +69,7 @@ export class CocosFactory extends BaseFactory {
    */
   public static get factory(): CocosFactory {
     if (CocosFactory._factory === null) {
-      CocosFactory._factory = new CocosFactory(null, CocosFactory.useSharedTicker);
+      CocosFactory._factory = new CocosFactory(null);
     }
 
     return CocosFactory._factory;
@@ -80,9 +80,9 @@ export class CocosFactory extends BaseFactory {
    * @version DragonBones 4.7
    * @language zh_CN
    */
-  public static newInstance(useSharedTicker = true): CocosFactory {
+  public static newInstance(): CocosFactory {
     if (CocosFactory._factory === null) {
-      CocosFactory._factory = new CocosFactory(null, useSharedTicker);
+      CocosFactory._factory = new CocosFactory(null);
     }
 
     return CocosFactory._factory;
@@ -90,15 +90,12 @@ export class CocosFactory extends BaseFactory {
   /**
    * @inheritDoc
    */
-  public constructor(dataParser: DataParser | null = null, useSharedTicker = true) {
+  public constructor(dataParser: DataParser | null = null) {
     super(dataParser);
 
     if (CocosFactory._dragonBonesInstance === null) {
       const eventManager = new CocosArmatureDisplay();
       CocosFactory._dragonBonesInstance = new DragonBones(eventManager);
-      // if (useSharedTicker) {
-      //   PIXI.Ticker.shared.add(CocosFactory._clockHandler, CocosFactory);
-      // }
     }
 
     this._dragonBones = CocosFactory._dragonBonesInstance;
@@ -106,7 +103,7 @@ export class CocosFactory extends BaseFactory {
 
   protected _buildTextureAtlasData(textureAtlasData: CocosTextureAtlasData | null, textureAtlas: cc.Texture2D | null): CocosTextureAtlasData {
     if (textureAtlasData) {
-      console.log(textureAtlasData, 'textureAtlasData', textureAtlas)
+      // console.log(textureAtlasData, 'textureAtlasData', textureAtlas)
       const scale = cc.director.getContentScaleFactor();
       textureAtlasData.scale = scale
       textureAtlasData.renderTexture = textureAtlas;

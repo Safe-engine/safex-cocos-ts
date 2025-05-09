@@ -22,7 +22,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Armature, BoundingBoxType, DragonBones, EventObject, EventStringType, IArmatureProxy, PolygonBoundingBoxData } from '@cocos/dragonbones-js';
+import {
+  Armature,
+  BoundingBoxType,
+  DragonBones,
+  EventObject,
+  EventStringType,
+  IArmatureProxy,
+  PolygonBoundingBoxData,
+} from '@cocos/dragonbones-js';
 
 export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   /**
@@ -44,7 +52,7 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
    */
   public dbClear(): void {
     if (this._debugDrawer !== null) {
-      this._debugDrawer.removeFromParent()
+      this._debugDrawer.removeFromParent();
     }
 
     this._armature = null as any;
@@ -80,7 +88,7 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
           const endY = startY + bone.globalTransformMatrix.b * boneLength;
 
           boneDrawer.setLineWidth(2.0);
-          boneDrawer.setColor(cc.color('0x00FFFF'))
+          boneDrawer.setColor(cc.color('0x00FFFF'));
           boneDrawer.drawSegment(cc.p(startX, startY), cc.p(endX, endY));
           // boneDrawer.lineStyle(0.0, 0, 0.0);
           // boneDrawer.beginFill(0x00FFFF, 0.7);
@@ -94,7 +102,9 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
           const boundingBoxData = slot.boundingBoxData;
 
           if (boundingBoxData) {
-            let child = this._debugDrawer.getChildByName(slot.name) as cc.DrawNode;
+            let child = this._debugDrawer.getChildByName(
+              slot.name
+            ) as cc.DrawNode;
             if (!child) {
               child = new cc.DrawNode();
               child.name = slot.name;
@@ -102,34 +112,43 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
             }
 
             child.clear();
-            child.lineStyle(2.0, 0xFF00FF, 0.7);
+            child.lineStyle(2.0, 0xff00ff, 0.7);
 
             switch (boundingBoxData.type) {
               case BoundingBoxType.Rectangle:
-                child.drawRect(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
+                child.drawRect(
+                  -boundingBoxData.width * 0.5,
+                  -boundingBoxData.height * 0.5,
+                  boundingBoxData.width,
+                  boundingBoxData.height
+                );
                 break;
 
               case BoundingBoxType.Ellipse:
-                child.drawEllipse(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
+                child.drawEllipse(
+                  -boundingBoxData.width * 0.5,
+                  -boundingBoxData.height * 0.5,
+                  boundingBoxData.width,
+                  boundingBoxData.height
+                );
                 break;
 
-              case BoundingBoxType.Polygon:
-                const vertices = (boundingBoxData as PolygonBoundingBoxData).vertices;
+              case BoundingBoxType.Polygon: {
+                const { vertices } = boundingBoxData as PolygonBoundingBoxData;
                 for (let i = 0, l = vertices.length; i < l; i += 2) {
                   const x = vertices[i];
                   const y = vertices[i + 1];
 
                   if (i === 0) {
                     child.moveTo(x, y);
-                  }
-                  else {
+                  } else {
                     child.lineTo(x, y);
                   }
                 }
 
                 child.lineTo(vertices[0], vertices[1]);
                 break;
-
+              }
               default:
                 break;
             }
@@ -140,22 +159,27 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
 
             const transform = slot.global;
             child.setTransform(
-              transform.x, transform.y,
-              transform.scaleX, transform.scaleY,
+              transform.x,
+              transform.y,
+              transform.scaleX,
+              transform.scaleY,
               transform.rotation,
-              transform.skew, 0.0,
-              slot._pivotX, slot._pivotY
+              transform.skew,
+              0.0,
+              slot._pivotX,
+              slot._pivotY
             );
-          }
-          else {
+          } else {
             const child = this._debugDrawer.getChildByName(slot.name);
             if (child) {
               this._debugDrawer.removeChild(child);
             }
           }
         }
-      }
-      else if (this._debugDrawer !== null && this._debugDrawer.parent === this) {
+      } else if (
+        this._debugDrawer !== null &&
+        this._debugDrawer.parent === this
+      ) {
         this.removeChild(this._debugDrawer);
       }
     }
@@ -180,7 +204,10 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   /**
    * @private
    */
-  public dispatchDBEvent(type: EventStringType, eventObject: EventObject): void {
+  public dispatchDBEvent(
+    type: EventStringType,
+    eventObject: EventObject
+  ): void {
     this.emit(type, eventObject);
   }
   /**
@@ -188,18 +215,26 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
    */
   public hasDBEventListener(type: EventStringType): boolean {
     // return this.listenerCount(type) > 0;
-    return false
+    return false;
   }
   /**
    * @inheritDoc
    */
-  public addDBEventListener(type: EventStringType, listener: (event: EventObject) => void, target: any): void {
+  public addDBEventListener(
+    type: EventStringType,
+    listener: (event: EventObject) => void,
+    target: any
+  ): void {
     this.addListener(type as any, listener as any, target);
   }
   /**
    * @inheritDoc
    */
-  public removeDBEventListener(type: EventStringType, listener: (event: EventObject) => void, target: any): void {
+  public removeDBEventListener(
+    type: EventStringType,
+    listener: (event: EventObject) => void,
+    target: any
+  ): void {
     this.removeListener(type as any, listener as any, target);
   }
   /**

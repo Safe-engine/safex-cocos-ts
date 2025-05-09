@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-var dragonBones = dragonBones || {};
+const dragonBones = dragonBones || {};
 
 dragonBones.DisplayType = {
   DT_IMAGE: 0,
@@ -5282,7 +5282,7 @@ dragonBones.DBCCSlot = dragonBones.Slot.extend({
     const releasedNodeList = [];
 
     let displayA;
-    let armature;
+    // let armature;
     for (let i = 0, l = this._displayList.length; i < l; ++i) {
       displayA = this._displayList[i];
       if (displayA instanceof dragonBones.Armature) {

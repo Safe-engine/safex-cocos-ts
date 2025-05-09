@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * The MIT License (MIT)
  *
@@ -69,9 +68,9 @@ export class CocosTextureAtlasData extends TextureAtlasData {
     if (this._renderTexture !== null) {
       for (const k in this.textures) {
         const textureData = this.textures[k] as CocosTextureData;
-        if (textureData.renderTexture !== null) {
-          textureData.renderTexture.destroy();
-        }
+        // if (textureData.renderTexture !== null) {
+        //   textureData.renderTexture.destroy();
+        // }
         // console.log('textureData', this._renderTexture, textureData)
         // console.log('this._renderTexture', this._renderTexture)
         const x = textureData.region.x;
@@ -106,10 +105,9 @@ export class CocosTextureAtlasData extends TextureAtlasData {
     else {
       for (const k in this.textures) {
         const textureData = this.textures[k] as CocosTextureData;
-        if (textureData.renderTexture !== null) {
-          textureData.renderTexture.destroy();
-        }
-
+        // if (textureData.renderTexture !== null) {
+        //   textureData.renderTexture.destroy();
+        // }
         textureData.renderTexture = null;
       }
     }
@@ -128,9 +126,9 @@ export class CocosTextureData extends TextureData {
   protected _onClear(): void {
     super._onClear();
 
-    if (this.renderTexture !== null) {
-      this.renderTexture.destroy();
-    }
+    // if (this.renderTexture !== null) {
+    //   this.renderTexture.destroy();
+    // }
 
     this.renderTexture = null;
   }
