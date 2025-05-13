@@ -10,6 +10,7 @@ import {
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
+import { CocosArmatureDisplay } from './cocos/CocosArmatureDisplay';
 import { CocosFactory } from './cocos/CocosFactory';
 
 interface DragonBonesData {
@@ -28,34 +29,38 @@ interface DragonBonesProps {
   onAnimationEnd?: (event: { name: string }) => void;
   onAnimationComplete?: (event: { name: string }) => void;
 }
-export class DragonBones extends ComponentX<DragonBonesProps> {
-  setAnimation(name: string, loop = false) {
-    const skel: any = this.node.instance;
-    if (skel.setAnimation) {
-      skel.setAnimation(0, name, loop);
+export class DragonBonesComp extends ComponentX<DragonBonesProps> {
+  setAnimation(name: string, playTimes = 0) {
+    const skel = this.node.instance as CocosArmatureDisplay;
+    if (skel.armature) {
+      skel.armature.animation.gotoAndPlayByTime(
+          name,
+          0,
+          playTimes
+        )
     }
   }
 
-  setSkeletonData(data: string) {
-    const skel: any = this.node.instance;
-    const atlas = data.replace('.json', '.atlas');
-    skel.initWithArgs(data, atlas, this.node.scale);
-  }
+  // setSkeletonData(data: string) {
+  //   const skel = this.node.instance as CocosArmatureDisplay;
+  //   const atlas = data.replace('.json', '.atlas');
+  //   skel.armature.armatureData(data, atlas, this.node.scale);
+  // }
 }
 
 export class DragonBonesSystem implements System {
   configure(event_manager: EventManager) {
-    event_manager.subscribe(ComponentAddedEvent(DragonBones), this);
-    event_manager.subscribe(ComponentRemovedEvent(DragonBones), this);
+    event_manager.subscribe(ComponentAddedEvent(DragonBonesComp), this);
+    event_manager.subscribe(ComponentRemovedEvent(DragonBonesComp), this);
     CocosFactory.newInstance();
   }
 
   receive(type: string, event: EventReceive) {
     switch (type) {
-      case ComponentAddedEvent(DragonBones): {
-        console.log('DragonBones', event);
+      case ComponentAddedEvent(DragonBonesComp): {
+        console.log('DragonBonesComp', event);
         const ett = event.entity;
-        const dbComp = event.entity.getComponent(DragonBones);
+        const dbComp = event.entity.getComponent(DragonBonesComp);
         const { data, animation, playTimes = 0 } = dbComp.props;
         // const texturePath = atlas.replace('.json', '.png')
         const { atlas, skeleton, texture } = data;
@@ -92,7 +97,7 @@ export class DragonBonesSystem implements System {
         break;
       }
 
-      case ComponentRemovedEvent(DragonBones): {
+      case ComponentRemovedEvent(DragonBonesComp): {
         // const { component } = event
         break;
       }
