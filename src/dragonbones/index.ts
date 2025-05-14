@@ -13,11 +13,12 @@ import { ComponentX } from '../gworld/core/decorator';
 import { CocosArmatureDisplay } from './cocos/CocosArmatureDisplay';
 import { CocosFactory } from './cocos/CocosFactory';
 
-interface DragonBonesData {
+export interface DragonBonesData {
   atlas: string;
   skeleton: string;
   texture: string;
 }
+
 interface DragonBonesProps {
   data: DragonBonesData;
   skin?: string;

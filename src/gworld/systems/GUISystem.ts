@@ -127,6 +127,7 @@ export class GUISystem implements System {
         node.setDirection(direction as number)
         // node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
         // node.setTouchEnabled(false)
+        node.setBounceable(false)
         scrollView.node = ett.assign(new NodeComp(node, ett))
         break
       }
