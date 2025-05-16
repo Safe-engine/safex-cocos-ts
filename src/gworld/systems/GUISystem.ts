@@ -60,7 +60,7 @@ export class GUISystem implements System {
         // console.log(event.component)
         const ett = event.entity
         const bar = ett.getComponent(ProgressTimerComp)
-        const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar.props
+        const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(1, 0) } = bar.props
         const sprite = new cc.Sprite(spriteFrame)
         const pTimer = new cc.ProgressTimer(sprite)
         const ptt = fillType === FillType.RADIAL ? cc.ProgressTimer.TYPE_RADIAL : cc.ProgressTimer.TYPE_BAR
