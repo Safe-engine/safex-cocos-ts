@@ -29,7 +29,7 @@ export class GUISystem implements System {
   receive(type: string, event: EventReceive) {
     switch (type) {
       case ComponentAddedEvent(ButtonComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const button = ett.getComponent(ButtonComp)
         const nodeComp = ett.getComponent(NodeComp)
@@ -57,7 +57,7 @@ export class GUISystem implements System {
         break
       }
       case ComponentAddedEvent(ProgressTimerComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const bar = ett.getComponent(ProgressTimerComp)
         const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar.props
@@ -84,7 +84,7 @@ export class GUISystem implements System {
         break
       }
       case ComponentAddedEvent(LabelComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const label = ett.getComponent(LabelComp)
         const { string = '', font = '', size = 64 } = label.props
@@ -95,7 +95,7 @@ export class GUISystem implements System {
         break
       }
       case ComponentAddedEvent(LabelOutlineComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const outline = ett.getComponent(LabelOutlineComp)
         const { color, width } = outline.props
@@ -106,7 +106,7 @@ export class GUISystem implements System {
         break
       }
       case ComponentAddedEvent(LabelShadowComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const outline = ett.getComponent(LabelShadowComp)
         const { color, blur, offset } = outline.props
@@ -117,7 +117,7 @@ export class GUISystem implements System {
         break
       }
       case ComponentAddedEvent(ScrollViewComp): {
-        console.log(event.component)
+        // console.log(event.component)
         const ett = event.entity
         const scrollView = ett.getComponent(ScrollViewComp)
         const { viewSize, contentSize, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
