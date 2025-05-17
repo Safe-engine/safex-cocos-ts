@@ -7,6 +7,7 @@ import {
   System,
 } from 'entityx-ts';
 
+import { EventObject } from '@cocos/dragonbones-js';
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
@@ -35,10 +36,10 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps> {
     const skel = this.node.instance as CocosArmatureDisplay;
     if (skel.armature) {
       skel.armature.animation.gotoAndPlayByTime(
-          name,
-          0,
-          playTimes
-        )
+        name,
+        0,
+        playTimes
+      )
     }
   }
 
@@ -79,6 +80,8 @@ export class DragonBonesSystem implements System {
           dataSkel.armature[0].name,
           dataSkel.name
         );
+        // node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
+        node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
         // console.log('armature', armature)
         console.log('node', node);
         // armature.animation.gotoAndPlay('run', 0.2)
@@ -91,9 +94,9 @@ export class DragonBonesSystem implements System {
         // if (skin) {
         //   node.setSkin(skin)
         // }
-        if (animation) {
-          // node.setAnimation(0, animation, playTimes)
-        }
+        // if (animation) {
+        //   dbComp.setAnimation(animation, playTimes)
+        // }
         dbComp.node = ett.assign(new NodeComp(node, ett));
         break;
       }

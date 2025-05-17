@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * The MIT License (MIT)
  *
@@ -22,7 +21,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Armature, BaseFactory, BaseObject, BuildArmaturePackage, DataParser, DragonBones, Slot, SlotData } from '@cocos/dragonbones-js';
+import { Armature, BaseFactory, BaseObject, BuildArmaturePackage, DataParser, DisplayData, DragonBones, Slot, SlotData } from '@cocos/dragonbones-js';
 
 import { CocosArmatureDisplay } from './CocosArmatureDisplay';
 import { CocosSlot } from './CocosSlot';
@@ -127,7 +126,7 @@ export class CocosFactory extends BaseFactory {
     return armature;
   }
 
-  protected _buildSlot(_dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot {
+  protected _buildSlot(_dataPackage: BuildArmaturePackage, slotData: SlotData, armature: DisplayData[]): Slot {
     const slot = BaseObject.borrowObject(CocosSlot);
     slot.init(
       slotData, armature,

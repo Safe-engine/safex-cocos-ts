@@ -23,6 +23,7 @@
  */
 
 import {
+  Animation,
   Armature,
   BoundingBoxType,
   DragonBones,
@@ -41,6 +42,27 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   // private _disposeProxy: boolean = false;
   private _armature: Armature = null as any;
   private _debugDrawer: cc.Sprite | null = null;
+  eventDispatcher: cc.EventManager = null as any;
+  listenerCount = {}
+
+  constructor() {
+    // 1. super init first
+    super()
+    super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
+    this.eventDispatcher = cc.eventManager;
+  }
+
+  hasEvent(type: EventStringType): boolean {
+    return this.hasDBEventListener(type as any);
+  }
+
+  addEvent(type: EventStringType, listener: Function, thisObject: any): void {
+    console.log('addEvent', type, listener, thisObject);
+    this.addDBEventListener(type as any, listener as any, thisObject);
+  }
+  removeEvent(type: EventStringType, listener: Function, thisObject: any): void {
+    this.removeDBEventListener(type as any, listener as any, thisObject)
+  }
   /**
    * @inheritDoc
    */
@@ -107,53 +129,60 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
             ) as cc.DrawNode;
             if (!child) {
               child = new cc.DrawNode();
-              child.name = slot.name;
+              child.setName(slot.name);
               this._debugDrawer.addChild(child);
             }
 
             child.clear();
-            child.lineStyle(2.0, 0xff00ff, 0.7);
+            child.setLineWidth(2.0);
+            child.setColor(cc.color('0xFF00FF'));
+            child.setOpacity(0.7);
+            // child.lineStyle(2.0, 0xff00ff, 0.7);
 
             switch (boundingBoxData.type) {
               case BoundingBoxType.Rectangle:
-                child.drawRect(
-                  -boundingBoxData.width * 0.5,
-                  -boundingBoxData.height * 0.5,
-                  boundingBoxData.width,
-                  boundingBoxData.height
+                child.drawRect(cc.p(-boundingBoxData.width * 0.5,
+                  -boundingBoxData.height * 0.5),
+                  cc.p(boundingBoxData.width * 0.5,
+                    boundingBoxData.height * 0.5)
+
                 );
                 break;
 
               case BoundingBoxType.Ellipse:
-                child.drawEllipse(
-                  -boundingBoxData.width * 0.5,
-                  -boundingBoxData.height * 0.5,
-                  boundingBoxData.width,
-                  boundingBoxData.height
-                );
+                child.drawCircle(cc.p(0.0, 0.0), boundingBoxData.width * 0.5, 0, 64);
+                //   -boundingBoxData.width * 0.5,
+                //   -boundingBoxData.height * 0.5,
+                //   boundingBoxData.width,
+                //   boundingBoxData.height
+                // );
                 break;
 
               case BoundingBoxType.Polygon: {
                 const { vertices } = boundingBoxData as PolygonBoundingBoxData;
+                const points = []
                 for (let i = 0, l = vertices.length; i < l; i += 2) {
                   const x = vertices[i];
                   const y = vertices[i + 1];
 
-                  if (i === 0) {
-                    child.moveTo(x, y);
-                  } else {
-                    child.lineTo(x, y);
-                  }
+                  // if (i === 0) {
+                  //   child.moveTo(x, y);
+                  // } else {
+                  //   child.lineTo(x, y);
+                  // }
+                  // child.drawSegment(cc.p(x, y), cc.p(vertices[i + 2], vertices[i + 3]));
+                  points.push(cc.p(x, y))
                 }
 
-                child.lineTo(vertices[0], vertices[1]);
+                // child.lineTo(vertices[0], vertices[1]);
+                child.drawPoly(points)
                 break;
               }
               default:
                 break;
             }
 
-            child.endFill();
+            // child.endFill();
             slot.updateTransformAndMatrix();
             slot.updateGlobalTransform();
 
@@ -208,14 +237,16 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     type: EventStringType,
     eventObject: EventObject
   ): void {
-    this.emit(type, eventObject);
+    console.log('dispatchDBEvent', type, eventObject);
+    this.eventDispatcher.dispatchCustomEvent(type, eventObject);
   }
   /**
    * @inheritDoc
    */
   public hasDBEventListener(type: EventStringType): boolean {
-    // return this.listenerCount(type) > 0;
-    return false;
+    console.log('hasDBEventListener', type);
+    return (this.listenerCount[type] || 0) > 0;
+    // return this.eventDispatcher.isEnabled();
   }
   /**
    * @inheritDoc
@@ -225,7 +256,9 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     listener: (event: EventObject) => void,
     target: any
   ): void {
-    this.addListener(type as any, listener as any, target);
+    console.log('addDBEventListener', type);
+    this.listenerCount[type] = (this.listenerCount[type] || 0) + 1;
+    this.eventDispatcher.addCustomListener(type, listener.bind(target));
   }
   /**
    * @inheritDoc
@@ -235,7 +268,8 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     listener: (event: EventObject) => void,
     target: any
   ): void {
-    this.removeListener(type as any, listener as any, target);
+    this.listenerCount[type] = (this.listenerCount[type] || 0) - 1;
+    this.eventDispatcher.removeCustomListeners(type);
   }
   /**
    * @inheritDoc

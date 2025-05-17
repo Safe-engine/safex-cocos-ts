@@ -57,7 +57,7 @@ export class CocosSlot extends Slot {
     // tslint:disable-next-line:no-unused-expression
     value;
     if (!isRelease) {
-      (value as cc.Node).destroy();
+      (value as cc.Node).release();
     }
   }
 
