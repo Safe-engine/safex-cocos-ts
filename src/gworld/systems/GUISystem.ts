@@ -41,7 +41,7 @@ export class GUISystem implements System {
           // console.log('onTouchBegan', p, nodeComp)
           const rect = nodeComp.getBoundingBox()
           const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
-          if (rect.contains(nodeSpaceLocation)) {
+          if (rect.contains(nodeSpaceLocation) && button.enabled) {
             const scale = cc.scaleTo(0.3, 1.2)
             nodeComp.runAction(scale)
             button.props.onPress(button)

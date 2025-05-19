@@ -27,9 +27,9 @@ export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
     this.props.onPress = cb
   }
 
-  set enabled(val) {
-    this.node.setTouchEnabled(val)
-  }
+  // setTouchEnabled(val) {
+  //   this.node.setTouchEnabled(val)
+  // }
 }
 
 export class ProgressTimerComp extends ComponentX<ProgressTimerProps & { $ref?: ProgressTimerComp }> {

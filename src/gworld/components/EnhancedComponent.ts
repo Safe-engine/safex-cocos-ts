@@ -4,7 +4,10 @@ import { BaseComponentProps } from '../../../@types/safex'
 import { NodeComp } from './NodeComp'
 
 export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeComp<any>> {
+  static hasRender = true
   props: Props = {} as any
+  node: N
+  enabled: boolean = true
   constructor(data?: BaseComponentProps & Props) {
     this.init(data)
   }
@@ -16,8 +19,7 @@ export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeCom
       })
     }
   }
-  static hasRender = true
-  node: N
+
   addComponent<T extends EnhancedComponent>(instance: T): T {
     return this.node.addComponent(instance)
   }
