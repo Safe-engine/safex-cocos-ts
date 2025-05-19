@@ -2,10 +2,13 @@ import { Color4B, NodeComp } from '../src'
 
 type ColorSource = ReturnType<typeof Color4B>
 
-interface BaseComponentProps {
-  $ref?: unknown
-  $refNode?: NodeComp<any>
-  $push?: unknown[]
+interface RefComp<T> {
+  $ref?: T
+  $push?: T[]
+}
+interface BaseComponentProps extends RefComp<unknown> {
+  $refNode?: NodeComp
+  $pushNode?: NodeComp[]
   node?: Partial<NodeComp>
   // [$key: `$${string}`]: string
 }

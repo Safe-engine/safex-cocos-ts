@@ -1,4 +1,4 @@
-import { LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps } from '../../../@types/safex'
+import { LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps, RefComp } from '../../../@types/safex'
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
@@ -32,7 +32,7 @@ export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
   // }
 }
 
-export class ProgressTimerComp extends ComponentX<ProgressTimerProps & { $ref?: ProgressTimerComp }> {
+export class ProgressTimerComp extends ComponentX<ProgressTimerProps & RefComp<ProgressTimerComp>> {
   spriteFrame: string
   fillType: Values
   fillRange: number
@@ -58,7 +58,7 @@ export class ProgressTimerComp extends ComponentX<ProgressTimerProps & { $ref?: 
   }
 }
 
-export class LabelComp extends ComponentX<LabelCompProps & { $ref?: LabelComp }, ccui.Text> {
+export class LabelComp extends ComponentX<LabelCompProps & RefComp<LabelComp>, ccui.Text> {
   // protected font: string
   // protected string: string
   // protected size: number
@@ -75,7 +75,7 @@ export class LabelComp extends ComponentX<LabelCompProps & { $ref?: LabelComp },
   }
 }
 
-export class RichTextComp extends ComponentX<LabelCompProps, ccui.RichText> {
+export class RichTextComp extends ComponentX<LabelCompProps & RefComp<RichTextComp>, ccui.RichText> {
   get string() {
     return this.props.string
   }
@@ -125,7 +125,7 @@ interface ScrollViewProps {
   contentSize: Size
   direction?: ScrollViewDirection
 }
-export class ScrollViewComp extends ComponentX<ScrollViewProps, cc.ScrollView> {
+export class ScrollViewComp extends ComponentX<ScrollViewProps & RefComp<ScrollViewComp>, cc.ScrollView> {
   zoom(scale: number) {
     if (this.node.instance instanceof cc.ScrollView) {
       this.node.instance.getContainer().setScale(scale)
@@ -133,4 +133,4 @@ export class ScrollViewComp extends ComponentX<ScrollViewProps, cc.ScrollView> {
   }
 }
 
-export class BlockInputEventsComp extends NoRenderComponentX {}
+export class BlockInputEventsComp extends NoRenderComponentX { }

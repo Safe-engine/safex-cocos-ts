@@ -8,6 +8,7 @@ import {
 } from 'entityx-ts';
 
 import { EventObject } from '@cocos/dragonbones-js';
+import { RefComp } from '../../@types/safex';
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
@@ -31,7 +32,7 @@ interface DragonBonesProps {
   onAnimationEnd?: (event: { name: string }) => void;
   onAnimationComplete?: (event: { name: string }) => void;
 }
-export class DragonBonesComp extends ComponentX<DragonBonesProps> {
+export class DragonBonesComp extends ComponentX<DragonBonesProps & RefComp<DragonBonesComp>, CocosArmatureDisplay> {
   setAnimation(name: string, playTimes = 0) {
     const skel = this.node.instance as CocosArmatureDisplay;
     if (skel.armature) {

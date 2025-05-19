@@ -1,4 +1,4 @@
-import { GraphicsRenderProps, SpineData } from '../../../@types/safex'
+import { GraphicsRenderProps, RefComp, SpineData } from '../../../@types/safex'
 import { BLUE, RED } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
@@ -11,7 +11,7 @@ interface SpriteRenderProps {
   type?: number
 }
 
-export class SpriteRender extends ComponentX<SpriteRenderProps & { $ref?: SpriteRender }, cc.Sprite> {
+export class SpriteRender extends ComponentX<SpriteRenderProps & RefComp<SpriteRender>, cc.Sprite> {
   get spriteFrame() {
     return this.props.spriteFrame
   }
@@ -38,12 +38,12 @@ interface MaskRenderProps {
   segments?: number
   inverted?: boolean
 }
-export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
+export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> { }
 
 interface ParticleCompProps {
   plistFile: string
 }
-export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
+export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> { }
 
 interface SpineSkeletonProps {
   data: SpineData
@@ -52,7 +52,7 @@ interface SpineSkeletonProps {
   timeScale?: number
   loop?: boolean
 }
-export class SpineSkeleton extends ComponentX<SpineSkeletonProps & { $ref: SpineSkeleton }> {
+export class SpineSkeleton extends ComponentX<SpineSkeletonProps & RefComp<SpineSkeleton>> {
   data: SpineData
   skin: string
   animation: string
@@ -73,7 +73,7 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps & { $ref: Spine
   }
 }
 
-export class GraphicsRender extends ComponentX<GraphicsRenderProps, cc.DrawNode> {
+export class GraphicsRender extends ComponentX<GraphicsRenderProps & RefComp<GraphicsRender>, cc.DrawNode> {
   lineWidth = 5
   strokeColor = RED
   fillColor = BLUE
@@ -145,4 +145,4 @@ interface TiledMapProps {
   mapFile: string
 }
 
-export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
+export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> { }
