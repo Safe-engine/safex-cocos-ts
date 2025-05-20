@@ -61,7 +61,7 @@ export class DragonBonesSystem implements System {
   receive(type: string, event: EventReceive) {
     switch (type) {
       case ComponentAddedEvent(DragonBonesComp): {
-        console.log('DragonBonesComp', event);
+        // console.log('DragonBonesComp', event);
         const ett = event.entity;
         const dbComp = event.entity.getComponent(DragonBonesComp);
         const { data, animation, playTimes = 0 } = dbComp.props;
@@ -81,17 +81,19 @@ export class DragonBonesSystem implements System {
           dataSkel.armature[0].name,
           dataSkel.name
         );
-        // node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
-        node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
+        if (dbComp.props.onAnimationEnd)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
+        if (dbComp.props.onAnimationComplete)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
         // console.log('armature', armature)
-        console.log('node', node);
+        // console.log('node', node);
         // armature.animation.gotoAndPlay('run', 0.2)
         const state = node.armature.animation.gotoAndPlayByTime(
           animation,
           0,
           playTimes
         );
-        console.log('state', state);
+        // console.log('state', state);
         // if (skin) {
         //   node.setSkin(skin)
         // }

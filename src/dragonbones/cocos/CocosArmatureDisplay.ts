@@ -32,6 +32,10 @@ import {
   PolygonBoundingBoxData,
 } from '@cocos/dragonbones-js';
 
+export type EventCallbackType = (...args) => void
+export interface EventMap {
+  [key: string]: [EventCallbackType]
+}
 export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   /**
    * @private
@@ -41,14 +45,15 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   // private _disposeProxy: boolean = false;
   private _armature: Armature = null as any;
   private _debugDrawer: cc.Sprite | null = null;
-  eventDispatcher: cc.EventManager = null as any;
+  // eventDispatcher: cc.EventManager = null as any;
   listenerCount = {}
+  events: EventMap = {}
 
   constructor() {
     // 1. super init first
     super()
     super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
-    this.eventDispatcher = cc.eventManager;
+    // this.eventDispatcher = cc.eventManager;
   }
 
   hasEvent(type: EventStringType): boolean {
@@ -56,7 +61,7 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
   }
 
   addEvent(type: EventStringType, listener: Function, thisObject: any): void {
-    console.log('addEvent', type, listener, thisObject);
+    // console.log('addEvent', type, listener, thisObject);
     this.addDBEventListener(type as any, listener as any, thisObject);
   }
   removeEvent(type: EventStringType, listener: Function, thisObject: any): void {
@@ -216,8 +221,7 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
    * @inheritDoc
    */
   public dispose(disposeProxy = true): void {
-    // tslint:disable-next-line:no-unused-expression
-    disposeProxy;
+    // disposeProxy;
     if (this._armature !== null) {
       this._armature.dispose();
       this._armature = null as any;
@@ -236,14 +240,19 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     type: EventStringType,
     eventObject: EventObject
   ): void {
-    console.log('dispatchDBEvent', type, eventObject);
-    this.eventDispatcher.dispatchCustomEvent(type, eventObject);
+    // console.log('dispatchDBEvent', type, eventObject);
+    // this.eventDispatcher.dispatchCustomEvent(type, eventObject);
+    if (this.events[type]) {
+      var ev = new cc.EventCustom(type);
+      ev.setUserData(eventObject);
+      this.events[type].forEach((fc) => fc(ev))
+    }
   }
   /**
    * @inheritDoc
    */
   public hasDBEventListener(type: EventStringType): boolean {
-    console.log('hasDBEventListener', type);
+    // console.log('hasDBEventListener', type);
     return (this.listenerCount[type] || 0) > 0;
     // return this.eventDispatcher.isEnabled();
   }
@@ -255,9 +264,15 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     listener: (event: EventObject) => void,
     target: any
   ): void {
-    console.log('addDBEventListener', type);
+    // console.log('addDBEventListener', type);
     this.listenerCount[type] = (this.listenerCount[type] || 0) + 1;
-    this.eventDispatcher.addCustomListener(type, listener.bind(target));
+    // this.eventDispatcher.addCustomListener(type, listener.bind(target));
+    const bound = target ? listener.bind(target) : listener
+    if (this.events[type]) {
+      this.events[type].push(bound)
+    } else {
+      this.events[type] = [bound]
+    }
   }
   /**
    * @inheritDoc
@@ -268,7 +283,8 @@ export class CocosArmatureDisplay extends cc.Sprite implements IArmatureProxy {
     target: any
   ): void {
     this.listenerCount[type] = (this.listenerCount[type] || 0) - 1;
-    this.eventDispatcher.removeCustomListeners(type);
+    // this.eventDispatcher.removeCustomListeners(type);
+    this.events[type] = undefined
   }
   /**
    * @inheritDoc
