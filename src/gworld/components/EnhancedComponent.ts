@@ -8,7 +8,7 @@ export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeCom
   props: Props = {} as any
   node: N
   enabled: boolean = true
-  constructor(data?: BaseComponentProps & Props) {
+  constructor(data?: BaseComponentProps<EnhancedComponent> & Props) {
     this.init(data)
   }
   init(data?: Props) {

@@ -8,7 +8,7 @@ import {
 } from 'entityx-ts';
 
 import { EventObject } from '@cocos/dragonbones-js';
-import { RefComp } from '../../@types/safex';
+import { BaseComponentProps } from '../../@types/safex';
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
@@ -29,11 +29,11 @@ interface DragonBonesProps {
   playTimes?: Integer;
   timeScale?: Float;
 
-  onAnimationStart?: (event: DragonBonesEventData) => void;
-  onAnimationEnd?: (event: DragonBonesEventData) => void;
-  onAnimationComplete?: (event: DragonBonesEventData) => void;
+  onAnimationStart?: () => void;
+  onAnimationEnd?: () => void;
+  onAnimationComplete?: () => void;
 }
-export class DragonBonesComp extends ComponentX<DragonBonesProps & RefComp<DragonBonesComp>, CocosArmatureDisplay> {
+export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, CocosArmatureDisplay> {
   setAnimation(name: string, playTimes = 0) {
     const skel = this.node.instance as CocosArmatureDisplay;
     if (skel.armature) {
@@ -43,6 +43,11 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & RefComp<Drago
         playTimes
       )
     }
+  }
+
+  getAnimationName() {
+    const skel = this.node.instance as CocosArmatureDisplay;
+    return skel.armature.animation.lastAnimationName
   }
 
   // setSkeletonData(data: string) {
@@ -87,17 +92,11 @@ export class DragonBonesSystem implements System {
           dataSkel.name
         );
         if (dbComp.props.onAnimationStart)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.START, (event: cc.EventCustom) => {
-            dbComp.props.onAnimationStart({ name: event.getUserData().animationState.name })
-          }, dbComp)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.START, dbComp.props.onAnimationStart, dbComp)
         if (dbComp.props.onAnimationEnd)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, (event: cc.EventCustom) => {
-            dbComp.props.onAnimationEnd({ name: event.getUserData().animationState.name })
-          }, dbComp)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
         if (dbComp.props.onAnimationComplete)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, (event: cc.EventCustom) => {
-            dbComp.props.onAnimationComplete({ name: event.getUserData().animationState.name })
-          }, dbComp)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
         // console.log('armature', armature)
         // console.log('node', node);
         // armature.animation.gotoAndPlay('run', 0.2)
