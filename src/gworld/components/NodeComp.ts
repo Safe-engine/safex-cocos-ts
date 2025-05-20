@@ -4,7 +4,7 @@ import remove from 'lodash/remove'
 import { instantiate } from '../../helper/utils'
 import { Vec2 } from '../../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
-import { ExtraDataComp } from './NoRenderComponent'
+import { EventRegister, ExtraDataComp } from './NoRenderComponent'
 
 export type EventCallbackType = (...args) => void
 export class NodeComp<C extends cc.Node = cc.Node> {
@@ -397,6 +397,19 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     } else {
       data.setData(key, value)
     }
+  }
+  removeData(key: string) {
+    const data = this.getComponent(ExtraDataComp)
+    if (data) {
+      data.removeData(key)
+    }
+  }
+  get event(): EventRegister {
+    const event = this.getComponent(EventRegister)
+    if (!event) {
+      return this.addComponent(instantiate(EventRegister))
+    }
+    return event
   }
 
   resolveComponent(component: EnhancedComponent<object, NodeComp>) {

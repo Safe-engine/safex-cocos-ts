@@ -58,4 +58,7 @@ export class ExtraDataComp extends NoRenderComponentX<ExtraDataProps> {
   setData<T>(key: string, val: T) {
     this.data[key] = val
   }
+  removeData(key: string) {
+    delete this.data[key]
+  }
 }
