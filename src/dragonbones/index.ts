@@ -15,6 +15,7 @@ import { ComponentX } from '../gworld/core/decorator';
 import { CocosArmatureDisplay } from './cocos/CocosArmatureDisplay';
 import { CocosFactory } from './cocos/CocosFactory';
 
+export type DragonBonesEventData = { name: string }
 export interface DragonBonesData {
   atlas: string;
   skeleton: string;
@@ -25,12 +26,12 @@ interface DragonBonesProps {
   data: DragonBonesData;
   skin?: string;
   animation?: string;
-  playTimes?: number;
-  timeScale?: number;
+  playTimes?: Integer;
+  timeScale?: Float;
 
-  onAnimationStart?: (event: { name: string }) => void;
-  onAnimationEnd?: (event: { name: string }) => void;
-  onAnimationComplete?: (event: { name: string }) => void;
+  onAnimationStart?: (event: DragonBonesEventData) => void;
+  onAnimationEnd?: (event: DragonBonesEventData) => void;
+  onAnimationComplete?: (event: DragonBonesEventData) => void;
 }
 export class DragonBonesComp extends ComponentX<DragonBonesProps & RefComp<DragonBonesComp>, CocosArmatureDisplay> {
   setAnimation(name: string, playTimes = 0) {
@@ -64,7 +65,7 @@ export class DragonBonesSystem implements System {
         // console.log('DragonBonesComp', event);
         const ett = event.entity;
         const dbComp = event.entity.getComponent(DragonBonesComp);
-        const { data, animation, playTimes = 0 } = dbComp.props;
+        const { data, animation, playTimes = 0, timeScale = 1 } = dbComp.props;
         // const texturePath = atlas.replace('.json', '.png')
         const { atlas, skeleton, texture } = data;
         // cc.textureCache.addImage(texture)
@@ -81,24 +82,32 @@ export class DragonBonesSystem implements System {
           dataSkel.armature[0].name,
           dataSkel.name
         );
+        if (dbComp.props.onAnimationStart)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.START, (event: cc.EventCustom) => {
+            dbComp.props.onAnimationStart({ name: event.getUserData().animationState.name })
+          }, dbComp)
         if (dbComp.props.onAnimationEnd)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, (event: cc.EventCustom) => {
+            dbComp.props.onAnimationEnd({ name: event.getUserData().animationState.name })
+          }, dbComp)
         if (dbComp.props.onAnimationComplete)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, (event: cc.EventCustom) => {
+            dbComp.props.onAnimationComplete({ name: event.getUserData().animationState.name })
+          }, dbComp)
         // console.log('armature', armature)
         // console.log('node', node);
         // armature.animation.gotoAndPlay('run', 0.2)
-        const state = node.armature.animation.gotoAndPlayByTime(
-          animation,
-          0,
-          playTimes
-        );
+        node.armature.animation.timeScale = timeScale
+        if (animation) {
+          const state = node.armature.animation.gotoAndPlayByTime(
+            animation,
+            0,
+            playTimes
+          );
+        }
         // console.log('state', state);
         // if (skin) {
         //   node.setSkin(skin)
-        // }
-        // if (animation) {
-        //   dbComp.setAnimation(animation, playTimes)
         // }
         dbComp.node = ett.assign(new NodeComp(node, ett));
         break;
