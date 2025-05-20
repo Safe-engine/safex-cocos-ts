@@ -50,6 +50,10 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & RefComp<Drago
   //   const atlas = data.replace('.json', '.atlas');
   //   skel.armature.armatureData(data, atlas, this.node.scale);
   // }
+  setFLipX(isFlipX) {
+    const skel = this.node.instance as CocosArmatureDisplay;
+    skel.armature.flipX = isFlipX
+  }
 }
 
 export class DragonBonesSystem implements System {

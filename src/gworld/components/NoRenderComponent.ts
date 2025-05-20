@@ -41,6 +41,9 @@ interface TouchEventProps {
 export class TouchEventRegister extends NoRenderComponentX<TouchEventProps> {
   listener: cc.EventListener
   touch: cc.Touch
+  setEnabled(enabled: boolean) {
+    this.listener.setEnabled(enabled)
+  }
 }
 
 interface ExtraDataProps {
