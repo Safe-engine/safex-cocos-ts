@@ -24,7 +24,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return this.entity.id
   }
 
-  get position(): Vec2 {
+  get position(): Readonly<Vec2> {
     return Vec2(this.instance.getPosition())
   }
 
