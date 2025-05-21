@@ -25,28 +25,28 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   get position(): Vec2 {
-    return this.getPosition()
+    return Vec2(this.instance.getPosition())
   }
 
   set position(val: Vec2) {
-    this.setPosition(val.x, val.y)
+    this.instance.setPosition(val.x, val.y)
   }
 
-  get x() {
-    return this.instance.getPositionX()
-  }
+  // get x() {
+  //   return this.instance.getPositionX()
+  // }
 
-  set x(val: number) {
-    this.instance.setPositionX(val)
-  }
+  // set x(val: number) {
+  //   this.instance.setPositionX(val)
+  // }
 
-  get y() {
-    return this.instance.getPositionY()
-  }
+  // get y() {
+  //   return this.instance.getPositionY()
+  // }
 
-  set y(val: number) {
-    this.instance.setPositionY(val)
-  }
+  // set y(val: number) {
+  //   this.instance.setPositionY(val)
+  // }
 
   get scale() {
     return this.instance.getScale()
@@ -275,19 +275,19 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return Vec2(x, y)
   }
 
-  getPosition() {
-    return Vec2(this.x, this.y)
-  }
+  // getPosition() {
+  //   return Vec2(this.x, this.y)
+  // }
 
-  setPosition(x: number | cc.Vec2 | cc.Vec3 | cc.Point, y?: number) {
-    if (typeof x !== 'number') {
-      this.x = x.x
-      this.y = x.y
-    } else {
-      this.x = x
-      this.y = y
-    }
-  }
+  // setPosition(x: number | cc.Vec2 | cc.Vec3 | cc.Point, y?: number) {
+  //   if (typeof x !== 'number') {
+  //     this.x = x.x
+  //     this.y = x.y
+  //   } else {
+  //     this.x = x
+  //     this.y = y
+  //   }
+  // }
 
   setRotation(deg: number) {
     this.instance.setRotation(deg)

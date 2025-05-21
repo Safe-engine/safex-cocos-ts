@@ -99,7 +99,7 @@ class _Vec2 {
   }
 }
 export type Vec2 = _Vec2
-export function Vec2(x?: number, y?: number): Vec2 {
+export function Vec2(x?: number | object, y?: number): Vec2 {
   return new _Vec2(x, y)
 }
 cc.Vec2 = _Vec2
