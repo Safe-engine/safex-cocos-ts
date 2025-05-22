@@ -32,21 +32,21 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.setPosition(val.x, val.y)
   }
 
-  // get x() {
-  //   return this.instance.getPositionX()
-  // }
+  getPositionX() {
+    return this.instance.getPositionX()
+  }
 
-  // set x(val: number) {
-  //   this.instance.setPositionX(val)
-  // }
+  setPositionX(val: number) {
+    this.instance.setPositionX(val)
+  }
 
-  // get y() {
-  //   return this.instance.getPositionY()
-  // }
+  getPositionY() {
+    return this.instance.getPositionY()
+  }
 
-  // set y(val: number) {
-  //   this.instance.setPositionY(val)
-  // }
+  setPositionY(val: number) {
+    this.instance.setPositionY(val)
+  }
 
   get scale() {
     return this.instance.getScale()
