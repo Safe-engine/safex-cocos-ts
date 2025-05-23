@@ -26,6 +26,7 @@ export class EventRegister extends NoRenderComponentX {
   }
 
   emit(name: string, ...params: any) {
+    // if (!this.node || !this.node.active || !this.enabled) return
     if (this.events[name]) {
       this.events[name].forEach((fc) => fc(...params))
     }

@@ -275,19 +275,13 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return Vec2(x, y)
   }
 
-  // getPosition() {
-  //   return Vec2(this.x, this.y)
-  // }
+  getPosition() {
+    return this.instance.getPosition()
+  }
 
-  // setPosition(x: number | cc.Vec2 | cc.Vec3 | cc.Point, y?: number) {
-  //   if (typeof x !== 'number') {
-  //     this.x = x.x
-  //     this.y = x.y
-  //   } else {
-  //     this.x = x
-  //     this.y = y
-  //   }
-  // }
+  setPosition(x: number | cc.Vec2 | cc.Vec3 | cc.Point, y?: number) {
+    this.instance.setPosition(x, y)
+  }
 
   setRotation(deg: number) {
     this.instance.setRotation(deg)
