@@ -91,12 +91,7 @@ export class DragonBonesSystem implements System {
           dataSkel.armature[0].name,
           dataSkel.name
         );
-        if (dbComp.props.onAnimationStart)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.START, dbComp.props.onAnimationStart, dbComp)
-        if (dbComp.props.onAnimationEnd)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, dbComp.props.onAnimationEnd, dbComp)
-        if (dbComp.props.onAnimationComplete)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, dbComp.props.onAnimationComplete, dbComp)
+
         // console.log('armature', armature)
         // console.log('node', node);
         // armature.animation.gotoAndPlay('run', 0.2)
@@ -113,11 +108,29 @@ export class DragonBonesSystem implements System {
         //   node.setSkin(skin)
         // }
         dbComp.node = ett.assign(new NodeComp(node, ett));
+        if (dbComp.props.onAnimationStart)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.START, (event: EventObject) => {
+            if (dbComp.node.active && dbComp.enabled)
+              dbComp.props.onAnimationStart()
+          }, dbComp)
+        if (dbComp.props.onAnimationEnd)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, (event: EventObject) => {
+            if (dbComp.node.active && dbComp.enabled)
+              dbComp.props.onAnimationEnd()
+          }, dbComp)
+        if (dbComp.props.onAnimationComplete)
+          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, (event: EventObject) => {
+            if (dbComp.node.active && dbComp.enabled)
+              dbComp.props.onAnimationComplete()
+          }, dbComp)
         break;
       }
 
       case ComponentRemovedEvent(DragonBonesComp): {
-        // const { component } = event
+        const { component } = event
+        const dbComp = component as DragonBonesComp;
+        const skel = dbComp.node.instance as CocosArmatureDisplay;
+        skel.events = {}
         break;
       }
       default:
