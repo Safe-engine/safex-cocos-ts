@@ -59,6 +59,11 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
     const skel = this.node.instance as CocosArmatureDisplay;
     skel.armature.flipX = isFlipX
   }
+
+  setTimeScale(timeScale: Float) {
+    const skel = this.node.instance as CocosArmatureDisplay;
+    skel.armature.animation.timeScale = timeScale
+  }
 }
 
 export class DragonBonesSystem implements System {
