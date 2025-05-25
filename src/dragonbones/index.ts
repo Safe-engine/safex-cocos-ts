@@ -37,6 +37,7 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
   setAnimation(name: string, playTimes = 0) {
     const skel = this.node.instance as CocosArmatureDisplay;
     if (skel.armature) {
+      if (skel.armature.animation.lastAnimationName === name) return;
       skel.armature.animation.gotoAndPlayByTime(
         name,
         0,
