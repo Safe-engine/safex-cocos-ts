@@ -88,31 +88,11 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.anchorY = val
   }
   /**
-   * Returns the rotation of the node in radians. 0 is the default rotation angle. Positive values rotate node clockwise.
-   * @function
-   * @return {Number} The rotation of the node in radians.
-   */
-  get rotation() {
-    return cc.degreesToRadians(this.instance.getRotation())
-  }
-  /**
-   *
-   *  Sets the X rotation of the node in radians which performs a horizontal rotational skew.
-   *  (support only in WebGL rendering mode)
-   *  0 is the default rotation angle.
-   *  Positive values rotate node clockwise, and negative values for anti-clockwise.
-   *
-   * @param {Number} radians The X rotation in radians which performs a horizontal rotational skew.
-   */
-  set rotation(val: number) {
-    this.instance.setRotation(cc.radiansToDegrees(val))
-  }
-  /**
    * Returns the angle of the node in degrees. 0 is the default rotation angle. Positive values rotate node clockwise.
    * @function
    * @return {Number} The rotation of the node in degrees.
    */
-  get angle() {
+  get rotation() {
     return this.instance.getRotation()
   }
   /**
@@ -124,7 +104,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
    *
    * @param {Number} degrees The X rotation in degrees which performs a horizontal rotational skew.
    */
-  set angle(val: number) {
+  set rotation(val: number) {
     this.instance.setRotation(val)
   }
 
