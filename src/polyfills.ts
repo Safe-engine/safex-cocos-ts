@@ -2,7 +2,7 @@ import { circleCircle, pointInPolygon, polygonCircle, polygonPolygon } from './h
 
 function updatePoint(p) {
   const { x, y } = p
-  return cc.v2(x, y)
+  return Vec2(x, y)
 }
 
 class _Vec2 {
@@ -22,30 +22,30 @@ class _Vec2 {
     this.y = y
   }
 
-  equals(other: cc.Vec2) {
+  equals(other: _Vec2) {
     return this.x === other.x && this.y === other.y
   }
 
-  add(value: cc.Point): cc.Vec2 {
+  add(value: cc.Point | Vec2): _Vec2 {
     return updatePoint(cc.pAdd(cc.p(this.x, this.y), value))
   }
 
-  addSelf(value: cc.Point): cc.Vec2 {
+  addSelf(value: cc.Point | Vec2): _Vec2 {
     const nor = updatePoint(cc.pAdd(cc.p(this.x, this.y), value))
     this.x = nor.x
     this.y = nor.y
     return nor
   }
 
-  sub(value: cc.Point): cc.Vec2 {
+  sub(value: cc.Point | Vec2): _Vec2 {
     return updatePoint(cc.pSub(cc.p(this.x, this.y), value))
   }
 
-  mul(multiply: number): cc.Vec2 {
+  mul(multiply: number): _Vec2 {
     return updatePoint(cc.pMult(cc.p(this.x, this.y), multiply))
   }
 
-  mulSelf(multiply: number): cc.Vec2 {
+  mulSelf(multiply: number): _Vec2 {
     const nor = updatePoint(cc.pMult(cc.p(this.x, this.y), multiply))
     this.x = nor.x
     this.y = nor.y
@@ -56,14 +56,14 @@ class _Vec2 {
     return cc.pLength(cc.p(this.x, this.y))
   }
 
-  normalizeSelf(): cc.Vec2 {
+  normalizeSelf(): _Vec2 {
     const nor = updatePoint(cc.pNormalize(cc.p(this.x, this.y)))
     this.x = nor.x
     this.y = nor.y
     return nor
   }
 
-  normalize(): cc.Vec2 {
+  normalize(): _Vec2 {
     return updatePoint(cc.pNormalize(cc.p(this.x, this.y)))
   }
 
