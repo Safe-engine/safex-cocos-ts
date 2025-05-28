@@ -74,7 +74,7 @@ export class CocosSlot extends Slot {
     const container = this._armature.display as CocosArmatureDisplay;
     const prevDisplay = value as cc.Node;
     container.addChild(this._renderDisplay);
-    container.swapChildren(this._renderDisplay, prevDisplay);
+    // container.swapChildren(this._renderDisplay, prevDisplay);
     container.removeChild(prevDisplay);
     this._textureScale = 1.0;
   }
@@ -222,14 +222,15 @@ export class CocosSlot extends Slot {
 
   protected _updateMesh(): void {
     const scale = this._armature._armatureData.scale;
-    const deformVertices = (this._displayFrame as DisplayFrame).deformVertices;
+    // console.log(this._renderDisplay)
+    const deformVertices = this._deformVertices;
     const bones = this._geometryBones;
     const geometryData = this._geometryData as GeometryData;
-    const weightData = geometryData.weight;
+    const weightData = deformVertices.verticesData.weight;
 
-    const hasDeform = deformVertices.length > 0 && geometryData.inheritDeform;
-    const meshDisplay = (this._renderDisplay.getComponent(cc.Sprite) as any)._sgNode; // as cc.Scale9Sprite;
-    const polygonInfo = meshDisplay.getMeshPolygonInfo();
+    const hasDeform = deformVertices.length > 0 && deformVertices.verticesData.inheritDeform;
+    // const meshDisplay = (this._renderDisplay.getComponent(cc.Sprite) as any)._sgNode; // as cc.Scale9Sprite;
+    const polygonInfo = this._meshDisplay._polygonInfo;
     if (!polygonInfo) {
       return;
     }
@@ -385,8 +386,8 @@ export class CocosSlot extends Slot {
     //   this._renderDisplay.y = transform.y - (globalTransformMatrix.b * this._pivotX - globalTransformMatrix.d * this._pivotY);
     // }
     // else {
-      this._renderDisplay.x = transform.x;
-      this._renderDisplay.y = transform.y;
+    this._renderDisplay.x = transform.x;
+    this._renderDisplay.y = transform.y;
     // }
 
     this._renderDisplay.rotationX = -(transform.rotation + transform.skew) * Transform.RAD_DEG;
