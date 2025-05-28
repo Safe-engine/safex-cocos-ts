@@ -16,6 +16,7 @@ import {
 import { NodeComp } from '../components/NodeComp'
 
 export class GUISystem implements System {
+  defaultFont: string
   configure(event_manager: EventManager) {
     event_manager.subscribe(ComponentAddedEvent(ButtonComp), this)
     event_manager.subscribe(ComponentAddedEvent(ProgressTimerComp), this)
@@ -87,7 +88,7 @@ export class GUISystem implements System {
         // console.log(event.component)
         const ett = event.entity
         const label = ett.getComponent(LabelComp)
-        const { string = '', font = '', size = 64 } = label.props
+        const { string = '', font = this.defaultFont, size = 64 } = label.props
         const fontName = cc.path.basename(font, '.ttf')
         const node = new ccui.Text(string, fontName, size)
         node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
