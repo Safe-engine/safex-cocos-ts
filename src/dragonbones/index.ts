@@ -38,7 +38,9 @@ interface PixiDragonBonesAnimation {
 }
 interface PixiDragonBonesArmature {
   animation: PixiDragonBonesAnimation
-  flipX: boolean
+  _armature: {
+    flipX: boolean
+  }
   removeDBEventListener: () => void
   addDBEventListener: (name: string, cb: (event: any) => void, target: any) => void
 }
@@ -65,7 +67,7 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
   //   skel.armature.armatureData(data, atlas, this.node.scale);
   // }
   setFLipX(isFlipX: boolean) {
-    this.armature.flipX = isFlipX
+    this.armature._armature.flipX = isFlipX
   }
 
   setTimeScale(timeScale: Float) {
