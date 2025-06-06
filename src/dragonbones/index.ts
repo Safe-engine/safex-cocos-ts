@@ -129,6 +129,7 @@ export class DragonBonesSystem implements System {
         const { component } = event
         const dbComp = component as DragonBonesComp;
         dbComp.armature.removeDBEventListener()
+        dbComp.node.removeAllChildren()
         break;
       }
       default:

@@ -345,7 +345,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
       this.entity.destroy()
       this.instance.removeFromParent(cleanup)
     } else {
-      this.active = false
       this.stopAllActions()
       this.instance.removeFromParent()
     }
