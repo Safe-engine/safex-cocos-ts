@@ -39,8 +39,8 @@ export const PixiDragonBonesSprite: any = cc.Sprite.extend({
     this._super();
 
     this._canvas = document.createElement("canvas");
-    this._canvas.width = config.width || 512;
-    this._canvas.height = config.height || 512;
+    this._canvas.width = config.width || 1024;
+    this._canvas.height = config.height || 1024;
 
     this._pixiApp = new PIXI.Application({
       view: this._canvas,

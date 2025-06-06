@@ -14,6 +14,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   children: NodeComp[] = []
   name: string
   _group
+  _active = true
 
   constructor(instance: C, entity: Entity) {
     this.entity = entity
@@ -125,13 +126,14 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   get active() {
-    return cc.sys.isObjectValid(this.instance) && this.instance.visible
+    return cc.sys.isObjectValid(this.instance) && this._active
   }
 
   set active(val: boolean) {
     if (!cc.sys.isObjectValid(this.instance)) {
       return
     }
+    this._active = val
     if (this.instance instanceof ccui.Widget) {
       this.instance.setEnabled(val)
     }
@@ -331,6 +333,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   removeFromParent(cleanup?: boolean) {
+    this._active = false
     if (this.parent) {
       remove(this.parent.children, ({ entity }) => entity.id === this.entity.id)
     }
@@ -349,6 +352,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
   addChild(child: NodeComp, zOrder?: number, tag?: number)
   addChild(child: NodeComp) {
+    child._active = true
     child.parent = this
     this.children.push(child)
     this.instance.addChild(child.instance)
