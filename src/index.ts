@@ -1,5 +1,6 @@
 export * from './app'
 export * from './dragonbones'
+export * from './dragonbones/PixiDragonBonesSprite'
 export * from './gworld'
 export * from './gworld/components/CollideComponent'
 export * from './gworld/components/GUIComponent'
@@ -17,4 +18,3 @@ export * from './helper/NodePool'
 export * from './helper/utils'
 export * from './polyfills'
 export { type Touch } from './polyfills'
-

@@ -1,14 +1,12 @@
-const SharedDragonBonesManager = {
+export const SharedDragonBonesManager = {
   isLoaded: false,
   factory: dragonBones.PixiFactory.factory,
   assets: {},
 
-  loadAssetsOnce: function (key, texJsonUrl, texPngUrl, callback) {
+  loadAssetsOnce: function (key, texJsonUrl, texPngUrl) {
     if (this.assets[key]) {
-      callback(); // Đã load rồi
       return;
     }
-
     const loader = new PIXI.Loader();
     loader
       .add("ske" + key, key)
@@ -21,19 +19,16 @@ const SharedDragonBonesManager = {
           resources["texPng" + key].texture,
           key
         );
-
         this.assets[key] = {
           dragonData,
           texture: resources["texPng" + key].texture
         };
-
-        callback();
       });
   },
 
   buildArmatureDisplay: function (key) {
     // console.log(this.assets[key])
-    const { name, armatureNames } = this.assets[key].dragonData
+    const { armatureNames } = this.assets[key].dragonData
     const armatureName = armatureNames[0]
     return this.factory.buildArmatureDisplay(armatureName, key);
   }
@@ -65,30 +60,20 @@ export const PixiDragonBonesSprite: any = cc.Sprite.extend({
 
     this._config = config;
     this._armatureDisplay = null;
-
-    SharedDragonBonesManager.loadAssetsOnce(
-      config.ske,
-      config.texJson,
-      config.texPng,
-      () => {
-        this._setupArmature();
-      }
-    );
+    this._setupArmature();
 
     this.schedule(this.updateTexture, 1 / 30);
   },
 
   _setupArmature: function () {
-    const display = SharedDragonBonesManager.buildArmatureDisplay(
-      this._config.ske,
-    );
+    const display = SharedDragonBonesManager.buildArmatureDisplay(this._config.ske);
 
     if (!display) {
       console.error("Không thể build armature:", this._config.armatureName);
       return;
     }
 
-    display.animation.play(this._config.animationName || "idle", 0);
+    display.animation.play(this._config.animationName, 0, this._config.playTimes);
     display.x = this._canvas.width / 2;
     display.y = this._canvas.height / 2;
     display.scale.set(this._config.scale || 1);

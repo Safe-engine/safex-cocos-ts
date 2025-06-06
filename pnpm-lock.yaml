@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@cocos/dragonbones-js':
-        specifier: ^1.0.2
-        version: 1.0.2
       '@esotericsoftware/spine-core':
         specifier: ^4.2.70
         version: 4.2.70
@@ -33,9 +30,6 @@ importers:
 
 packages:
 
-  '@cocos/dragonbones-js@1.0.2':
-    resolution: {integrity: sha512-QeTxZwLr4OeOZDo7ENJfdmwmv9mb68iNNGXUSGqazy/kHTXpBwe2thWvYwxJyM+8+RTsVFkyEhxRkCIfulfN7g==}
-
   '@esotericsoftware/spine-core@4.2.70':
     resolution: {integrity: sha512-J7DS6Z5tlZTOyqio1naY8K8OeRByE62AtBix/4aNUgrIFSHjPj0yDrp87UjOPKc5V5cJPasoqpmFO8By0N9egw==}
 
@@ -57,8 +51,6 @@ packages:
     hasBin: true
 
 snapshots:
-
-  '@cocos/dragonbones-js@1.0.2': {}
 
   '@esotericsoftware/spine-core@4.2.70': {}
 
