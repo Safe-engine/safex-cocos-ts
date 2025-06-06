@@ -62,7 +62,7 @@ export const PixiDragonBonesSprite: any = cc.Sprite.extend({
     this._armatureDisplay = null;
     this._setupArmature();
 
-    this.schedule(this.updateTexture, 1 / 30);
+    // this.schedule(this.updateTexture, 1 / 30);
   },
 
   _setupArmature: function () {
@@ -92,7 +92,7 @@ export const PixiDragonBonesSprite: any = cc.Sprite.extend({
   },
 
   onExit: function () {
-    this.unschedule(this.updateTexture);
+    // this.unschedule(this.updateTexture);
     this._pixiApp.destroy(true, { children: true });
     this._canvas.remove();
     this._super();

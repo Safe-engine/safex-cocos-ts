@@ -46,6 +46,7 @@ interface PixiDragonBonesArmature {
 }
 export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, cc.Node> {
   armature: PixiDragonBonesArmature
+  dragon: any
   setAnimation(name: string, playTimes = 0) {
     if (this.armature) {
       if (this.armature.animation.lastAnimationName === name) return;
@@ -98,6 +99,7 @@ export class DragonBonesSystem implements System {
           // width: dataSkel.armature[0].aabb.width,
           // height: dataSkel.armature[0].aabb.height,
         });
+        dbComp.dragon = dragon
         dbComp.armature = dragon._armatureDisplay
         const node: any = new cc.Node()
         node.addChild(dragon)
@@ -138,6 +140,14 @@ export class DragonBonesSystem implements System {
   }
   update(entities: EntityManager, events: EventManager, dt: number) {
     // console.log('update', dt)
+    const animations = entities.entities_with_components(DragonBonesComp)
+    // cc.log(animations);
+    animations.forEach((ett) => {
+      const dbComp = ett.getComponent(DragonBonesComp)
+      if (dbComp.node && dbComp.node.active) {
+        dbComp.dragon.updateTexture()
+      }
+    })
   }
 }
 
