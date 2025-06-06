@@ -1,4 +1,4 @@
-import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { shouldCollider } from '../../helper/utils'
 import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from '../components/CollideComponent'
@@ -14,40 +14,25 @@ export class CollideSystem implements System {
   colliderMatrix = [[true]]
 
   configure(event_manager: EventManager) {
-    event_manager.subscribe(ComponentAddedEvent(BoxCollider), this)
-    event_manager.subscribe(ComponentAddedEvent(CircleCollider), this)
-    event_manager.subscribe(ComponentAddedEvent(PolygonCollider), this)
-    event_manager.subscribe(ComponentRemovedEvent(BoxCollider), this)
-    event_manager.subscribe(ComponentRemovedEvent(CircleCollider), this)
-    event_manager.subscribe(ComponentRemovedEvent(PolygonCollider), this)
+    event_manager.subscribe(EventTypes.ComponentAdded, BoxCollider, this.onAddCollider.bind(this))
+    event_manager.subscribe(EventTypes.ComponentAdded, CircleCollider, this.onAddCollider.bind(this))
+    event_manager.subscribe(EventTypes.ComponentAdded, PolygonCollider, this.onAddCollider.bind(this))
+    event_manager.subscribe(EventTypes.ComponentRemoved, BoxCollider, this.onRemoveCollider.bind(this))
+    event_manager.subscribe(EventTypes.ComponentRemoved, CircleCollider, this.onRemoveCollider.bind(this))
+    event_manager.subscribe(EventTypes.ComponentRemoved, PolygonCollider, this.onRemoveCollider.bind(this))
   }
 
-  receive(type: string, event: EventReceive) {
-    const ett = event.entity
-    const comp = event.component as Collider
+  private onAddCollider = ({ entity, component }) => {
+    const collider = entity.assign(new Collider(component as any))
+    collider.node = entity.getComponent(NodeComp)
+    collider.props = component.props
+    // collider.props.enable = true
+    component.node = entity.getComponent(NodeComp)
+    this.addCollider(collider)
+  }
 
-    switch (type) {
-      case ComponentAddedEvent(BoxCollider):
-      case ComponentAddedEvent(CircleCollider):
-      case ComponentAddedEvent(PolygonCollider): {
-        // cc.log(type, event)
-        const collider = ett.assign(new Collider(comp as any))
-        collider.node = ett.getComponent(NodeComp)
-        collider.props = comp.props
-        // collider.props.enable = true
-        comp.node = ett.getComponent(NodeComp)
-        this.addCollider(collider)
-        break
-      }
-      case ComponentRemovedEvent(BoxCollider):
-      case ComponentRemovedEvent(CircleCollider):
-      case ComponentRemovedEvent(PolygonCollider): {
-        this.removeColliders.push(comp.getComponent(Collider))
-        break
-      }
-      default:
-        break
-    }
+  private onRemoveCollider = ({ entity, component }) => {
+    this.removeColliders.push(component.getComponent(Collider))
   }
 
   update(entities: EntityManager, events: EventManager, dt: number) {

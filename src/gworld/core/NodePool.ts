@@ -1,18 +1,19 @@
-import { NodeComp } from "../gworld/components/NodeComp"
+import { NodeComp } from "../components/NodeComp"
 
 export class NodePool {
   items: NodeComp[] = []
 
   put(node: NodeComp) {
     if (node) {
-      node.active = false
       node.removeFromParent()
+      node.entity.immortal = true
       this.items.push(node)
     }
   }
 
   get(): NodeComp {
     const node = this.items.pop()
+    node.entity.immortal = false
     node.active = true
     return node
   }

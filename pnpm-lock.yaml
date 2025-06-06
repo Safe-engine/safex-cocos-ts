@@ -15,8 +15,8 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6
       entityx-ts:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^2.2.1
+        version: 2.2.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -39,8 +39,8 @@ packages:
   cocos-html5-ts@1.1.6:
     resolution: {integrity: sha512-hV6g94lCh5e/NsQA93gRv1GBCB8NWa1mgew5yGsBX8scNjiM/6hUY8V4Nm8SY4+zc87llGicZTm1f72TCkyLpg==}
 
-  entityx-ts@1.0.0:
-    resolution: {integrity: sha512-AKLlU5OD1MxEoSlWOnA1pBXAfEu6gwE+gRAQ7IYZ85ZY4lFo4jXZxUOISGDW263FeMELWOV1UxpYiP6SRXaUcA==}
+  entityx-ts@2.2.1:
+    resolution: {integrity: sha512-Z9uRGfmhcosgKZ1kAPM9MeZjiyym6Wg3fM4oDxn/0Lx4OfnZ4lhaoz7EnKb5p8ierBd90MJiGW/qVJ/4LxOmBg==}
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -58,7 +58,7 @@ snapshots:
 
   cocos-html5-ts@1.1.6: {}
 
-  entityx-ts@1.0.0: {}
+  entityx-ts@2.2.1: {}
 
   lodash@4.17.21: {}
 

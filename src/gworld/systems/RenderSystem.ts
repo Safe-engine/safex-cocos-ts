@@ -1,4 +1,4 @@
-import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { SkeletonAnimation } from '../../spine/CCSkeletonAnimation'
 import { NodeComp } from '../components/NodeComp'
@@ -15,111 +15,84 @@ export enum SpriteTypes {
 
 export class RenderSystem implements System {
   configure(event_manager: EventManager) {
-    event_manager.subscribe(ComponentAddedEvent(NodeRender), this)
-    event_manager.subscribe(ComponentAddedEvent(SpriteRender), this)
-    event_manager.subscribe(ComponentAddedEvent(MaskRender), this)
-    event_manager.subscribe(ComponentAddedEvent(SpineSkeleton), this)
-    event_manager.subscribe(ComponentAddedEvent(GraphicsRender), this)
-    event_manager.subscribe(ComponentAddedEvent(ParticleComp), this)
-    event_manager.subscribe(ComponentAddedEvent(TiledMap), this)
-    event_manager.subscribe(ComponentRemovedEvent(NodeComp), this)
+    event_manager.subscribe(EventTypes.ComponentAdded, NodeRender, this.onAddNodeRender)
+    event_manager.subscribe(EventTypes.ComponentAdded, SpriteRender, this.onAddSpriteRender)
+    event_manager.subscribe(EventTypes.ComponentAdded, MaskRender, this.onAddMaskRender)
+    event_manager.subscribe(EventTypes.ComponentAdded, SpineSkeleton, this.onAddSpineSkeleton)
+    event_manager.subscribe(EventTypes.ComponentAdded, GraphicsRender, this.onAddGraphicsRender)
+    event_manager.subscribe(EventTypes.ComponentAdded, ParticleComp, this.onAddParticleComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, TiledMap, this.onAddTiledMap)
+    event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, this.onRemovedNodeComp)
   }
 
-  receive(type: string, event: EventReceive) {
-    switch (type) {
-      case ComponentAddedEvent(NodeRender): {
-        // cc.log('NodeRender', event);
-        const nodeRenderComp = event.entity.getComponent(NodeRender)
-        const node = new cc.Node()
-        const ett = event.entity
-        nodeRenderComp.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
+  private onAddNodeRender: EventReceiveCallback<NodeRender> = ({ entity }) => {
+    const nodeRenderComp = entity.getComponent(NodeRender)
+    const node = new cc.Node()
+    const ett = entity
+    nodeRenderComp.node = ett.assign(new NodeComp(node, ett))
+  }
 
-      case ComponentAddedEvent(SpriteRender): {
-        // console.log('SpriteRender', event);
-        const spriteComp = event.entity.getComponent(SpriteRender)
-        const { spriteFrame } = spriteComp.props
-        const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
-        // console.log('frame', spriteFrame, frame)
-        const node = new cc.Sprite(frame)
-        const ett = event.entity
-        spriteComp.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
+  private onAddSpriteRender: EventReceiveCallback<SpriteRender> = ({ entity, component: spriteComp }) => {
+    const { spriteFrame } = spriteComp.props
+    const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
+    // console.log('frame', spriteFrame, frame)
+    const node = new cc.Sprite(frame)
+    const ett = entity
+    spriteComp.node = ett.assign(new NodeComp(node, ett))
+  }
 
-      case ComponentAddedEvent(MaskRender): {
-        // cc.log('MaskRender', event.component);
-        const ett = event.entity
-        const maskComp = event.entity.getComponent(MaskRender)
-        const { inverted } = maskComp.props
-        const node = new cc.ClippingNode()
-        node.setInverted(inverted)
-        maskComp.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
+  private onAddMaskRender: EventReceiveCallback<MaskRender> = ({ entity, component: maskComp }) => {
+    const { inverted } = maskComp.props
+    const node = new cc.ClippingNode()
+    node.setInverted(inverted)
+    maskComp.node = entity.assign(new NodeComp(node, entity))
+  }
+  private onAddSpineSkeleton = ({ entity }) => {
+    const spineComp = entity.getComponent(SpineSkeleton)
+    const { data, skin, animation, loop, timeScale = 1 } = spineComp.props
+    const { atlas, skeleton } = data
+    // cc.log(skel, atlas);
+    const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
+    if (skin) {
+      node.setSkin(skin)
+    }
+    if (animation) {
+      node.setAnimation(0, animation, loop)
+    }
+    spineComp.node = entity.assign(new NodeComp(node, entity))
+  }
 
-      case ComponentAddedEvent(ParticleComp): {
-        console.log('ParticleComp', event.component)
-        const ett = event.entity
-        const particleComp = event.component as ParticleComp
-        const { plistFile } = particleComp.props
-        const node = new cc.ParticleSystem(plistFile)
-        particleComp.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
-      case ComponentAddedEvent(TiledMap): {
-        console.log('TiledMap', event.component)
-        const ett = event.entity
-        const tiledMapComp = event.component as TiledMap
-        const { mapFile } = tiledMapComp.props
-        const node = new cc.TMXTiledMap(mapFile)
-        tiledMapComp.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
+  private onAddGraphicsRender = ({ entity }) => {
+    const graphicsComp = entity.getComponent(GraphicsRender)
+    const { lineWidth, strokeColor, fillColor } = graphicsComp.props
+    const node = new cc.DrawNode()
+    node.setColor(strokeColor)
+    node.setDrawColor(fillColor)
+    node.setLineWidth(lineWidth)
+    graphicsComp.node = entity.assign(new NodeComp(node, entity))
+  }
 
-      case ComponentAddedEvent(SpineSkeleton): {
-        // console.log('SpineSkeleton', event.component);
-        const ett = event.entity
-        const spine = event.entity.getComponent(SpineSkeleton)
-        const { data, skin, animation, loop, timeScale = 1 } = spine.props
-        const { atlas, skeleton } = data
-        // cc.log(skel, atlas);
-        const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
-        if (skin) {
-          node.setSkin(skin)
-        }
-        if (animation) {
-          node.setAnimation(0, animation, loop)
-        }
-        spine.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
+  private onAddParticleComp = ({ entity }) => {
+    const particleComp = entity.getComponent(ParticleComp)
+    const { plistFile } = particleComp.props
+    const node = new cc.ParticleSystem(plistFile)
+    particleComp.node = entity.assign(new NodeComp(node, entity))
+  }
 
-      case ComponentAddedEvent(GraphicsRender): {
-        // cc.log('MaskRender', event.component);
-        const ett = event.entity
-        const graphics = event.entity.getComponent(GraphicsRender)
-        const { lineWidth, strokeColor, fillColor } = graphics
-        const node = new cc.DrawNode()
-        node.setColor(strokeColor)
-        node.setDrawColor(fillColor)
-        node.setLineWidth(lineWidth)
-        graphics.node = ett.assign(new NodeComp(node, ett))
-        break
-      }
-      case ComponentRemovedEvent(NodeComp): {
-        const { component } = event
-        const node = component as NodeComp
-        if (node.instance) {
-          node.instance.removeFromParent(true)
-        }
-        break
-      }
-      default:
-        break
+  private onAddTiledMap = ({ entity }) => {
+    const tiledMapComp = entity.getComponent(TiledMap)
+    const { mapFile } = tiledMapComp.props
+    const node = new cc.TMXTiledMap(mapFile)
+    tiledMapComp.node = entity.assign(new NodeComp(node, entity))
+  }
+
+  private onRemovedNodeComp = ({ component }) => {
+    const node = component as NodeComp
+    if (node.instance) {
+      node.instance.removeFromParent(true)
     }
   }
+
   update(entities: EntityManager, events: EventManager, dt: number) {
     // throw new Error('Method not implemented.');
   }

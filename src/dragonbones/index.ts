@@ -1,10 +1,8 @@
 import {
-  ComponentAddedEvent,
-  ComponentRemovedEvent,
   EntityManager,
   EventManager,
-  EventReceive,
-  System,
+  EventTypes,
+  System
 } from 'entityx-ts';
 
 import { BaseComponentProps } from '../../@types/safex';
@@ -78,66 +76,52 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
 
 export class DragonBonesSystem implements System {
   configure(event_manager: EventManager) {
-    event_manager.subscribe(ComponentAddedEvent(DragonBonesComp), this);
-    event_manager.subscribe(ComponentRemovedEvent(DragonBonesComp), this);
+    event_manager.subscribe(EventTypes.ComponentAdded, DragonBonesComp, ({ entity }) => {
+      const dbComp = entity.getComponent(DragonBonesComp);
+      const { data, animation, playTimes = 0, timeScale = 1 } = dbComp.props;
+      const { atlas, skeleton, texture } = data;
+      const dragon = new PixiDragonBonesSprite({
+        ske: skeleton,
+        texJson: atlas,
+        texPng: texture,
+        animationName: animation,
+        playTimes,
+        // width: dataSkel.armature[0].aabb.width,
+        // height: dataSkel.armature[0].aabb.height,
+      });
+      dbComp.dragon = dragon
+      dbComp.armature = dragon._armatureDisplay
+      const node: any = new cc.Node()
+      node.addChild(dragon)
+      // console.log('armature', dbComp.armature)
+      dbComp.armature.animation.timeScale = timeScale
+      // if (skin) {
+      //   node.setSkin(skin)
+      // }
+      dbComp.node = entity.assign(new NodeComp(node, entity));
+      if (dbComp.props.onAnimationStart)
+        dbComp.armature.addDBEventListener(dragonBones.EventObject.START, (event: any) => {
+          if (dbComp.node.active && dbComp.enabled)
+            dbComp.props.onAnimationStart()
+        }, dbComp)
+      if (dbComp.props.onAnimationEnd)
+        dbComp.armature.addDBEventListener(dragonBones.EventObject.COMPLETE, (event: any) => {
+          if (dbComp.node.active && dbComp.enabled)
+            dbComp.props.onAnimationEnd()
+        }, dbComp)
+      if (dbComp.props.onAnimationComplete)
+        dbComp.armature.addDBEventListener(dragonBones.EventObject.LOOP_COMPLETE, (event: any) => {
+          if (dbComp.node.active && dbComp.enabled)
+            dbComp.props.onAnimationComplete()
+        }, dbComp)
+    });
+    event_manager.subscribe(EventTypes.ComponentRemoved, DragonBonesComp, ({ component }) => {
+      const dbComp = component as DragonBonesComp;
+      dbComp.armature.removeDBEventListener()
+      dbComp.node.removeAllChildren()
+    });
   }
 
-  receive(type: string, event: EventReceive) {
-    switch (type) {
-      case ComponentAddedEvent(DragonBonesComp): {
-        // console.log('DragonBonesComp', event);
-        const ett = event.entity;
-        const dbComp = event.entity.getComponent(DragonBonesComp);
-        const { data, animation, playTimes = 0, timeScale = 1 } = dbComp.props;
-        const { atlas, skeleton, texture } = data;
-        const dragon = new PixiDragonBonesSprite({
-          ske: skeleton,
-          texJson: atlas,
-          texPng: texture,
-          animationName: animation,
-          playTimes,
-          // width: dataSkel.armature[0].aabb.width,
-          // height: dataSkel.armature[0].aabb.height,
-        });
-        dbComp.dragon = dragon
-        dbComp.armature = dragon._armatureDisplay
-        const node: any = new cc.Node()
-        node.addChild(dragon)
-        // console.log('armature', dbComp.armature)
-        dbComp.armature.animation.timeScale = timeScale
-        // if (skin) {
-        //   node.setSkin(skin)
-        // }
-        dbComp.node = ett.assign(new NodeComp(node, ett));
-        if (dbComp.props.onAnimationStart)
-          dbComp.armature.addDBEventListener(dragonBones.EventObject.START, (event: any) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationStart()
-          }, dbComp)
-        if (dbComp.props.onAnimationEnd)
-          dbComp.armature.addDBEventListener(dragonBones.EventObject.COMPLETE, (event: any) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationEnd()
-          }, dbComp)
-        if (dbComp.props.onAnimationComplete)
-          dbComp.armature.addDBEventListener(dragonBones.EventObject.LOOP_COMPLETE, (event: any) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationComplete()
-          }, dbComp)
-        break;
-      }
-
-      case ComponentRemovedEvent(DragonBonesComp): {
-        const { component } = event
-        const dbComp = component as DragonBonesComp;
-        dbComp.armature.removeDBEventListener()
-        dbComp.node.removeAllChildren()
-        break;
-      }
-      default:
-        break;
-    }
-  }
   update(entities: EntityManager, events: EventManager, dt: number) {
     // console.log('update', dt)
     const animations = entities.entities_with_components(DragonBonesComp)

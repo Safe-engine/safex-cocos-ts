@@ -333,7 +333,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   removeFromParent(cleanup?: boolean) {
-    this._active = false
+    this.active = false
     if (this.parent) {
       remove(this.parent.children, ({ entity }) => entity.id === this.entity.id)
     }

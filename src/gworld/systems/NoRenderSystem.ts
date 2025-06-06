@@ -1,4 +1,4 @@
-import { ComponentAddedEvent, ComponentRemovedEvent, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { Touch } from '../../polyfills'
 import { NodeComp } from '../components/NodeComp'
@@ -6,85 +6,76 @@ import { ExtraDataComp, TouchEventRegister } from '../components/NoRenderCompone
 
 export class NoRenderSystem implements System {
   configure(event_manager: EventManager) {
-    event_manager.subscribe(ComponentAddedEvent(ExtraDataComp), this)
-    event_manager.subscribe(ComponentAddedEvent(TouchEventRegister), this)
-    event_manager.subscribe(ComponentRemovedEvent(TouchEventRegister), this)
+    event_manager.subscribe(EventTypes.ComponentAdded, ExtraDataComp, this.onAddExtraDataComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, TouchEventRegister, this.onAddTouchEventRegister)
+    event_manager.subscribe(EventTypes.ComponentRemoved, TouchEventRegister, this.onRemovedTouchEventRegister)
   }
 
-  receive(type: string, event: EventReceive) {
-    switch (type) {
-      case ComponentAddedEvent(TouchEventRegister): {
-        // console.log('TouchEventRegister', event)
-        const ett = event.entity
-        const touchComp = event.component as TouchEventRegister
-        const nodeComp = ett.getComponent(NodeComp)
-        touchComp.node = nodeComp
-        touchComp.listener = cc.eventManager.addListener(
-          {
-            event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches: true,
-            onTouchBegan: function (touch: Touch) {
-              const { onTouchStart } = touchComp.props
-              // console.log('onTouchBegan', onTouchStart)
-              if (!nodeComp.parent) {
-                if (onTouchStart) {
-                  onTouchStart(touch, nodeComp)
-                }
-                return true
-              }
-              const p = touch.getLocation()
-              const rect = nodeComp.getBoundingBox()
-              const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
-              if (rect.contains(nodeSpaceLocation)) {
-                if (onTouchStart) {
-                  onTouchStart(touch, nodeComp)
-                }
-                return true
-              }
-            },
-            onTouchMoved: function (touch) {
-              const { onTouchMove } = touchComp.props
-              if (!onTouchMove) return false
-              onTouchMove(touch, nodeComp)
-              return true
-            },
-            onTouchEnded: function (touch) {
-              const { onTouchEnd } = touchComp.props
-              if (!onTouchEnd) return false
-              onTouchEnd(touch, nodeComp)
-              return true
-            },
-            onTouchCancelled: function (touch) {
-              const { onTouchCancel } = touchComp.props
-              if (!onTouchCancel) return false
-              onTouchCancel(touch, nodeComp)
-              return true
-            },
-          },
-          nodeComp.instance,
-        )
-        break
-      }
+  onAddTouchEventRegister = ({ entity, component }) => {
+    const ett = entity
+    const touchComp = component as TouchEventRegister
+    const nodeComp = ett.getComponent(NodeComp)
+    touchComp.node = nodeComp
+    touchComp.listener = cc.eventManager.addListener(
+      {
+        event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        swallowTouches: true,
+        onTouchBegan: function (touch: Touch) {
+          const { onTouchStart } = touchComp.props
+          // console.log('onTouchBegan', onTouchStart)
+          if (!nodeComp.parent) {
+            if (onTouchStart) {
+              onTouchStart(touch, nodeComp)
+            }
+            return true
+          }
+          const p = touch.getLocation()
+          const rect = nodeComp.getBoundingBox()
+          const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
+          if (rect.contains(nodeSpaceLocation)) {
+            if (onTouchStart) {
+              onTouchStart(touch, nodeComp)
+            }
+            return true
+          }
+        },
+        onTouchMoved: function (touch) {
+          const { onTouchMove } = touchComp.props
+          if (!onTouchMove) return false
+          onTouchMove(touch, nodeComp)
+          return true
+        },
+        onTouchEnded: function (touch) {
+          const { onTouchEnd } = touchComp.props
+          if (!onTouchEnd) return false
+          onTouchEnd(touch, nodeComp)
+          return true
+        },
+        onTouchCancelled: function (touch) {
+          const { onTouchCancel } = touchComp.props
+          if (!onTouchCancel) return false
+          onTouchCancel(touch, nodeComp)
+          return true
+        },
+      },
+      nodeComp.instance,
+    )
+  }
 
-      case ComponentRemovedEvent(TouchEventRegister): {
-        console.log('ComponentRemovedEvent TouchEventRegister', event)
-        // const ett = event.entity
-        // const nodeComp = ett.getComponent(NodeComp)
-        const touchComp = event.component as TouchEventRegister
-        delete touchComp.touch
-        cc.eventManager.removeListener(touchComp.listener)
-        break
-      }
-      case ComponentAddedEvent(ExtraDataComp): {
-        const extra = event.component as ExtraDataComp
-        const { key, value } = extra.props
-        extra.data[key] = value
-        break
-      }
-      default:
-        break
+  onAddExtraDataComp = ({  component }) => {
+    const extra = component as ExtraDataComp
+    const { key, value } = extra.props
+    extra.data[key] = value
+  }
+
+  onRemovedTouchEventRegister = ({ component }) => {
+    const touchComp = component as TouchEventRegister
+    if (touchComp.listener) {
+      cc.eventManager.removeListener(touchComp.listener)
+      touchComp.listener = null
     }
   }
+
   update(entities: EntityManager, events: EventManager, dt: number)
   update() {
     // throw new Error('Method not implemented.');

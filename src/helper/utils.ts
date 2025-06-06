@@ -1,4 +1,4 @@
-import { ComponentAddedEvent, ComponentRemovedEvent, Constructor, EntityManager, EventManager, EventReceive, System } from 'entityx-ts'
+import { Constructor, EntityManager, EventManager, EventReceive, EventTypes, System } from 'entityx-ts'
 
 import { Collider, CollideSystem, ComponentX, NodeComp, NoRenderComponentX, SceneComponent } from '..'
 import { GameWorld } from '../gworld'
@@ -10,29 +10,19 @@ export function registerSystem<T extends ComponentX>(component: Constructor<T>) 
   class NewSystem implements System {
     configure(event_manager: EventManager) {
       console.log('configure registerSystem', component.name)
-      event_manager.subscribe(ComponentAddedEvent(component), this)
-      event_manager.subscribe(ComponentRemovedEvent(component), this)
+      event_manager.subscribe(EventTypes.ComponentAdded, component, (event: EventReceive<T>) => {
+        const ett = event.entity
+        const newComp = event.component as any
+        newComp.node = ett.getComponent(NodeComp)
+      })
+      event_manager.subscribe(EventTypes.ComponentRemoved, component, (event: EventReceive<T>) => {
+        const newComp = event.component as any
+        if (newComp.destroy) {
+          newComp.destroy()
+        }
+      })
     }
 
-    receive(type: string, event: EventReceive) {
-      switch (type) {
-        case ComponentAddedEvent(component): {
-          const ett = event.entity
-          const newComp = event.component as any
-          newComp.node = ett.getComponent(NodeComp)
-          break
-        }
-        case ComponentRemovedEvent(component): {
-          const newComp = event.component as any
-          if (newComp.destroy) {
-            newComp.destroy()
-          }
-          break
-        }
-        default:
-          break
-      }
-    }
     update(entities: EntityManager, events: EventManager, dt: number) {
       for (const entt of entities.entities_with_components(component)) {
         const comp = entt.getComponent(component)
