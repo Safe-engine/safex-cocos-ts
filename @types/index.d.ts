@@ -1,5 +1,7 @@
 type Float = number
 type Integer = number
+declare var dragonBones: any;
+declare var PIXI: any;
 
 declare namespace cc {
   declare let v2: (x?: number | any, y?: number) => Vec2

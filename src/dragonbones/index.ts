@@ -7,13 +7,13 @@ import {
   System,
 } from 'entityx-ts';
 
-import { EventObject } from '@cocos/dragonbones-js';
 import { BaseComponentProps } from '../../@types/safex';
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
 import { CocosArmatureDisplay } from './cocos/CocosArmatureDisplay';
 import { CocosFactory } from './cocos/CocosFactory';
+import { PixiDragonBonesSprite } from './PixiDragonBonesSprite';
 
 export type DragonBonesEventData = { name: string }
 export interface DragonBonesData {
@@ -84,51 +84,62 @@ export class DragonBonesSystem implements System {
         // const texturePath = atlas.replace('.json', '.png')
         const { atlas, skeleton, texture } = data;
         // cc.textureCache.addImage(texture)
-        const factory = CocosFactory.factory;
-        const dataSkel = cc.loader.getRes(skeleton);
-        const dataAtlas = cc.loader.getRes(atlas);
-        const textureCache = cc.textureCache.getTextureForKey(texture);
-        // texture.initWithFile(texturePath)
-        factory.parseDragonBonesData(dataSkel);
-        factory.parseTextureAtlasData(dataAtlas, textureCache);
+        // const factory = CocosFactory.factory;
+        // const dataSkel = cc.loader.getRes(skeleton);
+        // const dataAtlas = cc.loader.getRes(atlas);
+        // const textureCache = cc.textureCache.getTextureForKey(texture);
+        // factory.parseDragonBonesData(dataSkel);
+        // factory.parseTextureAtlasData(dataAtlas, textureCache);
         // factory.loadDragonBonesData(skel)
         // console.log(skeleton, dataSkel)
-        const node = factory.buildArmatureDisplay(
-          dataSkel.armature[0].name,
-          dataSkel.name
-        );
-
-        // console.log('armature', armature)
+        // const node = factory.buildArmatureDisplay(
+        //   dataSkel.armature[0].name,
+        //   dataSkel.name
+        // );
+        const dragon = new PixiDragonBonesSprite({
+          ske: skeleton,
+          texJson: atlas,
+          texPng: texture,
+          animationName: animation,
+          // width: dataSkel.armature[0].aabb.width,
+          // height: dataSkel.armature[0].aabb.height,
+        });
+        const node: any = new cc.Node()
+        // const { x, y } = dataSkel.armature[0].aabb
+        // dragon.setPosition(cc.p(0, -y))
+        node.addChild(dragon)
+        // console.log('armature', node._armatureDisplay)
         // console.log('node', node);
-        // armature.animation.gotoAndPlay('run', 0.2)
-        node.armature.animation.timeScale = timeScale
-        if (animation) {
-          const state = node.armature.animation.gotoAndPlayByTime(
-            animation,
-            0,
-            playTimes
-          );
-        }
+        // const armature = node._armatureDisplay._armature
+        // // armature.animation.gotoAndPlay('run', 0.2)
+        // armature.animation.timeScale = timeScale
+        // if (animation) {
+        //   const state = armature.animation.gotoAndPlayByTime(
+        //     animation,
+        //     0,
+        //     playTimes
+        //   );
+        // }
         // console.log('state', state);
         // if (skin) {
         //   node.setSkin(skin)
         // }
         dbComp.node = ett.assign(new NodeComp(node, ett));
-        if (dbComp.props.onAnimationStart)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.START, (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationStart()
-          }, dbComp)
-        if (dbComp.props.onAnimationEnd)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationEnd()
-          }, dbComp)
-        if (dbComp.props.onAnimationComplete)
-          node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationComplete()
-          }, dbComp)
+        // if (dbComp.props.onAnimationStart)
+        //   node.armature.eventDispatcher.addDBEventListener(EventObject.START, (event: EventObject) => {
+        //     if (dbComp.node.active && dbComp.enabled)
+        //       dbComp.props.onAnimationStart()
+        //   }, dbComp)
+        // if (dbComp.props.onAnimationEnd)
+        //   node.armature.eventDispatcher.addDBEventListener(EventObject.COMPLETE, (event: EventObject) => {
+        //     if (dbComp.node.active && dbComp.enabled)
+        //       dbComp.props.onAnimationEnd()
+        //   }, dbComp)
+        // if (dbComp.props.onAnimationComplete)
+        //   node.armature.eventDispatcher.addDBEventListener(EventObject.LOOP_COMPLETE, (event: EventObject) => {
+        //     if (dbComp.node.active && dbComp.enabled)
+        //       dbComp.props.onAnimationComplete()
+        //   }, dbComp)
         break;
       }
 
