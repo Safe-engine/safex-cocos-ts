@@ -358,7 +358,9 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   removeAllChildren(cleanup?) {
-    this.instance.removeAllChildren(cleanup)
+    this.children.forEach((child) => {
+      child.removeFromParent(cleanup)
+    })
   }
 
   getData<T>(key: string): T {
