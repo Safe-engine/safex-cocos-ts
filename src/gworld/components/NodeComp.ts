@@ -126,7 +126,15 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   get active() {
-    return cc.sys.isObjectValid(this.instance) && this._active
+    if (!cc.sys.isObjectValid(this.instance) || !this._active)
+      return false
+    let p = this.parent
+    while (p) {
+      if (!p.active)
+        return false
+      p = p.parent
+    }
+    return true
   }
 
   set active(val: boolean) {

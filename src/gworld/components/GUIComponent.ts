@@ -32,7 +32,7 @@ export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
   // }
 }
 
-export class ProgressTimerComp extends ComponentX<ProgressTimerProps & BaseComponentProps<ProgressTimerComp>> {
+export class ProgressTimerComp extends ComponentX<ProgressTimerProps & BaseComponentProps<ProgressTimerComp>, cc.ProgressTimer & cc.Node> {
   spriteFrame: string
   fillType: Values
   fillRange: number

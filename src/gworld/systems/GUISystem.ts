@@ -1,4 +1,4 @@
-import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
+import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { TouchEventRegister } from '../..'
 import { Vec2 } from '../../polyfills'
@@ -28,8 +28,7 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, BlockInputEventsComp, this.onAddBlockInputEventsComp)
   }
 
-  private onAddButtonComp = ({ entity }) => {
-    const button = entity.getComponent(ButtonComp)
+  private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
     const nodeComp = entity.getComponent(NodeComp)
     // const { normalImage, selectedImage, disableImage, texType, zoomScale } = button
     button.node = nodeComp
@@ -39,7 +38,7 @@ export class GUISystem implements System {
       // console.log('onTouchBegan', p, nodeComp)
       const rect = nodeComp.getBoundingBox()
       const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
-      if (rect.contains(nodeSpaceLocation) && button.enabled) {
+      if (rect.contains(nodeSpaceLocation) && button.enabled && nodeComp.active) {
         const scale = cc.scaleTo(0.3, 1.2)
         nodeComp.runAction(scale)
         button.props.onPress(button)
@@ -54,12 +53,10 @@ export class GUISystem implements System {
     touchComp.props.onTouchCancel = touchComp.props.onTouchEnd
   }
 
-  private onAddProgressTimerComp = ({ entity }) => {
-    const ett = entity
-    const bar = ett.getComponent(ProgressTimerComp)
+  private onAddProgressTimerComp: EventReceiveCallback<ProgressTimerComp> = ({ entity, component: bar }) => {
     const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(1, 0) } = bar.props
     const sprite = new cc.Sprite(spriteFrame)
-    const pTimer = new cc.ProgressTimer(sprite)
+    const pTimer = new cc.ProgressTimer(sprite) as cc.ProgressTimer & cc.Node
     const ptt = fillType === FillType.RADIAL ? cc.ProgressTimer.TYPE_RADIAL : cc.ProgressTimer.TYPE_BAR
     pTimer.setType(ptt)
     if (fillType !== FillType.RADIAL) {
@@ -68,53 +65,44 @@ export class GUISystem implements System {
     }
     pTimer.setPercentage(fillRange * 100)
     pTimer.setMidpoint(fillCenter)
-    bar.node = ett.assign(new NodeComp(pTimer as any, ett))
+    bar.node = entity.assign(new NodeComp(pTimer, entity))
   }
 
-  private onAddLabelComp = ({ entity }) => {
-    const ett = entity
-    const label = ett.getComponent(LabelComp)
+  private onAddLabelComp: EventReceiveCallback<LabelComp> = ({ entity, component: label }) => {
     const { string = '', font = this.defaultFont, size = 64 } = label.props
     const fontName = cc.path.basename(font, '.ttf')
     const node = new ccui.Text(string, fontName, size)
     node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
-    label.node = ett.assign(new NodeComp(node, ett))
+    label.node = entity.assign(new NodeComp(node, entity))
   }
 
-  private onAddLabelOutlineComp = ({ entity }) => {
-    const ett = entity
-    const outline = ett.getComponent(LabelOutlineComp)
+  private onAddLabelOutlineComp: EventReceiveCallback<LabelOutlineComp> = ({ entity, component: outline }) => {
     const { color, width } = outline.props
-    const node = ett.getComponent(NodeComp)
+    const node = entity.getComponent(NodeComp)
     if (node.instance instanceof ccui.Text) {
       node.instance.enableOutline(color, width)
     }
   }
 
-  private onAddLabelShadowComp = ({ entity }) => {
-    const ett = entity
-    const shadow = ett.getComponent(LabelShadowComp)
+  private onAddLabelShadowComp: EventReceiveCallback<LabelShadowComp> = ({ entity, component: shadow }) => {
     const { color, blur, offset } = shadow.props
-    const node = ett.getComponent(NodeComp)
+    const node = entity.getComponent(NodeComp)
     if (node.instance instanceof ccui.Text) {
       node.instance.enableShadow(color, offset, blur)
     }
   }
 
-  private onAddRichTextComp = ({ entity }) => {
-    const ett = entity
-    const rich = ett.getComponent(RichTextComp)
+  private onAddRichTextComp: EventReceiveCallback<RichTextComp> = ({ entity, component: rich }) => {
     const { string = '' } = rich.props
     const node = new ccui.RichText()
     node.width = 500
     node.height = 300
     node.ignoreContentAdaptWithSize(false)
-    rich.node = ett.assign(new NodeComp(node, ett))
+    rich.node = entity.assign(new NodeComp(node, entity))
     rich.string = string
   }
 
-  private onAddScrollViewComp = ({ entity }) => {
-    const scrollView = entity.getComponent(ScrollViewComp)
+  private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {
     const { viewSize, contentSize, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
     const node = new cc.ScrollView(viewSize)
     node.setContentSize(contentSize)
@@ -126,10 +114,8 @@ export class GUISystem implements System {
     scrollView.node = entity.assign(new NodeComp(node, entity))
   }
 
-  private onAddBlockInputEventsComp = ({ entity }) => {
-    const ett = entity
-    const blockInput = ett.getComponent(BlockInputEventsComp)
-    const node = ett.getComponent(NodeComp)
+  private onAddBlockInputEventsComp: EventReceiveCallback<BlockInputEventsComp> = ({ entity, component: blockInput }) => {
+    const node = entity.getComponent(NodeComp)
     if (node.instance instanceof ccui.ImageView) {
       node.instance.setTouchEnabled(true)
       node.instance.setScale9Enabled(true)
