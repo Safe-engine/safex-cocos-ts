@@ -31,7 +31,8 @@ interface DragonBonesProps {
 }
 interface PixiDragonBonesAnimation {
   lastAnimationName: string
-  gotoAndPlayByTime: (name: string, index: number, playTimes?: number) => void
+  gotoAndPlayByTime: (name: string, index?: number, playTimes?: number) => void
+  play: (name: string, index?: number, playTimes?: number) => void
   timeScale: Float
 }
 interface PixiDragonBonesArmature {
