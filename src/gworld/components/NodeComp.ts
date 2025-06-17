@@ -33,19 +33,19 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.setPosition(val.x, val.y)
   }
 
-  getPositionX() {
+  get posX() {
     return this.instance.getPositionX()
   }
 
-  setPositionX(val: number) {
+  set posX(val: number) {
     this.instance.setPositionX(val)
   }
 
-  getPositionY() {
+  get posY() {
     return this.instance.getPositionY()
   }
 
-  setPositionY(val: number) {
+  set posY(val: number) {
     this.instance.setPositionY(val)
   }
 
@@ -126,12 +126,10 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   get active() {
-    if (!cc.sys.isObjectValid(this.instance) || !this._active)
-      return false
+    if (!cc.sys.isObjectValid(this.instance) || !this._active) return false
     let p = this.parent
     while (p) {
-      if (!p.active)
-        return false
+      if (!p.active) return false
       p = p.parent
     }
     return true
