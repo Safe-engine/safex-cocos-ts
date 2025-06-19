@@ -6,6 +6,7 @@ import {
   BlockInputEventsComp,
   ButtonComp,
   FillType,
+  InputComp,
   LabelComp,
   LabelOutlineComp,
   LabelShadowComp,
@@ -25,6 +26,7 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, LabelShadowComp, this.onAddLabelShadowComp)
     event_manager.subscribe(EventTypes.ComponentAdded, RichTextComp, this.onAddRichTextComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, BlockInputEventsComp, this.onAddBlockInputEventsComp)
   }
 
@@ -121,6 +123,19 @@ export class GUISystem implements System {
       node.instance.setScale9Enabled(true)
     }
     blockInput.node = node
+  }
+
+  private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {
+    const { placeHolder = '', font = this.defaultFont, size = 64, maxLength = 20, isPassword = false } = textInput.props
+    const textField = new ccui.TextField();
+    textField.setPlaceHolder(placeHolder);
+    textField.setFontName(font);
+    textField.setFontSize(size);
+    textField.setTextColor(cc.color(255, 255, 255));
+    textField.setMaxLengthEnabled(true);
+    textField.setMaxLength(maxLength);
+    textField.setPasswordEnabled(isPassword);
+    textInput.node = entity.assign(new NodeComp(textField, entity))
   }
 
   update(entities: EntityManager, events: EventManager, dt: number)
