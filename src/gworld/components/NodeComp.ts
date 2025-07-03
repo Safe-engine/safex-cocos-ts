@@ -33,6 +33,10 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.setPosition(val.x, val.y)
   }
 
+  set xy(val: Array<number>) {
+    this.instance.setPosition(val[0], val[1])
+  }
+
   get posX() {
     return this.instance.getPositionX()
   }
