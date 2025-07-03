@@ -8,42 +8,24 @@ importers:
 
   .:
     dependencies:
-      '@esotericsoftware/spine-core':
-        specifier: ^4.2.70
-        version: 4.2.70
-      cocos-html5-ts:
-        specifier: ^1.1.8
-        version: 1.1.8
       entityx-ts:
         specifier: ^2.2.1
         version: 2.2.1
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
     devDependencies:
-      '@types/lodash':
-        specifier: ^4.17.14
-        version: 4.17.14
+      cocos-html5-ts:
+        specifier: ^1.1.8
+        version: 1.1.8
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
 
 packages:
 
-  '@esotericsoftware/spine-core@4.2.70':
-    resolution: {integrity: sha512-J7DS6Z5tlZTOyqio1naY8K8OeRByE62AtBix/4aNUgrIFSHjPj0yDrp87UjOPKc5V5cJPasoqpmFO8By0N9egw==}
-
-  '@types/lodash@4.17.14':
-    resolution: {integrity: sha512-jsxagdikDiDBeIRaPYtArcT8my4tN1og7MtMRquFT3XNA6axxyHDRUemqDz/taRDdOUn0GnGHRCuff4q48sW9A==}
-
   cocos-html5-ts@1.1.8:
     resolution: {integrity: sha512-s+2afqYfOvwZDVdepP/gYOz35qi+EUGxWSBm786Y874h7feR2FrrYwC6+4ejibcF1lNwVY5NYmx3W4eG3H1RwA==}
 
   entityx-ts@2.2.1:
     resolution: {integrity: sha512-Z9uRGfmhcosgKZ1kAPM9MeZjiyym6Wg3fM4oDxn/0Lx4OfnZ4lhaoz7EnKb5p8ierBd90MJiGW/qVJ/4LxOmBg==}
-
-  lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
   typescript@5.7.3:
     resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
@@ -52,14 +34,8 @@ packages:
 
 snapshots:
 
-  '@esotericsoftware/spine-core@4.2.70': {}
-
-  '@types/lodash@4.17.14': {}
-
   cocos-html5-ts@1.1.8: {}
 
   entityx-ts@2.2.1: {}
-
-  lodash@4.17.21: {}
 
   typescript@5.7.3: {}

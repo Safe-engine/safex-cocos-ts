@@ -1,6 +1,4 @@
 import { Constructor, Entity } from 'entityx-ts'
-import remove from 'lodash/remove'
-
 import { instantiate } from '../../helper/utils'
 import { Vec2 } from '../../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
@@ -345,7 +343,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   removeFromParent(cleanup?: boolean) {
     this.active = false
     if (this.parent) {
-      remove(this.parent.children, ({ entity }) => entity.id === this.entity.id)
+      this.parent.children = this.parent.children.filter(({ entity }) => entity.id !== this.entity.id)
     }
     if (cleanup) {
       this.children.forEach((child) => {
