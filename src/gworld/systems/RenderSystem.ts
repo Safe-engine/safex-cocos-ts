@@ -1,8 +1,7 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
-import { SkeletonAnimation } from '../../spine/CCSkeletonAnimation'
 import { NodeComp } from '../components/NodeComp'
-import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpineSkeleton, SpriteRender, TiledMap } from '../components/RenderComponent'
+import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from '../components/RenderComponent'
 
 export enum SpriteTypes {
   SIMPLE,
@@ -18,7 +17,7 @@ export class RenderSystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, NodeRender, this.onAddNodeRender)
     event_manager.subscribe(EventTypes.ComponentAdded, SpriteRender, this.onAddSpriteRender)
     event_manager.subscribe(EventTypes.ComponentAdded, MaskRender, this.onAddMaskRender)
-    event_manager.subscribe(EventTypes.ComponentAdded, SpineSkeleton, this.onAddSpineSkeleton)
+    // event_manager.subscribe(EventTypes.ComponentAdded, SpineSkeleton, this.onAddSpineSkeleton)
     event_manager.subscribe(EventTypes.ComponentAdded, GraphicsRender, this.onAddGraphicsRender)
     event_manager.subscribe(EventTypes.ComponentAdded, ParticleComp, this.onAddParticleComp)
     event_manager.subscribe(EventTypes.ComponentAdded, TiledMap, this.onAddTiledMap)
@@ -47,20 +46,20 @@ export class RenderSystem implements System {
     node.setInverted(inverted)
     maskComp.node = entity.assign(new NodeComp(node, entity))
   }
-  private onAddSpineSkeleton = ({ entity }) => {
-    const spineComp = entity.getComponent(SpineSkeleton)
-    const { data, skin, animation, loop, timeScale = 1 } = spineComp.props
-    const { atlas, skeleton } = data
-    // cc.log(skel, atlas);
-    const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
-    if (skin) {
-      node.setSkin(skin)
-    }
-    if (animation) {
-      node.setAnimation(0, animation, loop)
-    }
-    spineComp.node = entity.assign(new NodeComp(node, entity))
-  }
+  // private onAddSpineSkeleton = ({ entity }) => {
+  //   const spineComp = entity.getComponent(SpineSkeleton)
+  //   const { data, skin, animation, loop, timeScale = 1 } = spineComp.props
+  //   const { atlas, skeleton } = data
+  //   // cc.log(skel, atlas);
+  //   const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
+  //   if (skin) {
+  //     node.setSkin(skin)
+  //   }
+  //   if (animation) {
+  //     node.setAnimation(0, animation, loop)
+  //   }
+  //   spineComp.node = entity.assign(new NodeComp(node, entity))
+  // }
 
   private onAddGraphicsRender = ({ entity }) => {
     const graphicsComp = entity.getComponent(GraphicsRender)
