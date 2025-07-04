@@ -48,7 +48,8 @@ export function startGame(option: cc.RunOptions, designedResolution, cb) {
     // Adjust viewport meta
     cc.view.adjustViewPort(true)
     // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(width, height, cc.ResolutionPolicy.FIXED_WIDTH)
+    const policy = width > height ? cc.ResolutionPolicy.FIXED_HEIGHT : cc.ResolutionPolicy.FIXED_WIDTH
+    cc.view.setDesignResolutionSize(width, height, policy)
     // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true)
     cc.director.runScene(new BootScene())
