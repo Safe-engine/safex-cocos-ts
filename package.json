@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "safe-engine with cocos renderer support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "cocos-html5-ts": "^1.1.8",
+    "cocos-html5-ts": "^1.1.9",
     "typescript": "^5.7.3"
   },
   "dependencies": {

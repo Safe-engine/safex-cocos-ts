@@ -13,16 +13,16 @@ importers:
         version: 2.2.1
     devDependencies:
       cocos-html5-ts:
-        specifier: ^1.1.8
-        version: 1.1.8
+        specifier: ^1.1.9
+        version: 1.1.9
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
 
 packages:
 
-  cocos-html5-ts@1.1.8:
-    resolution: {integrity: sha512-s+2afqYfOvwZDVdepP/gYOz35qi+EUGxWSBm786Y874h7feR2FrrYwC6+4ejibcF1lNwVY5NYmx3W4eG3H1RwA==}
+  cocos-html5-ts@1.1.9:
+    resolution: {integrity: sha512-hrlTz9ltgvz1jkooq4Dfo3u98VC0FTFTYvcY4EY7wzF4jwPd/SV/nZWhitIgWMwkaXdl0opJkrjT12ywLam5HA==}
 
   entityx-ts@2.2.1:
     resolution: {integrity: sha512-Z9uRGfmhcosgKZ1kAPM9MeZjiyym6Wg3fM4oDxn/0Lx4OfnZ4lhaoz7EnKb5p8ierBd90MJiGW/qVJ/4LxOmBg==}
@@ -34,7 +34,7 @@ packages:
 
 snapshots:
 
-  cocos-html5-ts@1.1.8: {}
+  cocos-html5-ts@1.1.9: {}
 
   entityx-ts@2.2.1: {}
 
