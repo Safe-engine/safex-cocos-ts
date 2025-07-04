@@ -1,9 +1,16 @@
 type Float = number
 type Integer = number
-declare var dragonBones: any;
-declare var PIXI: any;
+declare let dragonBones: any
+declare let PIXI: any
 
 declare namespace cc {
+  interface RunOptions {
+    debugMode: 1 | 0
+    showFPS: boolean
+    frameRate: number
+    id: string
+    renderMode: 0 | 1 | 2
+  }
   declare let v2: (x?: number | any, y?: number) => Vec2
   declare let v3: (x?: number | any, y?: number, z?: number) => Vec3
   declare let instantiate: (id: string) => NodeComp
