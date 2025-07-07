@@ -127,14 +127,14 @@ export class GUISystem implements System {
 
   private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {
     const { placeHolder = '', font = this.defaultFont, size = 64, maxLength = 20, isPassword = false } = textInput.props
-    const textField = new ccui.TextField();
-    textField.setPlaceHolder(placeHolder);
-    textField.setFontName(font);
-    textField.setFontSize(size);
-    textField.setTextColor(cc.color(255, 255, 255));
-    textField.setMaxLengthEnabled(true);
-    textField.setMaxLength(maxLength);
-    textField.setPasswordEnabled(isPassword);
+    const textField = new ccui.TextField()
+    textField.setPlaceHolder(placeHolder)
+    textField.setFontName(font)
+    textField.setFontSize(size)
+    textField.setTextColor(cc.color(255, 255, 255))
+    textField.setMaxLengthEnabled(true)
+    textField.setMaxLength(maxLength)
+    textField.setPasswordEnabled(isPassword)
     textInput.node = entity.assign(new NodeComp(textField, entity))
   }
 

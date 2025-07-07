@@ -146,4 +146,4 @@ export class InputComp extends ComponentX<InputCompProps & BaseComponentProps<In
   }
 }
 
-export class BlockInputEventsComp extends NoRenderComponentX { }
+export class BlockInputEventsComp extends NoRenderComponentX {}

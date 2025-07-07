@@ -1,4 +1,5 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
+
 import { AnimationComp } from '../components/AnimationComponent'
 import { NodeComp } from '../components/NodeComp'
 

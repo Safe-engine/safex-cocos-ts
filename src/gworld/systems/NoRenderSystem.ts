@@ -62,7 +62,7 @@ export class NoRenderSystem implements System {
     )
   }
 
-  onAddExtraDataComp = ({  component }) => {
+  onAddExtraDataComp = ({ component }) => {
     const extra = component as ExtraDataComp
     const { key, value } = extra.props
     extra.data[key] = value

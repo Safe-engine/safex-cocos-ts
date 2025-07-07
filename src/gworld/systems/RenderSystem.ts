@@ -1,5 +1,6 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
+import { BLUE, RED } from '../../polyfills'
 import { NodeComp } from '../components/NodeComp'
 import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from '../components/RenderComponent'
 
@@ -63,7 +64,7 @@ export class RenderSystem implements System {
 
   private onAddGraphicsRender = ({ entity }) => {
     const graphicsComp = entity.getComponent(GraphicsRender)
-    const { lineWidth, strokeColor, fillColor } = graphicsComp.props
+    const { lineWidth = 5, strokeColor = RED, fillColor = BLUE } = graphicsComp.props
     const node = new cc.DrawNode()
     node.setColor(strokeColor)
     node.setDrawColor(fillColor)
@@ -92,7 +93,8 @@ export class RenderSystem implements System {
     }
   }
 
-  update(entities: EntityManager, events: EventManager, dt: number) {
+  update(entities: EntityManager, events: EventManager, dt: number)
+  update() {
     // throw new Error('Method not implemented.');
   }
 }

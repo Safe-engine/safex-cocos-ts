@@ -31,7 +31,7 @@ export class CollideSystem implements System {
     this.addCollider(collider)
   }
 
-  private onRemoveCollider = ({ entity, component }) => {
+  private onRemoveCollider = ({ component }) => {
     this.removeColliders.push(component.getComponent(Collider))
   }
 
