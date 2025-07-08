@@ -1,5 +1,5 @@
 import { BaseComponentProps, ColorSource } from '../../../@types/safex'
-import { BLUE, RED } from '../../polyfills'
+import { BLUE, Color4B, RED, Vec2 } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
@@ -84,33 +84,36 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   strokeColor = RED
   fillColor = BLUE
 
-  circle(x, y, r) {
-    if (this.node.instance instanceof cc.DrawNode) {
-      this.node.instance.drawDot(cc.p(x, y), r, this.fillColor)
-    }
+  drawDot(x, y, r) {
+    this.node.instance.drawDot(cc.p(x, y), r, this.fillColor)
   }
-
-  // fill() { }
-
-  // stroke() { }
 
   // drawPoint(position: Vec2, pointSize: Float, color:  Color4B, pointType = PointType.Rect) {
 
   // }
   // // drawPoints(points: Vec2[], color: Color4B) {
   // // }
-  // drawLine(origin: Vec2, destination: Vec2, color: Color4B, thickness: Float) {
-
-  // }
-  // drawRect(origin: Vec2, destination: Vec2, color: Color4B) {
-  //   this.node.instance.drawRect(origin, destination, color)
-  // }
+  drawLine(origin: Vec2, destination: Vec2, thickness: Float, color: Color4B) {
+    this.node.instance.drawSegment(origin, destination, thickness, color)
+  }
+  drawRect(origin: Vec2, destination: Vec2, color: Color4B) {
+    this.node.instance.drawRect(origin, destination, color)
+  }
   // drawSolidRect(origin: Vec2, destination: Vec2, color: Color4B) {
 
   // }
-  // drawCircle(center: Vec2, radius: Float, angle?: Float, segments?: Integer, drawLineToCenter?: boolean, scaleX?: Float, scaleY?: Float, color?: Color4B, thickness?: Float) {
-  //   this.node.instance.drawCircle(x, y, radius)
-  // }
+  drawCircle(
+    center: Vec2,
+    radius: Float,
+    angle?: Float,
+    segments?: Integer,
+    drawLineToCenter?: boolean,
+    lineWidth?: Float,
+    color?: Color4B,
+  ) {
+    this.node.instance.drawCircle(center, radius, angle, segments, drawLineToCenter, lineWidth, color)
+  }
+
   // drawSolidCircle(origin: Vec2, destination: Vec2, color: Color4B) {
 
   // }
