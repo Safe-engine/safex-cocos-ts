@@ -1,4 +1,4 @@
-import { BaseComponentProps, LabelCompProps, LabelOutlineCompProps, LabelShadowCompProps, ProgressTimerProps } from '../../../@types/safex'
+import { BaseComponentProps, ColorSource } from '../../../@types/safex'
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
@@ -32,6 +32,14 @@ export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
   // }
 }
 
+interface ProgressTimerProps {
+  spriteFrame: string
+  fillType?: number
+  fillRange?: number
+  fillCenter?: Vec2
+  isReverse?: boolean
+}
+
 export class ProgressTimerComp extends ComponentX<ProgressTimerProps & BaseComponentProps<ProgressTimerComp>, cc.ProgressTimer & cc.Node> {
   spriteFrame: string
   fillType: Values
@@ -58,16 +66,29 @@ export class ProgressTimerComp extends ComponentX<ProgressTimerProps & BaseCompo
   }
 }
 
-export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
-  // protected font: string
-  // protected string: string
-  // protected size: number
+interface LabelCompProps {
+  font?: string
+  string?: string
+  size?: number
+}
 
-  getString() {
+interface LabelOutlineCompProps {
+  color: ColorSource
+  width: number
+}
+
+interface LabelShadowCompProps {
+  color: ColorSource
+  blur: number
+  offset: Vec2
+}
+
+export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
+  get string() {
     return this.props.string
   }
 
-  setString(val: string) {
+  set string(val: string) {
     this.props.string = val
     if (this.node.instance instanceof ccui.Text) {
       this.node.instance.setString(val)

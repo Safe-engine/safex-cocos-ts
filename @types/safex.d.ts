@@ -15,32 +15,7 @@ interface NodeCompProps {
   nodeName?: string
 }
 
-interface ProgressTimerProps {
-  spriteFrame: string
-  fillType?: LoadingBarMode
-  fillRange?: number
-  fillCenter?: Point
-  isReverse?: boolean
-}
-
 // interface LoadingBarProps {}
-
-interface LabelCompProps {
-  font?: string
-  string?: string
-  size?: number
-}
-
-interface LabelOutlineCompProps {
-  color: ColorSource
-  width: number
-}
-
-interface LabelShadowCompProps {
-  color: ColorSource
-  blur: number
-  offset: Point
-}
 
 interface SpineData {
   atlas: string
