@@ -32,25 +32,25 @@ export class GUISystem implements System {
 
   private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
     const nodeComp = entity.getComponent(NodeComp)
-    // const { normalImage, selectedImage, disableImage, texType, zoomScale } = button
+    const { zoomScale = 1.2 } = button.props
     button.node = nodeComp
+    const lastScaleX = nodeComp.scaleX
+    const lastScaleY = nodeComp.scaleY
     const touchComp = entity.assign(new TouchEventRegister())
     touchComp.props.onTouchStart = function (touch) {
       const p = touch.getLocation()
-      // console.log('onTouchBegan', p, nodeComp)
+      // console.log('onTouchBegan', p, lastScaleX, lastScaleY)
       const rect = nodeComp.getBoundingBox()
       const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
       if (rect.contains(nodeSpaceLocation) && button.enabled && nodeComp.active) {
-        const scale = cc.scaleTo(0.3, 1.2)
+        const scale = cc.scaleTo(0.3, zoomScale * lastScaleX, lastScaleY * zoomScale)
         nodeComp.runAction(scale)
         button.props.onPress(button)
-        // return true
       }
     }
     touchComp.props.onTouchEnd = function () {
-      const scale = cc.scaleTo(0.3, 1)
+      const scale = cc.scaleTo(0.3, lastScaleX, lastScaleY)
       nodeComp.runAction(scale)
-      // return true
     }
     touchComp.props.onTouchCancel = touchComp.props.onTouchEnd
   }

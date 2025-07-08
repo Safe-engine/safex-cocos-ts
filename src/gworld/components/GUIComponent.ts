@@ -20,7 +20,7 @@ interface ButtonCompProps {
   onPress?: (target: ButtonComp) => void
 }
 export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
-  texType: ccui.Widget.TextureType
+  // texType: ccui.Widget.TextureType
   clickEvents = []
 
   setOnPress(cb: (target: ButtonComp) => void) {

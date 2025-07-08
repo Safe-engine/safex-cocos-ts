@@ -7,7 +7,7 @@ export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeCom
   static hasRender = true
   props: Props = {} as any
   node: N
-  enabled: boolean = true
+  enabled = true
   constructor(data?: BaseComponentProps<EnhancedComponent> & Props) {
     this.init(data)
   }
