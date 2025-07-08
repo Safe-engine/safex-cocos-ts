@@ -15,12 +15,6 @@ interface NodeCompProps {
   nodeName?: string
 }
 
-interface GraphicsRenderProps {
-  lineWidth?: number
-  strokeColor?: ColorSource
-  fillColor?: ColorSource
-}
-
 interface ProgressTimerProps {
   spriteFrame: string
   fillType?: LoadingBarMode

@@ -1,4 +1,4 @@
-import { BaseComponentProps, GraphicsRenderProps } from '../../../@types/safex'
+import { BaseComponentProps, ColorSource } from '../../../@types/safex'
 import { BLUE, RED } from '../../polyfills'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
@@ -38,12 +38,12 @@ interface MaskRenderProps {
   segments?: number
   inverted?: boolean
 }
-export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> { }
+export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
 
 interface ParticleCompProps {
   plistFile: string
 }
-export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> { }
+export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
 
 // interface SpineSkeletonProps {
 //   data: SpineData
@@ -72,6 +72,12 @@ export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSyste
 //     skel.initWithArgs(data, atlas, this.node.scale)
 //   }
 // }
+
+interface GraphicsRenderProps {
+  lineWidth?: number
+  strokeColor?: ColorSource
+  fillColor?: ColorSource
+}
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseComponentProps<GraphicsRender>, cc.DrawNode> {
   lineWidth = 5
@@ -145,4 +151,4 @@ interface TiledMapProps {
   mapFile: string
 }
 
-export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> { }
+export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
