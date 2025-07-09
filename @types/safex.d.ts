@@ -1,4 +1,4 @@
-import { Color4B, NodeComp } from '../src'
+import { Collider, Color4B, NodeComp, Vec2 } from '@safe-engine/cocos'
 
 type ColorSource = ReturnType<typeof Color4B>
 

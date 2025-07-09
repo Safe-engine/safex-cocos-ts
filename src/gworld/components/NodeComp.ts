@@ -1,4 +1,5 @@
 import { Constructor, Entity } from 'entityx-ts'
+
 import { instantiate } from '../../helper/utils'
 import { Vec2 } from '../../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'

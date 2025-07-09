@@ -30,8 +30,7 @@ export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
   // update(dt: number, draw?: cc.DrawNode) {}
   getAABB() {
     const collider = this.getComponent(Collider)
-    if (collider)
-      return collider._AABB
+    if (collider) return collider._AABB
     return this._AABB
   }
   get world() {
