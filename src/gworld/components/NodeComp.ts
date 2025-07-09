@@ -12,8 +12,8 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   parent: NodeComp
   children: NodeComp[] = []
   name: string
-  _group
-  _active = true
+  private _group
+  private _active = true
 
   constructor(instance: C, entity: Entity) {
     this.entity = entity
