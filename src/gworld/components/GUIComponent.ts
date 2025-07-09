@@ -1,6 +1,6 @@
-import { BaseComponentProps, ColorSource } from '../../../@types/safex'
 import { HtmlTextParser } from '../../helper/html-text-parser'
 import { Color4B, Size, Vec2 } from '../../polyfills'
+import { BaseComponentProps, ColorSource } from '../../safex'
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
 
 export const FillType = {

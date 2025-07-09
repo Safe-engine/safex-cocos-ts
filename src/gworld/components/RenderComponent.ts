@@ -1,5 +1,5 @@
-import { BaseComponentProps, ColorSource } from '../../../@types/safex'
 import { BLUE, Color4B, RED, Vec2 } from '../../polyfills'
+import { BaseComponentProps, ColorSource } from '../../safex'
 import { ComponentX } from '../core/decorator'
 export class NodeRender extends ComponentX {
   nodeName: string
@@ -44,6 +44,12 @@ interface ParticleCompProps {
   plistFile: string
 }
 export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
+
+// interface SpineData {
+//   atlas: string
+//   skeleton: string
+//   texture?: string
+// }
 
 // interface SpineSkeletonProps {
 //   data: SpineData

@@ -5,10 +5,10 @@ import {
   System
 } from 'entityx-ts';
 
-import { BaseComponentProps } from '../../@types/safex';
 import { GameWorld } from '../gworld';
 import { NodeComp } from '../gworld/components/NodeComp';
 import { ComponentX } from '../gworld/core/decorator';
+import { BaseComponentProps } from '../safex';
 import { PixiDragonBonesSprite } from './PixiDragonBonesSprite';
 
 export type DragonBonesEventData = { name: string }
