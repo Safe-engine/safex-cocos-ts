@@ -348,10 +348,11 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     }
     if (cleanup) {
       this.children.forEach((child) => {
-        child.entity.destroy()
+        child.destroy()
       })
       this.parent = null
       this.entity.destroy()
+      this.stopAllActions()
       this.instance.removeFromParent(cleanup)
     } else {
       this.stopAllActions()
