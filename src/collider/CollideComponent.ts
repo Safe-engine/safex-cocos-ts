@@ -1,6 +1,6 @@
-import { getMax, getMin } from '../../helper/math'
-import { Vec2 } from '../../polyfills'
-import { NoRenderComponentX } from '../core/decorator'
+import { NoRenderComponentX } from '../gworld/core/decorator'
+import { getMax, getMin } from '../helper/math'
+import { Vec2 } from '../polyfills'
 
 function getNodeToWorldTransformAR(node) {
   const t = node.instance.getNodeToWorldTransform()

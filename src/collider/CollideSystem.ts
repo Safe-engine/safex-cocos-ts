@@ -1,8 +1,18 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
-import { shouldCollider } from '../../helper/utils'
-import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from '../components/CollideComponent'
-import { NodeComp } from '../components/NodeComp'
+import { GameWorld } from '../gworld'
+import { NodeComp } from '../gworld/components/NodeComp'
+import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from './CollideComponent'
+
+export function shouldCollider(colA: Collider, colB: Collider) {
+  const groupA = colA.node.group
+  const groupB = colB.node.group
+  if (groupA === undefined || groupB === undefined) {
+    return true
+  }
+  const { colliderMatrix } = GameWorld.Instance.systems.get(CollideSystem)
+  return colliderMatrix[groupA][groupB]
+}
 
 export class CollideSystem implements System {
   listColliders: Collider[] = []

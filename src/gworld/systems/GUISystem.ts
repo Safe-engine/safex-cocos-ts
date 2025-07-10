@@ -11,7 +11,6 @@ import {
   LabelOutlineComp,
   LabelShadowComp,
   ProgressTimerComp,
-  RichTextComp,
   ScrollViewComp,
 } from '../components/GUIComponent'
 import { NodeComp } from '../components/NodeComp'
@@ -24,7 +23,6 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
     event_manager.subscribe(EventTypes.ComponentAdded, LabelOutlineComp, this.onAddLabelOutlineComp)
     event_manager.subscribe(EventTypes.ComponentAdded, LabelShadowComp, this.onAddLabelShadowComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, RichTextComp, this.onAddRichTextComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, BlockInputEventsComp, this.onAddBlockInputEventsComp)
@@ -92,16 +90,6 @@ export class GUISystem implements System {
     if (node.instance instanceof ccui.Text) {
       node.instance.enableShadow(color, offset, blur)
     }
-  }
-
-  private onAddRichTextComp: EventReceiveCallback<RichTextComp> = ({ entity, component: rich }) => {
-    const { string = '' } = rich.props
-    const node = new ccui.RichText()
-    node.width = 500
-    node.height = 300
-    node.ignoreContentAdaptWithSize(false)
-    rich.node = entity.assign(new NodeComp(node, entity))
-    rich.string = string
   }
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {

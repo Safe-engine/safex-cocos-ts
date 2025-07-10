@@ -1,6 +1,5 @@
-import { setupDragonBones } from './dragonbones'
+import { CollideSystem } from './collider/CollideSystem'
 import { GameWorld } from './gworld'
-import { CollideSystem } from './gworld/systems/CollideSystem'
 import { GUISystem } from './gworld/systems/GUISystem'
 import { NoRenderSystem } from './gworld/systems/NoRenderSystem'
 import { RenderSystem } from './gworld/systems/RenderSystem'
@@ -18,7 +17,6 @@ export function initWorld() {
   GameWorld.Instance.systems.configureOnce(CollideSystem)
   GameWorld.Instance.systems.configureOnce(GUISystem)
   GameWorld.Instance.systems.configureOnce(NoRenderSystem)
-  setupDragonBones()
 }
 
 export function startGame(option: cc.RunOptions, designedResolution, cb) {

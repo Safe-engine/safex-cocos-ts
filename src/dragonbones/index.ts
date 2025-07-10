@@ -137,8 +137,8 @@ export class DragonBonesSystem implements System {
   }
 }
 
-export function setupDragonBones() {
-  GameWorld.Instance.systems.add(DragonBonesSystem)
-  GameWorld.Instance.listUpdate.push(DragonBonesSystem)
-  GameWorld.Instance.systems.configureOnce(DragonBonesSystem)
+export function setupDragonBones(world: GameWorld) {
+  world.systems.add(DragonBonesSystem)
+  world.listUpdate.push(DragonBonesSystem)
+  world.systems.configureOnce(DragonBonesSystem)
 }
