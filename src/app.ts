@@ -14,8 +14,10 @@ export function initWorld(defaultFont?: string) {
   GameWorld.Instance.systems.configureOnce(CollideSystem)
   GameWorld.Instance.systems.configureOnce(GUISystem)
   GameWorld.Instance.systems.configureOnce(NoRenderSystem)
-  const guiSystem = GameWorld.Instance.systems.get(GUISystem)
-  guiSystem.defaultFont = defaultFont
+  if (defaultFont) {
+    const guiSystem = GameWorld.Instance.systems.get(GUISystem)
+    guiSystem.defaultFont = defaultFont
+  }
 }
 interface RunOptions {
   debugMode: 1 | 0
