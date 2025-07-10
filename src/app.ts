@@ -4,26 +4,29 @@ import { GUISystem } from './gworld/systems/GUISystem'
 import { NoRenderSystem } from './gworld/systems/NoRenderSystem'
 import { RenderSystem } from './gworld/systems/RenderSystem'
 
-export function initWorld() {
+export function initWorld(defaultFont?: string) {
   GameWorld.Instance.systems.add(RenderSystem)
-  // GameWorld.Instance.systems.add(PhysicsSystem)
   GameWorld.Instance.systems.add(CollideSystem)
   GameWorld.Instance.systems.add(GUISystem)
   GameWorld.Instance.systems.add(NoRenderSystem)
-  // GameWorld.Instance.listUpdate.push(PhysicsSystem)
   GameWorld.Instance.listUpdate.push(CollideSystem)
   GameWorld.Instance.systems.configureOnce(RenderSystem)
-  // GameWorld.Instance.systems.configureOnce(PhysicsSystem)
   GameWorld.Instance.systems.configureOnce(CollideSystem)
   GameWorld.Instance.systems.configureOnce(GUISystem)
   GameWorld.Instance.systems.configureOnce(NoRenderSystem)
+  const guiSystem = GameWorld.Instance.systems.get(GUISystem)
+  guiSystem.defaultFont = defaultFont
 }
-
-export function startGame(option: cc.RunOptions, designedResolution, cb) {
-  const { width, height } = designedResolution
+interface RunOptions {
+  debugMode: 1 | 0
+  showFPS: boolean
+  frameRate: number
+  id: string
+  renderMode: 0 | 1 | 2
+}
+export function startGame(option: RunOptions, { width, height }, cb: () => void) {
   class BootScene extends cc.Scene {
     constructor() {
-      // 1. super init first
       super()
       super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
       this.scheduleUpdate()
