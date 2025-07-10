@@ -1,13 +1,11 @@
-import { EnhancedComponent } from './EnhancedComponent'
-import { SpriteRender } from './RenderComponent'
+import { EnhancedComponent } from '../gworld/components/EnhancedComponent'
+import { SpriteRender } from '../gworld/components/RenderComponent'
 
-export declare namespace AnimationClip {
-  export interface IEvent {
-    frame: number
-    func: string
-    params: string[]
-    isCalled: boolean
-  }
+export interface IEvent {
+  frame: number
+  func: string
+  params: string[]
+  isCalled: boolean
 }
 
 export enum WrapMode {
@@ -40,7 +38,7 @@ export class AnimationClip {
   public sample = 60
   public speed = 1
   public wrapMode = WrapMode.Normal
-  public events: AnimationClip.IEvent[] = []
+  public events: IEvent[] = []
   public duration = 0
   name: string
   curveData: CurveData
