@@ -1,5 +1,6 @@
 import { NoRenderComponentX } from '../gworld/core/decorator'
 import { Vec2 } from '../polyfills'
+import { BaseComponentProps } from '../safex'
 import { PhysicsSprite } from './PhysicsSprite'
 
 interface RigidBodyProps {
@@ -41,14 +42,14 @@ export class PhysicsMaterial extends NoRenderComponentX<PhysicsMaterialProps> {}
 
 interface ColliderPhysicsProps {
   tag?: number
-  group?: number
   offset?: Vec2
-  onCollisionEnter?: (other: PhysicsCollider) => void
-  onCollisionExit?: (other: PhysicsCollider) => void
-  onCollisionStay?: (other: PhysicsCollider) => void
+  onBeginContact?: (other: PhysicsCollider) => void
+  onEndContact?: (other: PhysicsCollider) => void
+  onPreSolve?: (other: PhysicsCollider, impulse?) => void
+  onPostSolve?: (other: PhysicsCollider, oldManifold?) => void
 }
 
-export class PhysicsCollider<T extends ColliderPhysicsProps = ColliderPhysicsProps> extends NoRenderComponentX<T, PhysicsSprite['node']> {
+export class PhysicsCollider extends NoRenderComponentX<ColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {
   enabled = true
   instance: PhysicsSprite
 }
@@ -57,7 +58,7 @@ interface BoxColliderPhysicsProps extends ColliderPhysicsProps {
   width: number
   height: number
 }
-export class PhysicsBoxCollider extends PhysicsCollider<BoxColliderPhysicsProps> {
+export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {
   // set onCollisionEnter(val) {
   //   const phys1 = this.getComponent(PhysicsCollider)
   //   phys1._onCollisionEnter = val
@@ -70,8 +71,8 @@ export class PhysicsBoxCollider extends PhysicsCollider<BoxColliderPhysicsProps>
 interface CircleColliderPhysicsProps extends ColliderPhysicsProps {
   radius: number
 }
-export class PhysicsCircleCollider extends PhysicsCollider<CircleColliderPhysicsProps> {}
+export class PhysicsCircleCollider extends NoRenderComponentX<CircleColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}
 interface PolygonColliderPhysicsProps extends ColliderPhysicsProps {
   points: Array<Vec2>
 }
-export class PhysicsPolygonCollider extends PhysicsCollider<PolygonColliderPhysicsProps> {}
+export class PhysicsPolygonCollider extends NoRenderComponentX<PolygonColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}
