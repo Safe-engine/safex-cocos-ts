@@ -14,6 +14,9 @@ import {
 } from './PhysicsComponent'
 import { PhysicsSprite } from './PhysicsSprite'
 
+export const DynamicBody = 2
+export const KinematicBody = 1
+export const StaticBody = 0
 export let box2D: typeof Box2D
 
 export function initBox2d(cb) {
@@ -48,7 +51,7 @@ export class PhysicsSystem implements System {
   graphics: cc.DrawNode
 
   configure(event_manager: EventManager) {
-    const { b2BodyDef, b2_dynamicBody, b2_staticBody, b2FixtureDef, b2PolygonShape, b2Vec2, b2World, getPointer, b2ContactListener } =
+    const { b2BodyDef, b2FixtureDef, b2PolygonShape, b2CircleShape, b2Vec2, b2World, pointsToVec2Array, getPointer, b2ContactListener } =
       box2D as typeof Box2D
     const gravity = new b2Vec2(0, -10)
     this.world = new b2World(gravity)
@@ -69,7 +72,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = 'static', gravityScale = 1 } = rigidBody.props
+      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
       const physicsMaterial = entity.getComponent(PhysicsMaterial)
       const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
       const box = component
@@ -82,7 +85,7 @@ export class PhysicsSystem implements System {
       const offset = new b2Vec2(x, y)
 
       const bd = new b2BodyDef()
-      bd.set_type(type === 'dynamic' ? b2_dynamicBody : b2_staticBody)
+      bd.set_type(type)
       bd.set_position(zero)
       bd.set_gravityScale(gravityScale)
       const body = this.world.CreateBody(bd)
@@ -109,8 +112,100 @@ export class PhysicsSystem implements System {
       physicsCollide.node = node
       box.node = node
     })
-    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsCircleCollider, () => {})
-    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsPolygonCollider, () => {})
+    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsCircleCollider, ({ entity, component }) => {
+      console.log('ComponentAddedEvent PhysicsCircleCollider', component)
+      let rigidBody = entity.getComponent(RigidBody)
+      if (!rigidBody) {
+        rigidBody = instantiate(RigidBody)
+        entity.assign(rigidBody)
+      }
+      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
+      const physicsMaterial = entity.getComponent(PhysicsMaterial)
+      const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
+      const node = entity.getComponent(NodeComp)
+      const { radius, ...colliderProps } = component.props
+      // ett.assign(instantiate(PhysicsCollider, { tag, offset }))
+      const { x = 0, y = 0 } = colliderProps.offset || {}
+      const zero = new b2Vec2(0, 0)
+      const position = new b2Vec2(node.posX, node.posY)
+      const offset = new b2Vec2(x, y)
+
+      const bd = new b2BodyDef()
+      bd.set_type(type)
+      bd.set_position(zero)
+      bd.set_gravityScale(gravityScale)
+      const body = this.world.CreateBody(bd)
+      rigidBody.body = body
+      // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
+      // body.setMassData({ mass: 1 } as any)
+      const physicsNode = new PhysicsSprite(node.instance, body)
+      const circleShape = new b2CircleShape()
+      circleShape.set_m_radius(radius)
+      const fixtureDef = new b2FixtureDef()
+      fixtureDef.set_shape(circleShape)
+      fixtureDef.set_density(density)
+      fixtureDef.set_friction(friction)
+      fixtureDef.set_restitution(restitution)
+      body.CreateFixture(fixtureDef)
+      body.SetTransform(position, 0)
+      body.SetLinearVelocity(zero)
+      body.SetAwake(true)
+      body.SetEnabled(true)
+      metadata[getPointer(body)] = node
+
+      const physicsCollide = entity.assign(instantiate(PhysicsCollider, colliderProps))
+      physicsCollide.instance = physicsNode
+      physicsCollide.node = node
+      component.node = node
+    })
+    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsPolygonCollider, ({ entity, component }) => {
+      console.log('ComponentAddedEvent PhysicsPolygonCollider', component)
+      let rigidBody = entity.getComponent(RigidBody)
+      if (!rigidBody) {
+        rigidBody = instantiate(RigidBody)
+        entity.assign(rigidBody)
+      }
+      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
+      const physicsMaterial = entity.getComponent(PhysicsMaterial)
+      const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
+      const node = entity.getComponent(NodeComp)
+      const { points, ...colliderProps } = component.props
+      // ett.assign(instantiate(PhysicsCollider, { tag, offset }))
+      const { x = 0, y = 0 } = colliderProps.offset || {}
+      const zero = new b2Vec2(0, 0)
+      const position = new b2Vec2(node.posX, node.posY)
+      const offset = new b2Vec2(x, y)
+
+      const bd = new b2BodyDef()
+      bd.set_type(type)
+      bd.set_position(zero)
+      bd.set_gravityScale(gravityScale)
+      const body = this.world.CreateBody(bd)
+      rigidBody.body = body
+      // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
+      // body.setMassData({ mass: 1 } as any)
+      const physicsNode = new PhysicsSprite(node.instance, body)
+      const polygonShape = new b2PolygonShape()
+      const [vecArr, destroyVecArr] = pointsToVec2Array(points)
+      polygonShape.Set(vecArr, points.length)
+      destroyVecArr()
+      const fixtureDef = new b2FixtureDef()
+      fixtureDef.set_shape(polygonShape)
+      fixtureDef.set_density(density)
+      fixtureDef.set_friction(friction)
+      fixtureDef.set_restitution(restitution)
+      body.CreateFixture(fixtureDef)
+      body.SetTransform(position, 0)
+      body.SetLinearVelocity(zero)
+      body.SetAwake(true)
+      body.SetEnabled(true)
+      metadata[getPointer(body)] = node
+
+      const physicsCollide = entity.assign(instantiate(PhysicsCollider, colliderProps))
+      physicsCollide.instance = physicsNode
+      physicsCollide.node = node
+      component.node = node
+    })
     event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, ({ entity }) => {
       // log('ComponentRemovedEvent NodeComp', event);
       const node = entity.getComponent(NodeComp)

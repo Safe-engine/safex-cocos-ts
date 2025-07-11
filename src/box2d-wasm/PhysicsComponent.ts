@@ -3,7 +3,7 @@ import { Vec2 } from '../polyfills'
 import { PhysicsSprite } from './PhysicsSprite'
 
 interface RigidBodyProps {
-  type?: 'static' | 'dynamic'
+  type?: 0 | 1 | 2 // 0: Static, 1: Kinematic, 2: Dynamic
   density?: Float
   restitution?: Float
   friction?: Float
