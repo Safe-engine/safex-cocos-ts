@@ -67,7 +67,7 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    */
   const drawPolygon = (vertices, fill) => {
     // console.log("drawPolygon", vertices[0].y, fill);
-    graphics.drawPoly(vertices, fill)
+    graphics.drawPoly(vertices, Color4B(255, 0, 0, 50), fill ? 1 : 0)
     // graphics.drawPoly(vertices[vertices.length - 1].x * pixelsPerMeter, vertices[vertices.length - 1].y * pixelsPerMeter)
     // vertices.forEach((v) => {
     //   graphics.lineTo(v.x * pixelsPerMeter, v.y * pixelsPerMeter)

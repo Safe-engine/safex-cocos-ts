@@ -73,7 +73,7 @@ export class PhysicsSystem implements System {
       const physicsMaterial = entity.getComponent(PhysicsMaterial)
       const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
       const box = component
-      const node = entity.getComponent(NodeComp)
+      const node = entity.getComponent(NodeComp<PhysicsSprite>)
       const { width, height, ...colliderProps } = box.props
       // ett.assign(instantiate(ColliderPhysics, { tag, offset }))
       const { x = 0, y = 0 } = colliderProps.offset || {}
@@ -109,16 +109,16 @@ export class PhysicsSystem implements System {
       physicsCollide.node = node
       box.node = node
     })
-    event_manager.subscribe(EventTypes.ComponentAdded, CircleColliderPhysics, () => {})
-    event_manager.subscribe(EventTypes.ComponentAdded, PolygonColliderPhysics, () => {})
-    event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, () => {
+    event_manager.subscribe(EventTypes.ComponentAdded, CircleColliderPhysics, () => { })
+    event_manager.subscribe(EventTypes.ComponentAdded, PolygonColliderPhysics, () => { })
+    event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, ({ entity }) => {
       // log('ComponentRemovedEvent NodeComp', event);
-      // const node = event.entity.getComponent(NodeComp)
-      // if (node.instance instanceof Sprite) {
-      //   const body = node.instance.getBody()
-      //   this.listRemoveShape.push(...body.shapeList)
-      //   this.listRemoveBody.push(body)
-      // }
+      const node = entity.getComponent(NodeComp<PhysicsSprite>)
+      if (node.instance instanceof PhysicsSprite) {
+        const body = node.instance.getBody()
+        this.listRemoveShape.push(...body.shapeList)
+        this.listRemoveBody.push(body)
+      }
     })
     const listener = makeContactListener(this.world, metadata, box2D)
     this.world.SetContactListener(listener)
@@ -126,6 +126,20 @@ export class PhysicsSystem implements System {
 
   update(entities: EntityManager, events: EventManager, dt: number) {
     if (this.world) {
+      const { getPointer } = box2D
+      // remove bodies and shapes
+      this.listRemoveBody.forEach((body) => {
+        if (body) {
+          this.world.DestroyBody(getPointer(body))
+        }
+      })
+      // this.listRemoveShape.forEach((shape) => {
+      //   if (shape) {
+      //     this.world.DestroyShape(shape)
+      //   }
+      // })
+      this.listRemoveBody = []
+      this.listRemoveShape = []
       const clampedDelta = Math.min(dt, maxTimeStep)
       this.world.Step(clampedDelta, velocityIterations, positionIterations)
       this.graphics.clear()
