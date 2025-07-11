@@ -42,7 +42,7 @@ const pixelsPerMeter = 1
 
 export class PhysicsSystem implements System {
   world: Box2D.b2World
-  listRemoveBody: Body[] = []
+  listRemoveBody: Box2D.b2Body[] = []
   listRemoveShape: Box2D.b2Shape[] = []
   colliderMatrix = [[true]]
   graphics: cc.DrawNode
@@ -73,7 +73,7 @@ export class PhysicsSystem implements System {
       const physicsMaterial = entity.getComponent(PhysicsMaterial)
       const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
       const box = component
-      const node = entity.getComponent(NodeComp<PhysicsSprite>)
+      const node = entity.getComponent(NodeComp)
       const { width, height, ...colliderProps } = box.props
       // ett.assign(instantiate(ColliderPhysics, { tag, offset }))
       const { x = 0, y = 0 } = colliderProps.offset || {}
@@ -109,14 +109,14 @@ export class PhysicsSystem implements System {
       physicsCollide.node = node
       box.node = node
     })
-    event_manager.subscribe(EventTypes.ComponentAdded, CircleColliderPhysics, () => { })
-    event_manager.subscribe(EventTypes.ComponentAdded, PolygonColliderPhysics, () => { })
+    event_manager.subscribe(EventTypes.ComponentAdded, CircleColliderPhysics, () => {})
+    event_manager.subscribe(EventTypes.ComponentAdded, PolygonColliderPhysics, () => {})
     event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, ({ entity }) => {
       // log('ComponentRemovedEvent NodeComp', event);
-      const node = entity.getComponent(NodeComp<PhysicsSprite>)
+      const node = entity.getComponent(NodeComp)
       if (node.instance instanceof PhysicsSprite) {
         const body = node.instance.getBody()
-        this.listRemoveShape.push(...body.shapeList)
+        // this.listRemoveShape.push(...body.shapeList)
         this.listRemoveBody.push(body)
       }
     })

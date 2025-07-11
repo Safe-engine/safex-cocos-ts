@@ -2,6 +2,7 @@ import * as spine from '@esotericsoftware/spine-core'
 import { AtlasAttachmentLoader, SkeletonJson, TextureAtlas } from '@esotericsoftware/spine-core'
 
 import { _atlasLoader } from './CCSkeletonAnimation'
+import { CanvasRenderCmd } from './CCSkeletonCanvasRenderCmd'
 import { WebGLRenderCmd } from './CCSkeletonWebGLRenderCmd'
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -67,7 +68,7 @@ gworld.Skeleton = cc.Node.extend(
     },
 
     _createRenderCmd: function () {
-      if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) return new gworld.Skeleton.CanvasRenderCmd(this)
+      if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) return new CanvasRenderCmd(this)
       else return new WebGLRenderCmd(this)
     },
 
