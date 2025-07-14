@@ -4,14 +4,7 @@ import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 import { GameWorld, instantiate, NodeComp, Vec2 } from '..'
 import { makeContactListener } from './ContactListener'
 import { makeDebugDraw } from './debugDraw'
-import {
-  PhysicsBoxCollider,
-  PhysicsCircleCollider,
-  PhysicsCollider,
-  PhysicsMaterial,
-  PhysicsPolygonCollider,
-  RigidBody,
-} from './PhysicsComponent'
+import { PhysicsBoxCollider, PhysicsCircleCollider, PhysicsCollider, PhysicsPolygonCollider, RigidBody } from './PhysicsComponent'
 import { PhysicsSprite } from './PhysicsSprite'
 
 export const DynamicBody = 2
@@ -76,9 +69,7 @@ export class PhysicsSystem implements System {
         physicsCollide = instantiate(PhysicsCollider)
         entity.assign(physicsCollide)
       }
-      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
-      const physicsMaterial = entity.getComponent(PhysicsMaterial)
-      const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const box = component
       const node = entity.getComponent(NodeComp)
       const { width, height } = box.props
@@ -125,9 +116,7 @@ export class PhysicsSystem implements System {
         physicsCollide = instantiate(PhysicsCollider)
         entity.assign(physicsCollide)
       }
-      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
-      const physicsMaterial = entity.getComponent(PhysicsMaterial)
-      const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { radius } = component.props
       const { x = 0, y = 0 } = physicsCollide.props.offset || {}
@@ -173,15 +162,15 @@ export class PhysicsSystem implements System {
         physicsCollide = instantiate(PhysicsCollider)
         entity.assign(physicsCollide)
       }
-      const { type = StaticBody, gravityScale = 1 } = rigidBody.props
-      const physicsMaterial = entity.getComponent(PhysicsMaterial)
-      const { density = 1, friction = 0.5, restitution = 0.3 } = physicsMaterial?.props || {}
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { points } = component.props
       // ett.assign(instantiate(PhysicsCollider, { tag, offset }))
       const { x = 0, y = 0 } = physicsCollide.props.offset || {}
       const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
+      const { width, height } = node.getContentSize()
+      const { scaleX, scaleY, anchorX, anchorY } = node
 
       const bd = new b2BodyDef()
       bd.set_type(type)
@@ -194,8 +183,8 @@ export class PhysicsSystem implements System {
       const physicsNode = new PhysicsSprite(node.instance, body)
       const polygonShape = new b2PolygonShape()
       const fixedPoints = points.map((p) => {
-        if (p.x) return Vec2(p.x + x, p.y + y)
-        return Vec2(p[0] + x, p[1] + y)
+        if (p.x) return Vec2(p.x + x - width * anchorX * scaleX, p.y + y - height * scaleY * anchorY)
+        return Vec2(p[0] + x - width * anchorX * scaleX, p[1] + y - height * scaleY * anchorY)
       })
       const [vecArr, destroyVecArr] = pointsToVec2Array(fixedPoints)
       polygonShape.Set(vecArr, points.length)

@@ -33,12 +33,12 @@ export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
   // }
 }
 
-interface PhysicsMaterialProps {
-  friction?: number
-  restitution?: number
-  density?: number
-}
-export class PhysicsMaterial extends NoRenderComponentX<PhysicsMaterialProps> {}
+// interface PhysicsMaterialProps {
+//   friction?: number
+//   restitution?: number
+//   density?: number
+// }
+// export class PhysicsMaterial extends NoRenderComponentX<PhysicsMaterialProps> {}
 
 interface ColliderPhysicsProps {
   tag?: number

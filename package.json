@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "safe-engine with cocos renderer support",
   "type": "module",
   "main": "dist/index.js",
