@@ -22,7 +22,7 @@ export class PhysicsSprite {
     )
     this.node.setPosition(pos.x, pos.y)
     // lerp the rotation
-    this.node.setRotation(cc.lerp(this.node.rotation, cc.radiansToDegrees(this.physicsBody.GetAngle()), dt * 10))
+    this.node.setRotation(cc.lerp(this.node.rotation, cc.radiansToDegrees(-this.physicsBody.GetAngle()), dt * 10))
     // this.node.setRotation(cc.radiansToDegrees(this.physicsBody.GetAngle()))
     // this.node.setScale(1 / pixelsPerMeter)
     // this.node.setScale(1 / this.physicsBody.GetFixtureList().GetShape().GetRadius())
@@ -48,7 +48,7 @@ export class PhysicsSprite {
   }
 
   get y() {
-    return this.physicsBody.GetPosition().x
+    return this.physicsBody.GetPosition().y
   }
 
   // set angle(val: number) {
@@ -56,7 +56,7 @@ export class PhysicsSprite {
   // }
 
   get angle() {
-    return this.physicsBody.GetAngle()
+    return -this.physicsBody.GetAngle()
   }
 
   addChild(child: cc.Node) {

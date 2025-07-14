@@ -51,10 +51,10 @@ interface ColliderPhysicsProps {
 
 export class PhysicsCollider extends NoRenderComponentX<ColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {
   enabled = true
-  instance: PhysicsSprite
+  physicSprite: PhysicsSprite
 }
 
-interface BoxColliderPhysicsProps extends ColliderPhysicsProps {
+interface BoxColliderPhysicsProps {
   width: number
   height: number
 }
@@ -68,11 +68,11 @@ export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsPro
   //   return phys1._onCollisionEnter
   // }
 }
-interface CircleColliderPhysicsProps extends ColliderPhysicsProps {
+interface CircleColliderPhysicsProps {
   radius: number
 }
 export class PhysicsCircleCollider extends NoRenderComponentX<CircleColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}
-interface PolygonColliderPhysicsProps extends ColliderPhysicsProps {
-  points: Array<Vec2>
+interface PolygonColliderPhysicsProps {
+  points: Array<Vec2> | [number, number][]
 }
 export class PhysicsPolygonCollider extends NoRenderComponentX<PolygonColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}

@@ -109,7 +109,7 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.instance = physicsNode
+      physicsCollide.physicSprite = physicsNode
       physicsCollide.node = node
       box.node = node
     })
@@ -157,7 +157,7 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.instance = physicsNode
+      physicsCollide.physicSprite = physicsNode
       physicsCollide.node = node
       component.node = node
     })
@@ -194,7 +194,8 @@ export class PhysicsSystem implements System {
       const physicsNode = new PhysicsSprite(node.instance, body)
       const polygonShape = new b2PolygonShape()
       const fixedPoints = points.map((p) => {
-        return Vec2(p.x + x, p.y + y)
+        if (p.x) return Vec2(p.x + x, p.y + y)
+        return Vec2(p[0] + x, p[1] + y)
       })
       const [vecArr, destroyVecArr] = pointsToVec2Array(fixedPoints)
       polygonShape.Set(vecArr, points.length)
@@ -211,15 +212,14 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.instance = physicsNode
+      physicsCollide.physicSprite = physicsNode
       physicsCollide.node = node
       component.node = node
     })
-    event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, ({ entity }) => {
-      // log('ComponentRemovedEvent NodeComp', event);
-      const node = entity.getComponent(NodeComp)
-      if (node.instance instanceof PhysicsSprite) {
-        const body = node.instance.getBody()
+    event_manager.subscribe(EventTypes.ComponentRemoved, PhysicsCollider, ({ component }) => {
+      // console.log('ComponentRemovedEvent NodeComp', component)
+      if (component.physicSprite instanceof PhysicsSprite) {
+        const body = component.physicSprite.getBody()
         // this.listRemoveShape.push(...body.shapeList)
         this.listRemoveBody.push(body)
       }
