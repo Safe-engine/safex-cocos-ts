@@ -4,7 +4,7 @@ import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 import { GameWorld, instantiate, NodeComp, Vec2 } from '..'
 import { makeContactListener } from './ContactListener'
 import { makeDebugDraw } from './debugDraw'
-import { PhysicsBoxCollider, PhysicsCircleCollider, PhysicsCollider, PhysicsPolygonCollider, RigidBody } from './PhysicsComponent'
+import { PhysicsBoxCollider, PhysicsCircleCollider, PhysicsPolygonCollider, RigidBody } from './PhysicsComponent'
 import { PhysicsSprite } from './PhysicsSprite'
 
 export const DynamicBody = 2
@@ -43,20 +43,21 @@ export class PhysicsSystem implements System {
   colliderMatrix = [[true]]
   graphics: cc.DrawNode
 
+  addDebug() {
+    const debugDraw = makeDebugDraw(this.graphics, pixelsPerMeter, box2D)
+    this.world.SetDebugDraw(debugDraw)
+  }
+
   configure(event_manager: EventManager) {
     const { b2BodyDef, b2FixtureDef, b2PolygonShape, b2CircleShape, b2Vec2, b2World, pointsToVec2Array, getPointer } = box2D as typeof Box2D
     const gravity = new b2Vec2(0, -10)
     this.world = new b2World(gravity)
     console.log('configure PhysicsSystem world', this.world)
-    // event_manager.world.physicsManager = this
     const graphics = new cc.DrawNode()
     this.graphics = graphics
     graphics.zIndex = 1000
     const scene = cc.director.getRunningScene()
     scene.addChild(graphics)
-    const debugDraw = makeDebugDraw(graphics, pixelsPerMeter, box2D)
-    this.world.SetDebugDraw(debugDraw)
-    // event_manager.subscribe(ComponentAddedEvent(RigidBody), this);
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsBoxCollider, ({ entity, component }) => {
       console.log('ComponentAddedEvent PhysicsBoxCollider', component)
       let rigidBody = entity.getComponent(RigidBody)
@@ -64,16 +65,11 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      let physicsCollide = entity.getComponent(PhysicsCollider)
-      if (!physicsCollide) {
-        physicsCollide = instantiate(PhysicsCollider)
-        entity.assign(physicsCollide)
-      }
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const box = component
       const node = entity.getComponent(NodeComp)
-      const { width, height } = box.props
-      const { x = 0, y = 0 } = physicsCollide.props.offset || {}
+      const { width, height, offset } = box.props
+      const { x = 0, y = 0 } = offset || {}
       const zero = new b2Vec2(x, y)
       const position = new b2Vec2(node.posX, node.posY)
 
@@ -100,8 +96,8 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.physicSprite = physicsNode
-      physicsCollide.node = node
+      rigidBody.physicSprite = physicsNode
+      rigidBody.node = node
       box.node = node
     })
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsCircleCollider, ({ entity, component }) => {
@@ -111,15 +107,10 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      let physicsCollide = entity.getComponent(PhysicsCollider)
-      if (!physicsCollide) {
-        physicsCollide = instantiate(PhysicsCollider)
-        entity.assign(physicsCollide)
-      }
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
-      const { radius } = component.props
-      const { x = 0, y = 0 } = physicsCollide.props.offset || {}
+      const { radius, offset } = component.props
+      const { x = 0, y = 0 } = offset || {}
       const zero = new b2Vec2(x, y)
       const position = new b2Vec2(node.posX, node.posY)
 
@@ -146,8 +137,8 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.physicSprite = physicsNode
-      physicsCollide.node = node
+      rigidBody.physicSprite = physicsNode
+      rigidBody.node = node
       component.node = node
     })
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsPolygonCollider, ({ entity, component }) => {
@@ -157,16 +148,11 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      let physicsCollide = entity.getComponent(PhysicsCollider)
-      if (!physicsCollide) {
-        physicsCollide = instantiate(PhysicsCollider)
-        entity.assign(physicsCollide)
-      }
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
-      const { points } = component.props
+      const { points, offset } = component.props
       // ett.assign(instantiate(PhysicsCollider, { tag, offset }))
-      const { x = 0, y = 0 } = physicsCollide.props.offset || {}
+      const { x = 0, y = 0 } = offset || {}
       const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
       const { width, height } = node.getContentSize()
@@ -201,11 +187,11 @@ export class PhysicsSystem implements System {
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
 
-      physicsCollide.physicSprite = physicsNode
-      physicsCollide.node = node
+      rigidBody.physicSprite = physicsNode
+      rigidBody.node = node
       component.node = node
     })
-    event_manager.subscribe(EventTypes.ComponentRemoved, PhysicsCollider, ({ component }) => {
+    event_manager.subscribe(EventTypes.ComponentRemoved, RigidBody, ({ component }) => {
       // console.log('ComponentRemovedEvent NodeComp', component)
       if (component.physicSprite instanceof PhysicsSprite) {
         const body = component.physicSprite.getBody()

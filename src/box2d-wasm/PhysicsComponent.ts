@@ -9,10 +9,17 @@ interface RigidBodyProps {
   restitution?: Float
   friction?: Float
   gravityScale?: Float
+  isSensor?: boolean
+  tag?: number
+  onBeginContact?: (other: RigidBody) => void
+  onEndContact?: (other: RigidBody) => void
+  onPreSolve?: (other: RigidBody, impulse?) => void
+  onPostSolve?: (other: RigidBody, oldManifold?) => void
 }
 
 export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
   body: Box2D.b2Body
+  physicSprite: PhysicsSprite
   // set linearVelocity(vel: Vec2) {
   //   if (!this.node) {
   //     return
@@ -33,32 +40,12 @@ export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
   // }
 }
 
-// interface PhysicsMaterialProps {
-//   friction?: number
-//   restitution?: number
-//   density?: number
-// }
-// export class PhysicsMaterial extends NoRenderComponentX<PhysicsMaterialProps> {}
-
-interface ColliderPhysicsProps {
-  tag?: number
-  offset?: Vec2
-  onBeginContact?: (other: PhysicsCollider) => void
-  onEndContact?: (other: PhysicsCollider) => void
-  onPreSolve?: (other: PhysicsCollider, impulse?) => void
-  onPostSolve?: (other: PhysicsCollider, oldManifold?) => void
-}
-
-export class PhysicsCollider extends NoRenderComponentX<ColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {
-  enabled = true
-  physicSprite: PhysicsSprite
-}
-
 interface BoxColliderPhysicsProps {
   width: number
   height: number
+  offset?: Vec2
 }
-export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {
+export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsProps & BaseComponentProps<PhysicsBoxCollider>> {
   // set onCollisionEnter(val) {
   //   const phys1 = this.getComponent(PhysicsCollider)
   //   phys1._onCollisionEnter = val
@@ -70,9 +57,11 @@ export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsPro
 }
 interface CircleColliderPhysicsProps {
   radius: number
+  offset?: Vec2
 }
-export class PhysicsCircleCollider extends NoRenderComponentX<CircleColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}
+export class PhysicsCircleCollider extends NoRenderComponentX<CircleColliderPhysicsProps & BaseComponentProps<PhysicsCircleCollider>> {}
 interface PolygonColliderPhysicsProps {
   points: Array<Vec2> | [number, number][]
+  offset?: Vec2
 }
-export class PhysicsPolygonCollider extends NoRenderComponentX<PolygonColliderPhysicsProps & BaseComponentProps<PhysicsCollider>> {}
+export class PhysicsPolygonCollider extends NoRenderComponentX<PolygonColliderPhysicsProps & BaseComponentProps<PhysicsPolygonCollider>> {}

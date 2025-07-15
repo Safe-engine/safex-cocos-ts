@@ -83,7 +83,7 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const drawCircle = (center, radius, axis, fill) => {
-    graphics.drawCircle(center, radius, 0, 64, true, 6, fill)
+    graphics.drawCircle(center, radius, 0, 32, true, 2, fill)
   }
 
   /**

@@ -1,5 +1,5 @@
 import { NodeComp } from '..'
-import { PhysicsCollider } from './PhysicsComponent'
+import { RigidBody } from './PhysicsComponent'
 
 type Meta = { [key: number]: NodeComp }
 export const makeContactListener = (world: Box2D.b2World, metadata: Meta, box2D: typeof Box2D) => {
@@ -25,8 +25,8 @@ export const makeContactListener = (world: Box2D.b2World, metadata: Meta, box2D:
       //   listRemoveBody = []
       //   listRemoveShape = []
       // })
-      const phys1 = ett1.getComponent(PhysicsCollider)
-      const phys2 = ett2.getComponent(PhysicsCollider)
+      const phys1 = ett1.getComponent(RigidBody)
+      const phys2 = ett2.getComponent(RigidBody)
       // console.log('addPostStepCallback', ett1, phys1.props.onBeginContact, phys2.props)
       if (phys1 && phys2) {
         if (Object.prototype.hasOwnProperty.call(phys1.props, 'onBeginContact')) {
@@ -44,8 +44,8 @@ export const makeContactListener = (world: Box2D.b2World, metadata: Meta, box2D:
       const ett1: NodeComp = metadata[getPointer(contact.GetFixtureA().GetBody())]
       const ett2: NodeComp = metadata[getPointer(contact.GetFixtureB().GetBody())]
       // const event1 = ett1.getComponent(NodeComp)
-      const phys1 = ett1.getComponent(PhysicsCollider)
-      const phys2 = ett2.getComponent(PhysicsCollider)
+      const phys1 = ett1.getComponent(RigidBody)
+      const phys2 = ett2.getComponent(RigidBody)
       // const event2 = ett2.getComponent(NodeComp)
       if (phys1 && phys2) {
         if (Object.prototype.hasOwnProperty.call(phys1.props, 'onEndContact')) {
@@ -63,8 +63,8 @@ export const makeContactListener = (world: Box2D.b2World, metadata: Meta, box2D:
       const ett1: NodeComp = metadata[getPointer(contact.GetFixtureA().GetBody())]
       const ett2: NodeComp = metadata[getPointer(contact.GetFixtureB().GetBody())]
       // const event1 = ett1.getComponent(NodeComp)
-      const phys1 = ett1.getComponent(PhysicsCollider)
-      const phys2 = ett2.getComponent(PhysicsCollider)
+      const phys1 = ett1.getComponent(RigidBody)
+      const phys2 = ett2.getComponent(RigidBody)
       // const event2 = ett2.getComponent(NodeComp)
       if (phys1 && phys2) {
         if (Object.prototype.hasOwnProperty.call(phys1.props, 'onPostSolve')) {
@@ -82,8 +82,8 @@ export const makeContactListener = (world: Box2D.b2World, metadata: Meta, box2D:
       const ett1: NodeComp = metadata[getPointer(contact.GetFixtureA().GetBody())]
       const ett2: NodeComp = metadata[getPointer(contact.GetFixtureB().GetBody())]
       // const event1 = ett1.getComponent(NodeComp)
-      const phys1 = ett1.getComponent(PhysicsCollider)
-      const phys2 = ett2.getComponent(PhysicsCollider)
+      const phys1 = ett1.getComponent(RigidBody)
+      const phys2 = ett2.getComponent(RigidBody)
       // const event2 = ett2.getComponent(NodeComp)
       if (phys1 && phys2) {
         if (Object.prototype.hasOwnProperty.call(phys1.props, 'onPostSolve')) {
