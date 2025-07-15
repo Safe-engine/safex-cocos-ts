@@ -173,6 +173,7 @@ export class PhysicsSystem implements System {
         return Vec2(p[0] + x - width * anchorX * scaleX, p[1] + y - height * scaleY * anchorY)
       })
       const [vecArr, destroyVecArr] = pointsToVec2Array(fixedPoints)
+      // console.log('vecArr', vecArr, vecArr.Length())
       polygonShape.Set(vecArr, points.length)
       destroyVecArr()
       const fixtureDef = new b2FixtureDef()
@@ -227,11 +228,9 @@ export class PhysicsSystem implements System {
     }
   }
 
-  set enabled(val) {
-    if (val) {
-      this.world.SetGravity(new Box2D.b2Vec2(0, -9.8))
-      // this.world.iterations = 60
-      // this.world.collisionSlop = 0.5
-    }
+  set gravity(val: Vec2) {
+    this.world.SetGravity(new box2D.b2Vec2(val.x, val.y))
+    // this.world.iterations = 60
+    // this.world.collisionSlop = 0.5
   }
 }
