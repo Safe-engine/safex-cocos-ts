@@ -68,9 +68,9 @@ export class PhysicsSystem implements System {
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const box = component
       const node = entity.getComponent(NodeComp)
-      const { width, height, offset } = box.props
-      const { x = 0, y = 0 } = offset || {}
-      const zero = new b2Vec2(x, y)
+      const { width, height, offset = [] } = box.props
+      const [x = 0, y = 0] = offset
+      const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
 
       const bd = new b2BodyDef()
@@ -83,7 +83,7 @@ export class PhysicsSystem implements System {
       // body.setMassData({ mass: 1 } as any)
       const physicsNode = new PhysicsSprite(node.instance, body)
       const square = new b2PolygonShape()
-      square.SetAsBox(width / 2, height / 2)
+      square.SetAsBox(width / 2, height / 2, new b2Vec2(x, y), 0)
       const fixtureDef = new b2FixtureDef()
       fixtureDef.set_shape(square)
       fixtureDef.set_density(density)
@@ -109,9 +109,9 @@ export class PhysicsSystem implements System {
       }
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
-      const { radius, offset } = component.props
-      const { x = 0, y = 0 } = offset || {}
-      const zero = new b2Vec2(x, y)
+      const { radius, offset = [] } = component.props
+      const [x = 0, y = 0] = offset
+      const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
 
       const bd = new b2BodyDef()
@@ -125,6 +125,7 @@ export class PhysicsSystem implements System {
       const physicsNode = new PhysicsSprite(node.instance, body)
       const circleShape = new b2CircleShape()
       circleShape.set_m_radius(radius)
+      circleShape.set_m_p(new b2Vec2(x, y))
       const fixtureDef = new b2FixtureDef()
       fixtureDef.set_shape(circleShape)
       fixtureDef.set_density(density)
@@ -150,9 +151,8 @@ export class PhysicsSystem implements System {
       }
       const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
-      const { points, offset } = component.props
-      // ett.assign(instantiate(PhysicsCollider, { tag, offset }))
-      const { x = 0, y = 0 } = offset || {}
+      const { points, offset = [] } = component.props
+      const [x = 0, y = 0] = offset
       const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
       const { width, height } = node.getContentSize()

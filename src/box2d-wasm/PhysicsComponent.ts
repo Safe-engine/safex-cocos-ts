@@ -43,7 +43,7 @@ export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
 interface BoxColliderPhysicsProps {
   width: number
   height: number
-  offset?: Vec2
+  offset?: [number, number]
 }
 export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsProps & BaseComponentProps<PhysicsBoxCollider>> {
   // set onCollisionEnter(val) {
@@ -57,11 +57,11 @@ export class PhysicsBoxCollider extends NoRenderComponentX<BoxColliderPhysicsPro
 }
 interface CircleColliderPhysicsProps {
   radius: number
-  offset?: Vec2
+  offset?: [number, number]
 }
 export class PhysicsCircleCollider extends NoRenderComponentX<CircleColliderPhysicsProps & BaseComponentProps<PhysicsCircleCollider>> {}
 interface PolygonColliderPhysicsProps {
   points: Array<Vec2> | [number, number][]
-  offset?: Vec2
+  offset?: [number, number]
 }
 export class PhysicsPolygonCollider extends NoRenderComponentX<PolygonColliderPhysicsProps & BaseComponentProps<PhysicsPolygonCollider>> {}
