@@ -169,8 +169,8 @@ export class PhysicsSystem implements System {
       const physicsNode = new PhysicsSprite(node.instance, body)
       const polygonShape = new b2PolygonShape()
       const fixedPoints = points.map((p) => {
-        if (p.x) return Vec2(p.x + x - width * anchorX * scaleX, p.y + y - height * scaleY * anchorY)
-        return Vec2(p[0] + x - width * anchorX * scaleX, p[1] + y - height * scaleY * anchorY)
+        if (p.x) return Vec2(p.x + x - width * anchorX * scaleX, -p.y + y + height * scaleY * anchorY)
+        return Vec2(p[0] + x - width * anchorX * scaleX, -p[1] + y + height * scaleY * anchorY)
       })
       const [vecArr, destroyVecArr] = pointsToVec2Array(fixedPoints)
       // console.log('vecArr', vecArr, vecArr.Length())
