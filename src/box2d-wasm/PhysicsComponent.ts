@@ -2,6 +2,7 @@ import { NoRenderComponentX } from '../gworld/core/decorator'
 import { Vec2 } from '../polyfills'
 import { BaseComponentProps } from '../safex'
 import { PhysicsSprite } from './PhysicsSprite'
+import { box2D } from './PhysicsSystem'
 
 interface RigidBodyProps {
   type?: 0 | 1 | 2 // 0: Static, 1: Kinematic, 2: Dynamic
@@ -20,24 +21,35 @@ interface RigidBodyProps {
 export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
   body: Box2D.b2Body
   physicSprite: PhysicsSprite
-  // set linearVelocity(vel: Vec2) {
-  //   if (!this.node) {
-  //     return
-  //   }
-  //   const physics = this.node.instance
-  //   if (physics instanceof Sprite) {
-  //     physics.getBody().setVel(vel)
-  //   }
-  // }
+  set linearVelocity(vel: Vec2) {
+    if (!this.node) {
+      return
+    }
+    this.physicSprite.getBody().SetLinearVelocity(new box2D.b2Vec2(vel.x, vel.y))
+  }
 
-  // get linearVelocity() {
-  //   if (!this.node) {
-  //     return Vec2.ZERO
-  //   }
-  //   const physics = this.node.instance
-  //   const vel = (physics as Sprite).getBody().getVel()
-  //   return v2(vel)
-  // }
+  get linearVelocity() {
+    if (!this.node) {
+      return Vec2.ZERO
+    }
+    const vel = this.physicSprite.getBody().GetLinearVelocity()
+    return Vec2(vel)
+  }
+
+  set position(pos: Vec2) {
+    this.physicSprite.node.setPosition(pos.x, pos.y)
+    const physicsPos = new box2D.b2Vec2(pos.x, pos.y)
+    // console.log('SetTransform', pos, physicsPos)
+    const body = this.physicSprite.getBody()
+    body.SetLinearVelocity(new box2D.b2Vec2(0, 0))
+    body.SetAngularVelocity(0)
+    body.SetAwake(true)
+    body.SetTransform(physicsPos, this.node.rotation)
+  }
+
+  get position() {
+    return Vec2(this.physicSprite.getBody().GetPosition())
+  }
 }
 
 interface BoxColliderPhysicsProps {
