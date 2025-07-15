@@ -35,7 +35,7 @@ export class RenderSystem implements System {
     const { spriteFrame } = spriteComp.props
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     // console.log('frame', spriteFrame, frame)
-    const node = new cc.Sprite(frame)
+    const node = new cc.Sprite(frame || spriteFrame)
     const ett = entity
     spriteComp.node = ett.assign(new NodeComp(node, ett))
   }

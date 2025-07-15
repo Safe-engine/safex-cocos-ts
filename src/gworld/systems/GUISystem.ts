@@ -54,8 +54,9 @@ export class GUISystem implements System {
   }
 
   private onAddProgressTimerComp: EventReceiveCallback<ProgressTimerComp> = ({ entity, component: bar }) => {
-    const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(1, 0) } = bar.props
-    const sprite = new cc.Sprite(spriteFrame)
+    const { spriteFrame, fillType = FillType.HORIZONTAL, fillRange = 1, fillCenter = Vec2(0, 0) } = bar.props
+    const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
+    const sprite = new cc.Sprite(frame || spriteFrame)
     const pTimer = new cc.ProgressTimer(sprite) as cc.ProgressTimer & cc.Node
     const ptt = fillType === FillType.RADIAL ? cc.ProgressTimer.TYPE_RADIAL : cc.ProgressTimer.TYPE_BAR
     pTimer.setType(ptt)
