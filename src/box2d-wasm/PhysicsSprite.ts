@@ -7,7 +7,6 @@ export class PhysicsSprite {
   constructor(node: cc.Node, body: Box2D.b2Body) {
     this.node = node
     this.physicsBody = body
-    this.node.schedule(this.update.bind(this), 0, cc.REPEAT_FOREVER, 0)
   }
 
   update(dt: number) {
@@ -32,9 +31,9 @@ export class PhysicsSprite {
     return this.physicsBody
   }
 
-  // set position(val: Box2D.b2Vec2) {
-  //   this.physicsBody.setPosition(val)
-  // }
+  set position(val: Box2D.b2Vec2) {
+    this.physicsBody.SetTransform(val, this.node.rotation)
+  }
 
   // set x(val) {
   //   this.physicsBody.setPosition(Vec2(val, this.y))

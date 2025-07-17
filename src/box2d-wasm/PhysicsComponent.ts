@@ -25,22 +25,37 @@ export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
     if (!this.node) {
       return
     }
-    this.physicSprite.getBody().SetLinearVelocity(new box2D.b2Vec2(vel.x, vel.y))
+    this.body.SetLinearVelocity(new box2D.b2Vec2(vel.x, vel.y))
   }
 
   get linearVelocity() {
     if (!this.node) {
       return Vec2.ZERO
     }
-    const vel = this.physicSprite.getBody().GetLinearVelocity()
+    const vel = this.body.GetLinearVelocity()
     return Vec2(vel)
+  }
+
+  applyForceToCenter(vel: Vec2) {
+    if (!this.node) {
+      return
+    }
+    this.body.ApplyForceToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
+  }
+
+  applyLinearImpulseToCenter(vel: Vec2) {
+    if (!this.node) {
+      return
+    }
+    // console.log('applyLinearImpulseToCenter', new box2D.b2Vec2(vel.x, vel.y))
+    this.body.ApplyLinearImpulseToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
   }
 
   set position(pos: Vec2) {
     this.physicSprite.node.setPosition(pos.x, pos.y)
     const physicsPos = new box2D.b2Vec2(pos.x, pos.y)
     // console.log('SetTransform', pos, physicsPos)
-    const body = this.physicSprite.getBody()
+    const body = this.body
     body.SetLinearVelocity(new box2D.b2Vec2(0, 0))
     body.SetAngularVelocity(0)
     body.SetAwake(true)

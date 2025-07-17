@@ -31,15 +31,15 @@ export function setColliderMatrix(colliderMatrix = [[true]]) {
   physicsSystem.colliderMatrix = colliderMatrix
 }
 const maxTimeStep = 1 / 60
-const velocityIterations = 1
-const positionIterations = 1
+const velocityIterations = 8
+const positionIterations = 3
 const metadata: { [key: number]: NodeComp } = {}
 const pixelsPerMeter = 1
 
 export class PhysicsSystem implements System {
   world: Box2D.b2World
   listRemoveBody: Box2D.b2Body[] = []
-  listRemoveShape: Box2D.b2Shape[] = []
+  // listRemoveShape: Box2D.b2Shape[] = []
   colliderMatrix = [[true]]
   graphics: cc.DrawNode
 
@@ -52,35 +52,32 @@ export class PhysicsSystem implements System {
     const { b2BodyDef, b2FixtureDef, b2PolygonShape, b2CircleShape, b2Vec2, b2World, pointsToVec2Array, getPointer } = box2D as typeof Box2D
     const gravity = new b2Vec2(0, -10)
     this.world = new b2World(gravity)
-    console.log('configure PhysicsSystem world', this.world)
+    // console.log('configure PhysicsSystem world', this.world)
     const graphics = new cc.DrawNode()
     this.graphics = graphics
     graphics.zIndex = 1000
     const scene = cc.director.getRunningScene()
     scene.addChild(graphics)
-    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsBoxCollider, ({ entity, component }) => {
+    event_manager.subscribe(EventTypes.ComponentAdded, PhysicsBoxCollider, ({ entity, component: box }) => {
       // console.log('ComponentAddedEvent PhysicsBoxCollider', component)
       let rigidBody = entity.getComponent(RigidBody)
-      const box = component
-      const { width, height, offset = [] } = box.props
-      const node = entity.getComponent(NodeComp)
-      const zero = new b2Vec2(0, 0)
       if (!rigidBody) {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
-        const { type = StaticBody, gravityScale = 1 } = rigidBody.props
-
-        const bd = new b2BodyDef()
-        bd.set_type(type)
-        bd.set_position(zero)
-        bd.set_gravityScale(gravityScale)
-        const body = this.world.CreateBody(bd)
-        rigidBody.body = body
-        const physicsNode = new PhysicsSprite(node.instance, rigidBody.body)
-        rigidBody.physicSprite = physicsNode
-        rigidBody.node = node
       }
-      const { density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor } = rigidBody.props
+      const { width, height, offset = [] } = box.props
+      const node = entity.getComponent(NodeComp)
+      const zero = new b2Vec2(0, 0)
+      const bd = new b2BodyDef()
+      bd.set_type(type)
+      bd.set_position(zero)
+      bd.set_gravityScale(gravityScale)
+      const body = this.world.CreateBody(bd)
+      rigidBody.body = body
+      const physicsNode = new PhysicsSprite(node.instance, rigidBody.body)
+      rigidBody.physicSprite = physicsNode
+      rigidBody.node = node
       // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
       // body.setMassData({ mass: 1 } as any)
       const position = new b2Vec2(node.posX, node.posY)
@@ -92,6 +89,7 @@ export class PhysicsSystem implements System {
       fixtureDef.set_density(density)
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
+      fixtureDef.set_isSensor(isSensor)
       rigidBody.body.CreateFixture(fixtureDef)
       rigidBody.body.SetTransform(position, 0)
       rigidBody.body.SetLinearVelocity(zero)
@@ -107,7 +105,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
+      const { type = StaticBody, gravityScale = 1, density = 100, friction = 0.5, restitution = 0.3, isSensor = false } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { radius, offset = [] } = component.props
       const [x = 0, y = 0] = offset
@@ -129,6 +127,7 @@ export class PhysicsSystem implements System {
       const fixtureDef = new b2FixtureDef()
       fixtureDef.set_shape(circleShape)
       fixtureDef.set_density(density)
+      fixtureDef.set_isSensor(isSensor)
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
       body.CreateFixture(fixtureDef)
@@ -149,7 +148,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3 } = rigidBody.props
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { points, offset = [] } = component.props
       const [x = 0, y = 0] = offset
@@ -181,9 +180,10 @@ export class PhysicsSystem implements System {
       fixtureDef.set_density(density)
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
+      fixtureDef.set_isSensor(isSensor)
       body.CreateFixture(fixtureDef)
       body.SetTransform(position, 0)
-      body.SetLinearVelocity(zero)
+      // body.SetLinearVelocity(zero)
       body.SetAwake(true)
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
@@ -207,6 +207,12 @@ export class PhysicsSystem implements System {
   update(entities: EntityManager, events: EventManager, dt: number) {
     if (this.world) {
       const { getPointer } = box2D
+      for (const entt of entities.entities_with_components(RigidBody)) {
+        const comp = entt.getComponent(RigidBody)
+        if (comp.node.active && comp.enabled) {
+          comp.physicSprite.update(dt)
+        }
+      }
       // remove bodies and shapes
       this.listRemoveBody.forEach((body) => {
         if (body) {
@@ -219,7 +225,7 @@ export class PhysicsSystem implements System {
       //   }
       // })
       this.listRemoveBody = []
-      this.listRemoveShape = []
+      // this.listRemoveShape = []
       const clampedDelta = Math.min(dt, maxTimeStep)
       this.world.Step(clampedDelta, velocityIterations, positionIterations)
       this.graphics.clear()
