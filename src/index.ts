@@ -1,5 +1,4 @@
 export * from './app'
-export * from './box2d-wasm'
 export * from './collider'
 export * from './dragonbones'
 export * from './gworld'
