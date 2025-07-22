@@ -26,36 +26,45 @@ interface RunOptions {
   id: string
   renderMode: 0 | 1 | 2
 }
-export function startGame(option: RunOptions, { width, height }, cb: () => void) {
-  class BootScene extends cc.Scene {
-    constructor() {
-      super()
-      super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
-      this.scheduleUpdate()
-    }
-    onEnter() {
-      super.onEnter()
-      cb()
+export async function startGame(defaultFont: string, { width, height }, option?: Partial<RunOptions>) {
+  return new Promise<void>((resolve) => {
+    class BootScene extends cc.Scene {
+      constructor() {
+        super()
+        super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
+        this.scheduleUpdate()
+      }
+      onEnter() {
+        super.onEnter()
+        initWorld(defaultFont)
+        resolve()
+      }
+
+      update(dt) {
+        GameWorld.Instance.update(dt)
+      }
     }
 
-    update(dt) {
-      GameWorld.Instance.update(dt)
-    }
-  }
-
-  cc._isContextMenuEnable = true
-
-  cc.game.run(option, function onStart() {
-    // Pass true to enable retina display, disabled by default to improve performance
-    cc.view.enableRetina(cc.sys.os === cc.sys.OS_IOS)
-    // Adjust viewport meta
-    cc.view.adjustViewPort(true)
-    // Setup the resolution policy and design resolution size
-    const policy = width > height ? cc.ResolutionPolicy.FIXED_HEIGHT : cc.ResolutionPolicy.FIXED_WIDTH
-    cc.view.setDesignResolutionSize(width, height, policy)
-    // The game will be resized when browser size change
-    cc.view.resizeWithBrowserSize(true)
-    cc.director.runScene(new BootScene())
+    cc._isContextMenuEnable = true
+    cc.game.run({
+      debugMode: 1,
+      showFPS: false,
+      frameRate: 60,
+      id: 'gameCanvas',
+      renderMode: 1,
+      ...option || {},
+    }, function onStart() {
+      // Pass true to enable retina display, disabled by default to improve performance
+      cc.view.enableRetina(cc.sys.os === cc.sys.OS_IOS)
+      // Adjust viewport meta
+      cc.view.adjustViewPort(true)
+      // Setup the resolution policy and design resolution size
+      const policy = width > height ? cc.ResolutionPolicy.FIXED_HEIGHT : cc.ResolutionPolicy.FIXED_WIDTH
+      cc.view.setDesignResolutionSize(width, height, policy)
+      // The game will be resized when browser size change
+      cc.view.resizeWithBrowserSize(true)
+      cc.director.runScene(new BootScene())
+    })
   })
 }
 
