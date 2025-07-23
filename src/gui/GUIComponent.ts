@@ -1,6 +1,6 @@
-import { Color4B, Size, Vec2 } from '../../polyfills'
-import { BaseComponentProps, ColorSource } from '../../safex'
-import { ComponentX, NoRenderComponentX } from '../core/decorator'
+import { ComponentX, NoRenderComponentX } from '../gworld/decorator'
+import { Color4B, Size, Vec2 } from '../polyfills'
+import { BaseComponentProps, ColorSource } from '../safex'
 
 export const FillType = {
   HORIZONTAL: 0,

@@ -1,6 +1,6 @@
-import { GameWorld } from '..'
-import { EnhancedComponent } from '../components/EnhancedComponent'
-import { NodeComp } from '../components/NodeComp'
+import { GameWorld } from '.'
+import { EnhancedComponent } from './EnhancedComponent'
+import { NodeComp } from './NodeComp'
 
 export class SceneComponent extends EnhancedComponent {
   render() {

@@ -1,6 +1,6 @@
-import { BLUE, Color4B, RED, Vec2 } from '../../polyfills'
-import { BaseComponentProps, ColorSource } from '../../safex'
-import { ComponentX } from '../core/decorator'
+import { BaseComponentProps, ColorSource, ComponentX } from ".."
+import { Color4B, Vec2 } from "../polyfills"
+
 export class NodeRender extends ComponentX {
   nodeName: string
 }
@@ -38,12 +38,12 @@ interface MaskRenderProps {
   segments?: number
   inverted?: boolean
 }
-export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
+export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> { }
 
 interface ParticleCompProps {
   plistFile: string
 }
-export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
+export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> { }
 
 interface GraphicsRenderProps {
   lineWidth?: number
@@ -52,12 +52,9 @@ interface GraphicsRenderProps {
 }
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseComponentProps<GraphicsRender>, cc.DrawNode> {
-  lineWidth = 5
-  strokeColor = RED
-  fillColor = BLUE
 
   drawDot(x, y, r) {
-    this.node.instance.drawDot(cc.p(x, y), r, this.fillColor)
+    this.node.instance.drawDot(cc.p(x, y), r, this.props.fillColor)
   }
 
   // drawPoint(position: Vec2, pointSize: Float, color:  Color4B, pointType = PointType.Rect) {
@@ -65,11 +62,11 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   // }
   // // drawPoints(points: Vec2[], color: Color4B) {
   // // }
-  drawLine(origin: Vec2, destination: Vec2, thickness: Float, color: Color4B) {
-    this.node.instance.drawSegment(origin, destination, thickness, color)
+  drawLine(origin: Vec2, destination: Vec2, thickness?: Float, color?: Color4B) {
+    this.node.instance.drawSegment(origin, destination, thickness || this.props.lineWidth, color || this.props.strokeColor)
   }
-  drawRect(origin: Vec2, destination: Vec2, color: Color4B) {
-    this.node.instance.drawRect(origin, destination, color)
+  drawRect(origin: Vec2, destination: Vec2, color?: Color4B) {
+    this.node.instance.drawRect(origin, destination, color || this.props.fillColor)
   }
   // drawSolidRect(origin: Vec2, destination: Vec2, color: Color4B) {
 
@@ -77,13 +74,13 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   drawCircle(
     center: Vec2,
     radius: Float,
-    angle?: Float,
-    segments?: Integer,
-    drawLineToCenter?: boolean,
+    angle = 0,
+    segments = 64,
+    drawLineToCenter = true,
     lineWidth?: Float,
     color?: Color4B,
   ) {
-    this.node.instance.drawCircle(center, radius, angle, segments, drawLineToCenter, lineWidth, color)
+    this.node.instance.drawCircle(center, radius, angle, segments, drawLineToCenter, lineWidth || this.props.lineWidth, color || this.props.fillColor)
   }
 
   // drawSolidCircle(origin: Vec2, destination: Vec2, color: Color4B) {
@@ -99,8 +96,8 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   // }
   // drawCatmullRom(points: Vec2[], color: Color4B) {
   // }
-  drawPoly(points: Vec2[], color: Color4B, thickness?: Float) {
-    this.node.instance.drawPoly(points, color, thickness)
+  drawPoly(points: Vec2[], color?: Color4B, thickness?: Float) {
+    this.node.instance.drawPoly(points, color || this.props.fillColor, thickness || this.props.lineWidth)
   }
   // drawSolidPoly(points: Vec2[], color: Color4B) {
   //   this.node.instance.drawPoly(points, color)
@@ -125,4 +122,4 @@ interface TiledMapProps {
   mapFile: string
 }
 
-export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
+export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> { }

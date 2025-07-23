@@ -1,5 +1,11 @@
 import { Constructor, System, World } from 'entityx-ts'
 
+export * from './decorator'
+export * from './EnhancedComponent'
+export * from './NodeComp'
+export * from './NodePool'
+export * from './Scene'
+
 export class GameWorld extends World {
   listUpdate: (System | Constructor<System>)[] = []
   update(dt: number) {

@@ -1,6 +1,8 @@
 import { GameWorld } from '../gworld'
 import { CollideSystem } from './CollideSystem'
 
+export * from './CollideComponent'
+
 export function setupCollider(colliderMatrix?, debug = false) {
   GameWorld.Instance.systems.add(CollideSystem)
   GameWorld.Instance.listUpdate.push(CollideSystem)

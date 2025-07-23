@@ -1,8 +1,8 @@
 import { CollideSystem } from './collider/CollideSystem'
+import { GUISystem } from './gui'
 import { GameWorld } from './gworld'
-import { GUISystem } from './gworld/systems/GUISystem'
-import { NoRenderSystem } from './gworld/systems/NoRenderSystem'
-import { RenderSystem } from './gworld/systems/RenderSystem'
+import { NoRenderSystem } from './norender'
+import { RenderSystem } from './render'
 
 export function initWorld(defaultFont?: string) {
   GameWorld.Instance.systems.add(RenderSystem)

@@ -1,6 +1,6 @@
 import { Constructor } from 'entityx-ts'
 
-import { BaseComponentProps } from '../../safex'
+import { BaseComponentProps } from '../safex'
 import { NodeComp } from './NodeComp'
 
 export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeComp<any>> {

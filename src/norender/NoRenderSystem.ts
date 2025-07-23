@@ -1,8 +1,8 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
-import { Touch } from '../../polyfills'
-import { NodeComp } from '../components/NodeComp'
-import { ExtraDataComp, TouchEventRegister } from '../components/NoRenderComponent'
+import { NodeComp } from '../gworld/NodeComp'
+import { Touch } from '../polyfills'
+import { ExtraDataComp, TouchEventRegister } from './NoRenderComponent'
 
 export class NoRenderSystem implements System {
   configure(event_manager: EventManager) {

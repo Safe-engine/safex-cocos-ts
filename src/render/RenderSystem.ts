@@ -1,8 +1,8 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
-import { BLUE, RED } from '../../polyfills'
-import { NodeComp } from '../components/NodeComp'
-import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from '../components/RenderComponent'
+import { NodeComp } from '../gworld/NodeComp'
+import { BLUE, RED } from '../polyfills'
+import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
 
 export enum SpriteTypes {
   SIMPLE,

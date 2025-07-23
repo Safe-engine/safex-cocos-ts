@@ -1,5 +1,5 @@
-import { EnhancedComponent } from '../gworld/components/EnhancedComponent'
-import { SpriteRender } from '../gworld/components/RenderComponent'
+import { EnhancedComponent } from '..'
+import { SpriteRender } from '../render'
 
 export interface IEvent {
   frame: number

@@ -1,6 +1,5 @@
-import { Touch } from '../../polyfills'
-import { NoRenderComponentX } from '../core/decorator'
-import { EventCallbackType, NodeComp } from './NodeComp'
+import { NoRenderComponentX, Touch } from ".."
+import { EventCallbackType, NodeComp } from "../gworld"
 
 type TouchEVentCallback = (touch?: Touch, node?: NodeComp) => void
 

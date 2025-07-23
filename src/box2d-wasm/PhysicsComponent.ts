@@ -1,4 +1,4 @@
-import { NoRenderComponentX } from '../gworld/core/decorator'
+import { NoRenderComponentX } from '..'
 import { Vec2 } from '../polyfills'
 import { BaseComponentProps } from '../safex'
 import { PhysicsSprite } from './PhysicsSprite'

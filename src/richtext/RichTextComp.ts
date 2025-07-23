@@ -1,4 +1,4 @@
-import { ComponentX } from '../gworld/core/decorator'
+import { ComponentX } from '../gworld/decorator'
 import { BaseComponentProps } from '../safex'
 import { HtmlTextParser } from './html-text-parser'
 

@@ -1,9 +1,9 @@
 import { Constructor, Entity } from 'entityx-ts'
 
-import { instantiate } from '../../helper/utils'
-import { Vec2 } from '../../polyfills'
+import { instantiate } from '../helper/utils'
+import { ExtraDataComp } from '../norender'
+import { Vec2 } from '../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
-import { ExtraDataComp } from './NoRenderComponent'
 
 export type EventCallbackType = (...args) => void
 export class NodeComp<C extends cc.Node = cc.Node> {

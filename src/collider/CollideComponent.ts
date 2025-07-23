@@ -1,4 +1,4 @@
-import { NoRenderComponentX } from '../gworld/core/decorator'
+import { NoRenderComponentX } from '..'
 import { getMax, getMin } from '../helper/math'
 import { Vec2 } from '../polyfills'
 

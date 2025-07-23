@@ -1,19 +1,8 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
-
-import { TouchEventRegister } from '../..'
-import { Vec2 } from '../../polyfills'
-import {
-  BlockInputEventsComp,
-  ButtonComp,
-  FillType,
-  InputComp,
-  LabelComp,
-  LabelOutlineComp,
-  LabelShadowComp,
-  ProgressTimerComp,
-  ScrollViewComp,
-} from '../components/GUIComponent'
-import { NodeComp } from '../components/NodeComp'
+import { NodeComp } from '../gworld'
+import { TouchEventRegister } from '../norender'
+import { Vec2 } from '../polyfills'
+import { BlockInputEventsComp, ButtonComp, FillType, InputComp, LabelComp, LabelOutlineComp, LabelShadowComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
 
 export class GUISystem implements System {
   defaultFont: string
