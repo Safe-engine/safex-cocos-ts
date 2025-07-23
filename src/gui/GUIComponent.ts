@@ -1,4 +1,4 @@
-import { ComponentX, NoRenderComponentX } from '../gworld/decorator'
+import { ComponentX, NoRenderComponentX } from '../core/decorator'
 import { Color4B, Size, Vec2 } from '../polyfills'
 import { BaseComponentProps, ColorSource } from '../safex'
 

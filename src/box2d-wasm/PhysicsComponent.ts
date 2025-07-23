@@ -1,4 +1,4 @@
-import { NoRenderComponentX } from '..'
+import { NoRenderComponentX } from '../core/decorator'
 import { Vec2 } from '../polyfills'
 import { BaseComponentProps } from '../safex'
 import { PhysicsSprite } from './PhysicsSprite'

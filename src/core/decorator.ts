@@ -1,4 +1,4 @@
-import { GameWorld } from '.'
+import { GameWorld } from '../gworld'
 import { EnhancedComponent } from './EnhancedComponent'
 import { NodeComp } from './NodeComp'
 

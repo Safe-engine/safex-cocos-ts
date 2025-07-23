@@ -1,6 +1,6 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
-import { NodeComp } from '../gworld'
+import { NodeComp } from '../core/NodeComp'
 import { AnimationComp } from './AnimationComponent'
 
 export class AnimationSystem implements System {

@@ -1,4 +1,4 @@
-import { NodeComp } from '..'
+import { NodeComp } from '../core/NodeComp'
 import { RigidBody } from './PhysicsComponent'
 
 type Meta = { [key: number]: NodeComp }

@@ -1,7 +1,7 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
+import { NodeComp } from '../core/NodeComp'
 import { GameWorld } from '../gworld'
-import { NodeComp } from '../gworld/NodeComp'
 import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from './CollideComponent'
 
 export function shouldCollider(colA: Collider, colB: Collider) {

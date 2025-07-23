@@ -1,6 +1,6 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
-import { NodeComp } from '../gworld/NodeComp'
+import { NodeComp } from '../core/NodeComp'
 import { BLUE, RED } from '../polyfills'
 import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
 

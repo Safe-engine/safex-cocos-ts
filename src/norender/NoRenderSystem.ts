@@ -1,6 +1,6 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
-import { NodeComp } from '../gworld/NodeComp'
+import { NodeComp } from '../core/NodeComp'
 import { Touch } from '../polyfills'
 import { ExtraDataComp, TouchEventRegister } from './NoRenderComponent'
 

@@ -1,4 +1,4 @@
-import { EnhancedComponent } from '..'
+import { EnhancedComponent } from '../core/EnhancedComponent'
 import { SpriteRender } from '../render'
 
 export interface IEvent {

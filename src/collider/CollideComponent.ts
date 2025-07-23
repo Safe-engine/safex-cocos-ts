@@ -1,4 +1,4 @@
-import { NoRenderComponentX } from '..'
+import { NoRenderComponentX } from '../core/decorator'
 import { getMax, getMin } from '../helper/math'
 import { Vec2 } from '../polyfills'
 

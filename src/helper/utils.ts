@@ -1,6 +1,8 @@
 import { Constructor, EntityManager, EventManager, EventReceive, EventTypes, System } from 'entityx-ts'
 
-import { ComponentX, NodeComp, NoRenderComponentX, SceneComponent } from '..'
+import { ComponentX, NoRenderComponentX } from '../core/decorator'
+import { NodeComp } from '../core/NodeComp'
+import { SceneComponent } from '../core/Scene'
 import { GameWorld } from '../gworld'
 
 export function registerSystem<T extends ComponentX>(component: Constructor<T>) {

@@ -1,7 +1,9 @@
 import Box2DFactory from 'box2d-wasm'
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
-
-import { GameWorld, instantiate, NodeComp, Vec2 } from '..'
+import { NodeComp } from '../core/NodeComp'
+import { GameWorld } from '../gworld'
+import { instantiate } from '../helper'
+import { Vec2 } from '../polyfills'
 import { makeContactListener } from './ContactListener'
 import { makeDebugDraw } from './debugDraw'
 import { PhysicsBoxCollider, PhysicsCircleCollider, PhysicsPolygonCollider, RigidBody } from './PhysicsComponent'

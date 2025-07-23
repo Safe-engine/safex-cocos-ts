@@ -1,5 +1,6 @@
-import { BaseComponentProps, ColorSource, ComponentX } from ".."
-import { Color4B, Vec2 } from "../polyfills"
+import { ComponentX } from '../core/decorator'
+import { Color4B, Vec2 } from '../polyfills'
+import { BaseComponentProps, ColorSource } from '../safex'
 
 export class NodeRender extends ComponentX {
   nodeName: string
@@ -38,12 +39,12 @@ interface MaskRenderProps {
   segments?: number
   inverted?: boolean
 }
-export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> { }
+export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
 
 interface ParticleCompProps {
   plistFile: string
 }
-export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> { }
+export class ParticleComp extends ComponentX<ParticleCompProps, cc.ParticleSystem> {}
 
 interface GraphicsRenderProps {
   lineWidth?: number
@@ -52,7 +53,6 @@ interface GraphicsRenderProps {
 }
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseComponentProps<GraphicsRender>, cc.DrawNode> {
-
   drawDot(x, y, r) {
     this.node.instance.drawDot(cc.p(x, y), r, this.props.fillColor)
   }
@@ -71,16 +71,16 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   // drawSolidRect(origin: Vec2, destination: Vec2, color: Color4B) {
 
   // }
-  drawCircle(
-    center: Vec2,
-    radius: Float,
-    angle = 0,
-    segments = 64,
-    drawLineToCenter = true,
-    lineWidth?: Float,
-    color?: Color4B,
-  ) {
-    this.node.instance.drawCircle(center, radius, angle, segments, drawLineToCenter, lineWidth || this.props.lineWidth, color || this.props.fillColor)
+  drawCircle(center: Vec2, radius: Float, angle = 0, segments = 64, drawLineToCenter = true, lineWidth?: Float, color?: Color4B) {
+    this.node.instance.drawCircle(
+      center,
+      radius,
+      angle,
+      segments,
+      drawLineToCenter,
+      lineWidth || this.props.lineWidth,
+      color || this.props.fillColor,
+    )
   }
 
   // drawSolidCircle(origin: Vec2, destination: Vec2, color: Color4B) {
@@ -122,4 +122,4 @@ interface TiledMapProps {
   mapFile: string
 }
 
-export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> { }
+export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}

@@ -1,8 +1,8 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
+import { NodeComp } from '../core/NodeComp'
+import { ComponentX } from '../core/decorator'
 import { GameWorld } from '../gworld'
-import { NodeComp } from '../gworld/NodeComp'
-import { ComponentX } from '../gworld/decorator'
 import { BaseComponentProps } from '../safex'
 import { PixiDragonBonesSprite } from './PixiDragonBonesSprite'
 
