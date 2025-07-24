@@ -142,3 +142,5 @@ export function setupDragonBones(world: GameWorld) {
   world.listUpdate.push(DragonBonesSystem)
   world.systems.configureOnce(DragonBonesSystem)
 }
+
+export * from './PixiDragonBonesSprite'

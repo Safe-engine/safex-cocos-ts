@@ -1,3 +1,4 @@
+import { BaseComponentProps } from '..'
 import { NoRenderComponentX } from '../core/decorator'
 import { getMax, getMin } from '../helper/math'
 import { Vec2 } from '../polyfills'
@@ -12,15 +13,14 @@ function getNodeToWorldTransformAR(node) {
 function cloneRect(origin) {
   return cc.rect(origin.x, origin.y, origin.width, origin.height)
 }
-interface ColliderProps {
-  offset?: Vec2
+interface ColliderProps extends BaseComponentProps<Collider> {
   tag?: number
   enabled?: boolean
   onCollisionEnter?: (other: Collider) => void
   onCollisionExit?: (other: Collider) => void
   onCollisionStay?: (other: Collider) => void
 }
-export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
+export class Collider extends NoRenderComponentX<ColliderProps> {
   _worldPoints: cc.Vec2[] | cc.Point[] = []
   _worldPosition: cc.Vec2 | cc.Point
   _worldRadius
@@ -41,11 +41,12 @@ export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
   }
 }
 
-interface BoxColliderProps extends ColliderProps {
+interface BoxColliderProps extends BaseComponentProps<BoxCollider> {
+  offset?: [number, number]
   width: number
   height: number
 }
-export class BoxCollider extends Collider<BoxColliderProps> {
+export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
   get size() {
     return cc.size(this.props.width, this.props.height)
   }
@@ -60,7 +61,7 @@ export class BoxCollider extends Collider<BoxColliderProps> {
       return
     }
     const collider = this.getComponent(Collider)
-    const { x, y } = collider.props.offset || Vec2(0, 0)
+    const [x, y] = this.props.offset || [0, 0]
     const hw = this.props.width * 0.5
     const hh = this.props.height * 0.5
     const transform = getNodeToWorldTransformAR(this.node)
@@ -85,10 +86,11 @@ export class BoxCollider extends Collider<BoxColliderProps> {
   }
 }
 
-interface CircleColliderProps extends ColliderProps {
+interface CircleColliderProps extends BaseComponentProps<CircleCollider> {
+  offset?: [number, number]
   radius: number
 }
-export class CircleCollider extends Collider<CircleColliderProps> {
+export class CircleCollider extends NoRenderComponentX<CircleColliderProps> {
   update(dt, draw: cc.DrawNode) {
     if (!this.node) {
       return
@@ -96,7 +98,8 @@ export class CircleCollider extends Collider<CircleColliderProps> {
     const transform = getNodeToWorldTransformAR(this.node)
     const collider = this.getComponent(Collider)
     collider._worldRadius = this.props.radius * this.node.scaleX
-    collider._worldPosition = cc.pointApplyAffineTransform(collider.props.offset, transform)
+    const [x, y] = this.props.offset || [0, 0]
+    collider._worldPosition = cc.pointApplyAffineTransform(cc.p(x, y), transform)
     if (draw) {
       draw.drawDot(collider._worldPosition, collider._worldRadius, cc.Color.DEBUG_FILL_COLOR)
       draw.drawCircle(collider._worldPosition, collider._worldRadius, 0, 64, true, 3, cc.Color.DEBUG_BORDER_COLOR)
@@ -112,13 +115,14 @@ export class CircleCollider extends Collider<CircleColliderProps> {
   }
 }
 
-interface PolygonColliderProps extends ColliderProps {
+interface PolygonColliderProps extends BaseComponentProps<PolygonCollider> {
+  offset?: [number, number]
   points: Array<Vec2>
 }
 
-export class PolygonCollider extends Collider<PolygonColliderProps> {
+export class PolygonCollider extends NoRenderComponentX<PolygonColliderProps> {
   get points(): Vec2[] {
-    const { x, y } = this.props.offset
+    const [x, y] = this.props.offset || [0, 0]
     const pointsList = this.props.points.map((p) => Vec2(p.x + x, p.y + y))
     return pointsList
   }
