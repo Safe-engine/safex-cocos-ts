@@ -36,19 +36,33 @@ export class RigidBody extends NoRenderComponentX<RigidBodyProps> {
     return Vec2(vel)
   }
 
-  applyForceToCenter(vel: Vec2) {
+  applyForceTo(vel: Vec2, pos?: Vec2) {
     if (!this.node) {
       return
     }
-    this.body.ApplyForceToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
+    if (pos) {
+      this.body.ApplyForce(new box2D.b2Vec2(vel.x, vel.y), new box2D.b2Vec2(pos.x, pos.y), true)
+    } else {
+      this.body.ApplyForceToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
+    }
   }
 
-  applyLinearImpulseToCenter(vel: Vec2) {
+  applyLinearImpulse(vel: Vec2, pos?: Vec2) {
     if (!this.node) {
       return
     }
-    // console.log('applyLinearImpulseToCenter', new box2D.b2Vec2(vel.x, vel.y))
-    this.body.ApplyLinearImpulseToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
+    if (pos) {
+      this.body.ApplyLinearImpulse(new box2D.b2Vec2(vel.x, vel.y), new box2D.b2Vec2(pos.x, pos.y), true)
+    } else {
+      this.body.ApplyLinearImpulseToCenter(new box2D.b2Vec2(vel.x, vel.y), true)
+    }
+  }
+
+  applyTorque(torque: Float) {
+    if (!this.node) {
+      return
+    }
+    this.body.ApplyTorque(torque, true)
   }
 
   set position(pos: Vec2) {
