@@ -2,7 +2,7 @@ import { Constructor, Entity } from 'entityx-ts'
 
 import { instantiate } from '../helper/utils'
 import { ExtraDataComp } from '../norender'
-import { Vec2 } from '../polyfills'
+import { Size, Vec2 } from '../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 
 export type EventCallbackType = (...args) => void
@@ -170,7 +170,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   set height(val) {
-    this.instance.setContentSize(val, this.width)
+    this.instance.setContentSize(this.width, val)
   }
 
   get zIndex() {
@@ -220,37 +220,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     })
   }
 
-  getPercent() {
-    if (this.instance instanceof ccui.LoadingBar) {
-      return this.instance.getPercent()
-    }
-    return 0
-  }
-
-  setPercent(val: number) {
-    if (this.instance instanceof ccui.LoadingBar) {
-      return this.instance.setPercent(val)
-    }
-  }
-
-  setTouchEnabled(enabled: boolean) {
-    if (!cc.sys.isObjectValid(this.instance)) {
-      return
-    }
-    if (this.instance instanceof ccui.Widget) {
-      this.instance.setTouchEnabled(enabled)
-    }
-  }
-
-  addTouchEventListener(cb) {
-    if (!cc.sys.isObjectValid(this.instance)) {
-      return
-    }
-    if (this.instance instanceof ccui.Widget) {
-      this.instance.addTouchEventListener(cb)
-    }
-  }
-
   convertToNodeSpace(point: cc.Point) {
     const { x, y } = this.instance.convertToNodeSpace(point)
     return Vec2(x, y)
@@ -266,30 +235,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return Vec2(x, y)
   }
 
-  getPosition() {
-    return this.instance.getPosition()
-  }
-
-  setPosition(x: number | cc.Vec2 | cc.Vec3 | cc.Point, y?: number) {
-    this.instance.setPosition(x, y)
-  }
-
-  setRotation(deg: number) {
-    this.instance.setRotation(deg)
-  }
-
-  getRotation() {
-    return this.instance.getRotation()
-  }
-
-  setAnchorPoint(point: number | cc.Point, y?: number) {
-    this.instance.setAnchorPoint(point, y)
-  }
-
-  getAnchorPoint() {
-    return this.instance.getAnchorPoint()
-  }
-
   getBoundingBox() {
     const box = this.instance.getBoundingBox()
     box.contains = function (point) {
@@ -298,29 +243,21 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return box
   }
 
-  getContentSize() {
+  get contentSize() {
     return this.instance.getContentSize()
   }
 
-  setContentSize(size: cc.Size | number, height?: number) {
-    this.instance.setContentSize(size, height)
+  set contentSize(size: Size) {
+    this.instance.setContentSize(size)
     if (this.instance instanceof cc.ClippingNode) {
-      const hw = ((size as any).width || size) * 0.5
-      const hh = ((size as any).height || height) * 0.5
+      const hw = size.width * 0.5
+      const hh = size.height * 0.5
       const stencil = new cc.DrawNode()
       const rectangle = [cc.p(-hw, -hh), cc.p(hw, -hh), cc.p(hw, hh), cc.p(-hw, hh)]
       stencil.drawPoly(rectangle, cc.Color.WHITE, 0, cc.Color.WHITE)
       // stencil.drawDot(cc.p(-height * 0.5, -height * 0.5), height, cc.Color.WHITE);
       this.instance.stencil = stencil
     }
-  }
-
-  setColor(color: cc.Color) {
-    this.instance.setColor(color)
-  }
-
-  setScale(scaleX: number, scaleY?: number) {
-    this.instance.setScale(scaleX, scaleY || scaleX)
   }
 
   runAction(atc: cc.ActionInterval) {
