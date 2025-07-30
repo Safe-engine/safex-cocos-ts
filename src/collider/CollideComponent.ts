@@ -15,7 +15,6 @@ function cloneRect(origin) {
 }
 interface ColliderProps extends BaseComponentProps<Collider> {
   tag?: number
-  enabled?: boolean
   onCollisionEnter?: (other: Collider) => void
   onCollisionExit?: (other: Collider) => void
   onCollisionStay?: (other: Collider) => void

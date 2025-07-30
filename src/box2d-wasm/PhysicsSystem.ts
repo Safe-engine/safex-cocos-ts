@@ -152,7 +152,7 @@ export class PhysicsSystem implements System {
       const [x = 0, y = 0] = offset
       const zero = new b2Vec2(0, 0)
       const position = new b2Vec2(node.posX, node.posY)
-      const { width, height } = node.getContentSize()
+      const { width, height } = node.contentSize
       const { scaleX, scaleY, anchorX, anchorY } = node
 
       const bd = new b2BodyDef()

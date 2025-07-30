@@ -61,8 +61,8 @@ export class SpineSystem implements System {
   }
 }
 
-export function setupSpine(world: GameWorld) {
-  world.systems.add(SpineSystem)
-  // world.listUpdate.push(SpineSystem)
-  world.systems.configureOnce(SpineSystem)
+export function setupSpine() {
+  GameWorld.Instance.systems.add(SpineSystem)
+  // GameWorld.Instance.listUpdate.push(SpineSystem)
+  GameWorld.Instance.systems.configureOnce(SpineSystem)
 }
