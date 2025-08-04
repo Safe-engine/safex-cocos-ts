@@ -1,7 +1,7 @@
 import { Constructor, Entity } from 'entityx-ts'
 
 import { instantiate } from '../helper/utils'
-import { ExtraDataComp } from '../norender'
+import { EventRegister, ExtraDataComp } from '../norender'
 import { Size, Vec2 } from '../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 
@@ -186,6 +186,9 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   destroy() {
+    if (!cc.sys.isObjectValid(this.instance)) {
+      return
+    }
     this.removeFromParent(true)
   }
 
@@ -324,6 +327,15 @@ export class NodeComp<C extends cc.Node = cc.Node> {
       data.setData(key, value)
     }
   }
+
+  get event() {
+    const _event = this.getComponent(EventRegister)
+    if (!_event) {
+      return this.addComponent(instantiate(EventRegister))
+    }
+    return _event
+  }
+
   removeData(key: string) {
     const data = this.getComponent(ExtraDataComp)
     if (data) {
@@ -331,11 +343,12 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     }
   }
 
-  resolveComponent(component: EnhancedComponent<object, NodeComp>) {
+  resolveComponent(component: EnhancedComponent<object, NodeComp> & { start?: () => void }) {
     if ((component.constructor as any).hasRender) {
       this.addChild(component.node)
     } else {
       this.addComponent(component)
+      if (component.start) component.start()
     }
   }
 }
