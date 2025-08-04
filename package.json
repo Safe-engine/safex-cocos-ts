@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "safe-engine with cocos renderer support",
   "type": "module",
   "main": "dist/index.js",
@@ -19,10 +19,10 @@
   },
   "devDependencies": {
     "cocos-html5-ts": "^1.1.10",
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@esotericsoftware/spine-core": "^4.2.84",
+    "@esotericsoftware/spine-core": "^4.2.88",
     "box2d-wasm": "^7.0.0",
     "entityx-ts": "^2.2.1"
   },
