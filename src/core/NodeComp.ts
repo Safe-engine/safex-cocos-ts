@@ -192,8 +192,12 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.removeFromParent(true)
   }
 
-  addComponent<T extends ComponentType>(instance: T): T {
-    return this.entity.assign(instance)
+  addComponent<T extends ComponentType>(instance: T & { start?: () => void }): T {
+    this.entity.assign(instance)
+    if (!(instance.constructor as any).hasRender) {
+      if (instance.start) instance.start()
+    }
+    return instance
   }
 
   getComponent<T extends ComponentType>(component: Constructor<T>): T {
@@ -343,12 +347,11 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     }
   }
 
-  resolveComponent(component: EnhancedComponent<object, NodeComp> & { start?: () => void }) {
+  resolveComponent(component: EnhancedComponent<object, NodeComp>) {
     if ((component.constructor as any).hasRender) {
       this.addChild(component.node)
     } else {
       this.addComponent(component)
-      if (component.start) component.start()
     }
   }
 }
