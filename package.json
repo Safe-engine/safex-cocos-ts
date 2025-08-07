@@ -24,6 +24,8 @@
   "dependencies": {
     "@esotericsoftware/spine-core": "^4.2.88",
     "box2d-wasm": "^7.0.0",
+    "pixi.js": "5.3.12",
+    "pixi5-dragonbones": "5.7.0-2b",
     "entityx-ts": "^2.2.1"
   },
   "author": "",
