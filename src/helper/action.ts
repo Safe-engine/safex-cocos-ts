@@ -23,6 +23,14 @@ export function repeatForever(action: cc.FiniteTimeAction) {
   return cc.repeatForever(action)
 }
 
+export function repeat(action: cc.FiniteTimeAction, times: Integer) {
+  return cc.repeat(action, times)
+}
+
+export function delayTime(time: Float) {
+  return cc.delayTime(time)
+}
+
 export function easeBackOut(action: cc.ActionInterval) {
   return action.easing(cc.easeBackOut())
 }
