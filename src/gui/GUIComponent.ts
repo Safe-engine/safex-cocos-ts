@@ -7,8 +7,8 @@ export const FillType = {
   VERTICAL: 1,
   RADIAL: 2,
 }
-type Keys = keyof typeof FillType
-type Values = (typeof FillType)[Keys]
+// type Keys = keyof typeof FillType
+// type Values = (typeof FillType)[Keys]
 
 interface ButtonCompProps {
   normalImage?: string
@@ -18,15 +18,9 @@ interface ButtonCompProps {
   onPress?: (target: ButtonComp) => void
 }
 export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
-  // texType: ccui.Widget.TextureType
-  clickEvents = []
-
-  setOnPress(cb: (target: ButtonComp) => void) {
-    this.props.onPress = cb
-  }
-
-  // setTouchEnabled(val) {
-  //   this.node.setTouchEnabled(val)
+  // clickEvents = []
+  // setOnPress(cb: (target: ButtonComp) => void) {
+  //   this.props.onPress = cb
   // }
 }
 
@@ -39,25 +33,19 @@ interface ProgressTimerProps {
 }
 
 export class ProgressTimerComp extends ComponentX<ProgressTimerProps & BaseComponentProps<ProgressTimerComp>, cc.ProgressTimer & cc.Node> {
-  spriteFrame: string
-  fillType: Values
-  fillRange: number
-  fillCenter: Vec2
-  isReverse: boolean
-
-  getFillRange() {
+  get fillRange() {
     if (this.node.instance instanceof cc.ProgressTimer) {
       return this.node.instance.getPercentage() * 0.01
     }
   }
 
-  setFillStart(val: number) {
+  set fillStart(val: number) {
     if (this.node.instance instanceof cc.ProgressTimer) {
       this.node.instance.setMidpoint(Vec2(val, val))
     }
   }
 
-  setFillRange(val: number) {
+  set fillRange(val: number) {
     if (this.node.instance instanceof cc.ProgressTimer) {
       this.node.instance.setPercentage(val * 100)
     }
@@ -78,7 +66,7 @@ interface LabelOutlineCompProps {
 interface LabelShadowCompProps {
   color: ColorSource
   blur: number
-  offset: Vec2
+  offset: Size
 }
 
 export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
