@@ -1,6 +1,9 @@
 export function randomRangeInt(minInclude: Integer, maxExclude: Integer) {
   return Math.round(Math.random() * (maxExclude - minInclude - 1)) + minInclude
 }
+export function randomRange(minInclude: Float, maxExclude: Float) {
+  return Math.random() * (maxExclude - minInclude - 1) + minInclude
+}
 
 export const degreesToRadians = cc.degreesToRadians
 export const radiansToDegrees = cc.radiansToDegrees
