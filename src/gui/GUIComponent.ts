@@ -1,5 +1,5 @@
 import { ComponentX, NoRenderComponentX } from '../core/decorator'
-import { Color4B, Size, Vec2 } from '../polyfills'
+import { Size, Vec2 } from '../polyfills'
 import { BaseComponentProps, ColorSource } from '../safex'
 
 export const FillType = {
@@ -58,17 +58,6 @@ interface LabelCompProps {
   size?: number
 }
 
-interface LabelOutlineCompProps {
-  color: ColorSource
-  width: number
-}
-
-interface LabelShadowCompProps {
-  color: ColorSource
-  blur: number
-  offset: Size
-}
-
 export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
   get string() {
     return this.props.string
@@ -82,16 +71,20 @@ export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<La
   }
 }
 
-export class LabelOutlineComp extends NoRenderComponentX<LabelOutlineCompProps> {
-  color: typeof Color4B
-  width: Float
+interface LabelOutlineCompProps {
+  color: ColorSource
+  width: number
 }
 
-export class LabelShadowComp extends NoRenderComponentX<LabelShadowCompProps> {
-  color: typeof Color4B
-  blur: Float
+export class LabelOutlineComp extends NoRenderComponentX<LabelOutlineCompProps> {}
+
+interface LabelShadowCompProps {
+  color: ColorSource
+  blur: number
   offset: Size
 }
+
+export class LabelShadowComp extends NoRenderComponentX<LabelShadowCompProps> {}
 
 export enum ScrollViewDirection {
   NONE = cc.SCROLLVIEW_DIRECTION_NONE,
