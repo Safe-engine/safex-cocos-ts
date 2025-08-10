@@ -2,17 +2,7 @@ import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System }
 import { NodeComp } from '../core/NodeComp'
 import { TouchEventRegister } from '../norender'
 import { Vec2 } from '../polyfills'
-import {
-  BlockInputEventsComp,
-  ButtonComp,
-  FillType,
-  InputComp,
-  LabelComp,
-  LabelOutlineComp,
-  LabelShadowComp,
-  ProgressTimerComp,
-  ScrollViewComp,
-} from './GUIComponent'
+import { BlockInputEventsComp, ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
 
 export class GUISystem implements System {
   defaultFont: string
@@ -20,8 +10,6 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, ButtonComp, this.onAddButtonComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ProgressTimerComp, this.onAddProgressTimerComp)
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, LabelOutlineComp, this.onAddLabelOutlineComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, LabelShadowComp, this.onAddLabelShadowComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, BlockInputEventsComp, this.onAddBlockInputEventsComp)
@@ -69,27 +57,19 @@ export class GUISystem implements System {
   }
 
   private onAddLabelComp: EventReceiveCallback<LabelComp> = ({ entity, component: label }) => {
-    const { string = '', font = this.defaultFont, size = 64 } = label.props
+    const { string = '', font = this.defaultFont, size = 64, outline, shadow } = label.props
     const fontName = cc.path.basename(font, '.ttf')
     const node = new ccui.Text(string, fontName, size)
     node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
+    if (outline) {
+      const [color, width] = outline
+      node.enableOutline(color, width)
+    }
+    if (shadow) {
+      const [color, blur, offset] = shadow
+      node.enableShadow(color, offset, blur)
+    }
     label.node = entity.assign(new NodeComp(node, entity))
-  }
-
-  private onAddLabelOutlineComp: EventReceiveCallback<LabelOutlineComp> = ({ entity, component: outline }) => {
-    const { color, width } = outline.props
-    const node = entity.getComponent(NodeComp)
-    if (node.instance instanceof ccui.Text) {
-      node.instance.enableOutline(color, width)
-    }
-  }
-
-  private onAddLabelShadowComp: EventReceiveCallback<LabelShadowComp> = ({ entity, component: shadow }) => {
-    const { color, blur, offset } = shadow.props
-    const node = entity.getComponent(NodeComp)
-    if (node.instance instanceof ccui.Text) {
-      node.instance.enableShadow(color, offset, blur)
-    }
   }
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {

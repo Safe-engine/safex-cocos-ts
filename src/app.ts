@@ -46,25 +46,28 @@ export async function startGame(defaultFont: string, { width, height }, option?:
     }
 
     cc._isContextMenuEnable = true
-    cc.game.run({
-      debugMode: 1,
-      showFPS: false,
-      frameRate: 60,
-      id: 'gameCanvas',
-      renderMode: 1,
-      ...option || {},
-    }, function onStart() {
-      // Pass true to enable retina display, disabled by default to improve performance
-      cc.view.enableRetina(cc.sys.os === cc.sys.OS_IOS)
-      // Adjust viewport meta
-      cc.view.adjustViewPort(true)
-      // Setup the resolution policy and design resolution size
-      const policy = width > height ? cc.ResolutionPolicy.FIXED_HEIGHT : cc.ResolutionPolicy.FIXED_WIDTH
-      cc.view.setDesignResolutionSize(width, height, policy)
-      // The game will be resized when browser size change
-      cc.view.resizeWithBrowserSize(true)
-      cc.director.runScene(new BootScene())
-    })
+    cc.game.run(
+      {
+        debugMode: 1,
+        showFPS: false,
+        frameRate: 60,
+        id: 'gameCanvas',
+        renderMode: 0,
+        ...(option || {}),
+      },
+      function onStart() {
+        // Pass true to enable retina display, disabled by default to improve performance
+        cc.view.enableRetina(cc.sys.os === cc.sys.OS_IOS)
+        // Adjust viewport meta
+        cc.view.adjustViewPort(true)
+        // Setup the resolution policy and design resolution size
+        const policy = width > height ? cc.ResolutionPolicy.FIXED_HEIGHT : cc.ResolutionPolicy.FIXED_WIDTH
+        cc.view.setDesignResolutionSize(width, height, policy)
+        // The game will be resized when browser size change
+        cc.view.resizeWithBrowserSize(true)
+        cc.director.runScene(new BootScene())
+      },
+    )
   })
 }
 

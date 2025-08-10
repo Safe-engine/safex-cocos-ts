@@ -56,6 +56,8 @@ interface LabelCompProps {
   font?: string
   string?: string
   size?: number
+  outline?: [ColorSource, number]
+  shadow?: [ColorSource, number, Size]
 }
 
 export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
@@ -70,21 +72,6 @@ export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<La
     }
   }
 }
-
-interface LabelOutlineCompProps {
-  color: ColorSource
-  width: number
-}
-
-export class LabelOutlineComp extends NoRenderComponentX<LabelOutlineCompProps> {}
-
-interface LabelShadowCompProps {
-  color: ColorSource
-  blur: number
-  offset: Size
-}
-
-export class LabelShadowComp extends NoRenderComponentX<LabelShadowCompProps> {}
 
 export enum ScrollViewDirection {
   NONE = cc.SCROLLVIEW_DIRECTION_NONE,
