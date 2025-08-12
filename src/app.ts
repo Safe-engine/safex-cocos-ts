@@ -71,7 +71,7 @@ export async function startGame(defaultFont: string, { width, height }, option?:
   })
 }
 
-export function loadAll(assets: string[] = [], cb: (progress: number) => void) {
+export function loadAll(assets: string[] = [], cb: (progress: number) => void, onCompleted?: () => void) {
   cc.loader.load(
     assets.map((value) => {
       if (value.endsWith('.ttf')) {
@@ -95,9 +95,7 @@ export function loadAll(assets: string[] = [], cb: (progress: number) => void) {
       percent = Math.min(percent, 1)
       cb(percent)
     },
-    function () {
-      setTimeout(cb, 500, 1)
-    },
+    onCompleted,
   )
 }
 
