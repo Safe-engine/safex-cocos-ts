@@ -3,7 +3,7 @@ import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 import { BaseComponentProps, ComponentX, GameWorld, NodeComp } from '..'
 import { SkeletonAnimation } from './CCSkeletonAnimation'
 
-interface SpineData {
+export interface SpineData {
   atlas: string
   skeleton: string
   texture?: string
@@ -17,11 +17,6 @@ interface SpineSkeletonProps {
   loop?: boolean
 }
 export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>> {
-  data: SpineData
-  skin: string
-  animation: string
-  loop: boolean
-  timeScale: number
 
   setAnimation(name: string, loop = false) {
     const skel: any = this.node.instance
