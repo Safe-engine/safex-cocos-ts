@@ -42,8 +42,8 @@ export class Collider extends NoRenderComponentX<ColliderProps> {
 
 interface BoxColliderProps extends BaseComponentProps<BoxCollider> {
   offset?: [number, number]
-  width?: number
-  height?: number
+  width: number
+  height: number
 }
 export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
   get size() {
@@ -62,12 +62,10 @@ export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
     const collider = this.getComponent(Collider)
     const { height, width, offset = [0, 0] } = this.props
     const [x, y] = offset
-    const rw = width || this.node.contentSize.width
-    const rh = height || this.node.contentSize.height
-    const hw = rw * 0.5
-    const hh = rh * 0.5
+    const hw = width * 0.5 * this.node.scale
+    const hh = height * 0.5 * this.node.scale
     const transform = getNodeToWorldTransformAR(this.node)
-    const rect = cc.rect(x - hw, y - hh, rw, rh)
+    const rect = cc.rect(x - hw, y - hh, width, height)
     const rectTrs = cc.rectApplyAffineTransform(rect, transform)
     // cc.log(rectTrs);
     collider._worldPoints[0] = Vec2(rectTrs.x, rectTrs.y)
@@ -90,7 +88,7 @@ export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
 
 interface CircleColliderProps extends BaseComponentProps<CircleCollider> {
   offset?: [number, number]
-  radius?: number
+  radius: number
 }
 export class CircleCollider extends NoRenderComponentX<CircleColliderProps> {
   update(dt, draw: cc.DrawNode) {
@@ -101,8 +99,7 @@ export class CircleCollider extends NoRenderComponentX<CircleColliderProps> {
     const collider = this.getComponent(Collider)
     const { radius, offset = [0, 0] } = this.props
     const [x, y] = offset
-    const rr = radius || this.node.contentSize.width * 0.5
-    collider._worldRadius = rr * this.node.scaleX
+    collider._worldRadius = radius * this.node.scale
     collider._worldPosition = cc.pointApplyAffineTransform(cc.p(x, y), transform)
     if (draw) {
       draw.drawDot(collider._worldPosition, collider._worldRadius, cc.Color.DEBUG_FILL_COLOR)
