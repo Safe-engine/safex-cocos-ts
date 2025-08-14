@@ -27,7 +27,6 @@ import { SkeletonTexture } from './CCSkeletonTexture'
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-var gworld = gworld || {}
 
 export const _atlasLoader = {
   spAtlasFile: null,
@@ -41,7 +40,7 @@ export const _atlasLoader = {
     tex.setRealTexture(texture)
     return tex
   },
-  unload: function (obj) {},
+  unload: function () {},
 }
 
 /**
@@ -49,7 +48,7 @@ export const _atlasLoader = {
  * @constant
  * @type {{START: number, END: number, COMPLETE: number, EVENT: number}}
  */
-gworld.ANIMATION_EVENT_TYPE = {
+const ANIMATION_EVENT_TYPE = {
   START: 0,
   INTERRUPT: 1,
   END: 2,
@@ -58,7 +57,14 @@ gworld.ANIMATION_EVENT_TYPE = {
   EVENT: 5,
 }
 
-gworld.TrackEntryListeners = function (startListener, endListener, completeListener, eventListener, interruptListener, disposeListener) {
+const TrackEntryListeners = function (
+  startListener?,
+  endListener?,
+  completeListener?,
+  eventListener?,
+  interruptListener?,
+  disposeListener?,
+) {
   this.startListener = startListener || null
   this.endListener = endListener || null
   this.completeListener = completeListener || null
@@ -70,13 +76,13 @@ gworld.TrackEntryListeners = function (startListener, endListener, completeListe
   this.skeletonNode = null
 }
 
-const proto = gworld.TrackEntryListeners.prototype
+const proto = TrackEntryListeners.prototype
 proto.start = function (trackEntry) {
   if (this.startListener) {
     this.startListener(trackEntry)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.START, null, 0)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.START, null, 0)
   }
 }
 
@@ -85,7 +91,7 @@ proto.interrupt = function (trackEntry) {
     this.interruptListener(trackEntry)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.INTERRUPT, null, 0)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.INTERRUPT, null, 0)
   }
 }
 
@@ -94,7 +100,7 @@ proto.end = function (trackEntry) {
     this.endListener(trackEntry)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.END, null, 0)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.END, null, 0)
   }
 }
 
@@ -103,7 +109,7 @@ proto.dispose = function (trackEntry) {
     this.disposeListener(trackEntry)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.DISPOSE, null, 0)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.DISPOSE, null, 0)
   }
 }
 
@@ -113,7 +119,7 @@ proto.complete = function (trackEntry) {
     this.completeListener(trackEntry, loopCount)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.COMPLETE, null, loopCount)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.COMPLETE, null, loopCount)
   }
 }
 
@@ -122,13 +128,13 @@ proto.event = function (trackEntry, event) {
     this.eventListener(trackEntry, event)
   }
   if (this.callback) {
-    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, gworld.ANIMATION_EVENT_TYPE.EVENT, event, 0)
+    this.callback.call(this.callbackTarget, this.skeletonNode, trackEntry, ANIMATION_EVENT_TYPE.EVENT, event, 0)
   }
 }
 
-gworld.TrackEntryListeners.getListeners = function (entry) {
+TrackEntryListeners.getListeners = function (entry) {
   if (!entry.listener) {
-    entry.listener = new gworld.TrackEntryListeners()
+    entry.listener = new TrackEntryListeners()
   }
   return entry.listener
 }
@@ -136,75 +142,66 @@ gworld.TrackEntryListeners.getListeners = function (entry) {
 /**
  * The skeleton animation of spine. It updates animation's state and skeleton's world transform.
  * @class
- * @extends gworld.Skeleton
- * @example
- * var spineBoy = new SkeletonAnimation('res/skeletons/spineboy.json', 'res/skeletons/spineboy.atlas');
- * this.addChild(spineBoy, 4);
+ * @extends Skeleton
  */
-export const SkeletonAnimation = Skeleton.extend({
-  _state: null,
+export class SkeletonAnimation extends Skeleton {
+  _state: any = null
+  _ownsAnimationStateData = false
+  _listener: any = null
 
-  _ownsAnimationStateData: false,
-  _listener: null,
-
-  /**
-   * Initializes a SkeletonAnimation. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
-   * @override
-   */
-  init: function () {
-    Skeleton.prototype.init.call(this)
+  constructor(skeletonDataFile?: any, atlasFile?: any, scale?: number) {
+    super(skeletonDataFile, atlasFile, scale)
     this._ownsAnimationStateData = true
     this.setAnimationStateData(new spine.AnimationStateData(this._skeleton.data))
-  },
+  }
 
   /**
    * Sets animation state data to SkeletonAnimation.
-   * @param {gworld.spine.AnimationStateData} stateData
+   * @param {spine.AnimationStateData} stateData
    */
-  setAnimationStateData: function (stateData) {
+  setAnimationStateData(stateData: any) {
     const state = new spine.AnimationState(stateData)
-    this._listener = new gworld.TrackEntryListeners()
-    // state.rendererObject = this;
+    this._listener = new TrackEntryListeners()
     state.addListener(this._listener)
     this._state = state
-  },
+  }
 
   /**
-   * Mix applies all keyframe values, interpolated for the specified time and mixed with the current values.  <br/>
+   * Mix applies all keyframe values, interpolated for the specified time and mixed with the current values.
    * @param {String} fromAnimation
    * @param {String} toAnimation
    * @param {Number} duration
    */
-  setMix: function (fromAnimation, toAnimation, duration) {
+  setMix(fromAnimation: string, toAnimation: string, duration: number) {
     this._state.data.setMixWith(fromAnimation, toAnimation, duration)
-  },
+  }
 
   /**
    * Sets event listener of SkeletonAnimation.
    * @param {Object} target
    * @param {Function} callback
    */
-  setAnimationListener: function (target, callback) {
+  setAnimationListener(target: any, callback: any) {
     this._listener.callbackTarget = target
     this._listener.callback = callback
     this._listener.skeletonNode = this
-  },
+  }
 
   /**
    * Set the current animation. Any queued animations are cleared.
    * @param {Number} trackIndex
    * @param {String} name
    * @param {Boolean} loop
-   * @returns {gworld.spine.TrackEntry|null}
+   * @returns {spine.TrackEntry|null}
    */
-  setAnimation: function (trackIndex, name, loop) {
+  setAnimation(trackIndex: number, name: string, loop: boolean) {
     const animation = this._skeleton.data.findAnimation(name)
     if (!animation) {
       cc.log(`Spine: Animation not found: ${name}`)
       return null
     }
     return this._state.setAnimationWith(trackIndex, animation, loop)
-  },
+  }
 
   /**
    * Adds an animation to be played delay seconds after the current or last queued animation.
@@ -212,9 +209,9 @@ export const SkeletonAnimation = Skeleton.extend({
    * @param {String} name
    * @param {Boolean} loop
    * @param {Number} [delay=0]
-   * @returns {gworld.spine.TrackEntry|null}
+   * @returns {spine.TrackEntry|null}
    */
-  addAnimation: function (trackIndex, name, loop, delay) {
+  addAnimation(trackIndex: number, name: string, loop: boolean, delay?: number) {
     delay = delay == null ? 0 : delay
     const animation = this._skeleton.data.findAnimation(name)
     if (!animation) {
@@ -222,40 +219,40 @@ export const SkeletonAnimation = Skeleton.extend({
       return null
     }
     return this._state.addAnimationWith(trackIndex, animation, loop, delay)
-  },
+  }
 
   /**
    * Find animation with specified name
    * @param {String} name
-   * @returns {gworld.spine.Animation|null}
+   * @returns {spine.Animation|null}
    */
-  findAnimation: function (name) {
+  findAnimation(name: string) {
     return this._skeleton.data.findAnimation(name)
-  },
+  }
 
   /**
    * Returns track entry by trackIndex.
    * @param trackIndex
-   * @returns {gworld.spine.TrackEntry|null}
+   * @returns {spine.TrackEntry|null}
    */
-  getCurrent: function (trackIndex) {
+  getCurrent(trackIndex: number) {
     return this._state.getCurrent(trackIndex)
-  },
+  }
 
   /**
    * Clears all tracks of animation state.
    */
-  clearTracks: function () {
+  clearTracks() {
     this._state.clearTracks()
-  },
+  }
 
   /**
    * Clears track of animation state by trackIndex.
    * @param {Number} trackIndex
    */
-  clearTrack: function (trackIndex) {
+  clearTrack(trackIndex: number) {
     this._state.clearTrack(trackIndex)
-  },
+  }
 
   /**
    * Update will be called automatically every frame if "scheduleUpdate" is called when the node is "live".
@@ -263,93 +260,97 @@ export const SkeletonAnimation = Skeleton.extend({
    * @param {Number} dt Delta time since last update
    * @override
    */
-  update: function (dt) {
-    this._super(dt)
+  update(dt: number) {
+    super.update(dt)
     dt *= this._timeScale
-    this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.contentDirty)
+    ;(this as any)._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.contentDirty)
     this._state.update(dt)
     this._state.apply(this._skeleton)
     this._skeleton.updateWorldTransform(true)
-    this._renderCmd._updateChild()
-  },
+    ;(this as any)._renderCmd._updateChild()
+  }
 
   /**
    * Set the start event listener.
    * @param {function} listener
    */
-  setStartListener: function (listener) {
+  setStartListener(listener: any) {
     this._listener.startListener = listener
-  },
+  }
 
   /**
    * Set the interrupt listener
    * @param {function} listener
    */
-  setInterruptListener: function (listener) {
+  setInterruptListener(listener: any) {
     this._listener.interruptListener = listener
-  },
+  }
 
   /**
    * Set the end event listener.
    * @param {function} listener
    */
-  setEndListener: function (listener) {
+  setEndListener(listener: any) {
     this._listener.endListener = listener
-  },
+  }
 
   /**
    * Set the dispose listener
    * @param {function} listener
    */
-  setDisposeListener: function (listener) {
+  setDisposeListener(listener: any) {
     this._listener.disposeListener = listener
-  },
+  }
 
-  setCompleteListener: function (listener) {
+  setCompleteListener(listener: any) {
     this._listener.completeListener = listener
-  },
+  }
 
-  setEventListener: function (listener) {
+  setEventListener(listener: any) {
     this._listener.eventListener = listener
-  },
+  }
 
-  setTrackStartListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).startListener = listener
-  },
+  setTrackStartListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).startListener = listener
+  }
 
-  setTrackInterruptListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).interruptListener = listener
-  },
+  setTrackInterruptListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).interruptListener = listener
+  }
 
-  setTrackEndListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).endListener = listener
-  },
+  setTrackEndListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).endListener = listener
+  }
 
-  setTrackDisposeListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).disposeListener = listener
-  },
+  setTrackDisposeListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).disposeListener = listener
+  }
 
-  setTrackCompleteListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).completeListener = listener
-  },
+  setTrackCompleteListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).completeListener = listener
+  }
 
-  setTrackEventListener: function (entry, listener) {
-    gworld.TrackEntryListeners.getListeners(entry).eventListener = listener
-  },
+  setTrackEventListener(entry: any, listener: any) {
+    TrackEntryListeners.getListeners(entry).eventListener = listener
+  }
 
-  getState: function () {
+  getState() {
     return this._state
-  },
-})
+  }
 
-/**
- * Creates a skeleton animation object.
- * @deprecated since v3.0, please use new SkeletonAnimation(skeletonDataFile, atlasFile, scale) instead.
- * @param {spine.SkeletonData|String} skeletonDataFile
- * @param {String|spine.Atlas|spine.SkeletonData} atlasFile atlas filename or atlas data or owns SkeletonData
- * @param {Number} [scale] scale can be specified on the JSON or binary loader which will scale the bone positions, image sizes, and animation translations.
- * @returns {gworld.Skeleton}
- */
-SkeletonAnimation.createWithJsonFile = SkeletonAnimation.create = function (skeletonDataFile, atlasFile /* or atlas*/, scale) {
-  return new SkeletonAnimation(skeletonDataFile, atlasFile, scale)
+  /**
+   * Creates a skeleton animation object.
+   * @deprecated since v3.0, please use new SkeletonAnimation(skeletonDataFile, atlasFile, scale) instead.
+   * @param {spine.SkeletonData|String} skeletonDataFile
+   * @param {String|spine.Atlas|spine.SkeletonData} atlasFile atlas filename or atlas data or owns SkeletonData
+   * @param {Number} [scale]
+   * @returns {SkeletonAnimation}
+   */
+  static createWithJsonFile(skeletonDataFile: any, atlasFile: any, scale?: number) {
+    return new SkeletonAnimation(skeletonDataFile, atlasFile, scale)
+  }
+
+  static create(skeletonDataFile: any, atlasFile: any, scale?: number) {
+    return new SkeletonAnimation(skeletonDataFile, atlasFile, scale)
+  }
 }

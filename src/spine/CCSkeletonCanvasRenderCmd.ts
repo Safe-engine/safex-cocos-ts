@@ -34,11 +34,8 @@ var gworld = gworld || {}
   proto.constructor = gworld.CanvasRenderCmd
 
   proto.rendering = function (wrapper, scaleX, scaleY) {
-    let node = this._node,
-      i,
-      n,
-      slot,
-      slotNode
+    const node = this._node
+    let i, n, slot, slotNode
     wrapper = wrapper || cc._renderContext
 
     const locSkeleton = node._skeleton,
@@ -57,8 +54,8 @@ var gworld = gworld || {}
 
     wrapper.setTransform(this._worldTransform, scaleX, scaleY)
     wrapper.setGlobalAlpha(1)
-    let attachment,
-      drawingUtil = cc._drawingUtil
+    let attachment
+    const drawingUtil = cc._drawingUtil
     if (node._debugSlots) {
       // Slots.
       drawingUtil.setDrawColor(0, 0, 255, 255)
@@ -125,9 +122,8 @@ var gworld = gworld || {}
 
   proto._createChildFormSkeletonData = function () {
     const node = this._node
-    let locSkeleton = node._skeleton,
-      spriteName,
-      sprite
+    const locSkeleton = node._skeleton
+    let spriteName, sprite
     for (let i = 0, n = locSkeleton.slots.length; i < n; i++) {
       const slot = locSkeleton.slots[i],
         attachment = slot.attachment

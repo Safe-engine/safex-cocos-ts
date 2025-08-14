@@ -1,4 +1,4 @@
-import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
+import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { BaseComponentProps, ComponentX, GameWorld, NodeComp } from '..'
 import { SkeletonAnimation } from './CCSkeletonAnimation'
@@ -16,19 +16,18 @@ interface SpineSkeletonProps {
   timeScale?: number
   loop?: boolean
 }
-export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>> {
-
+export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>, SkeletonAnimation> {
   setAnimation(name: string, loop = false) {
-    const skel: any = this.node.instance
+    const skel = this.node.instance
     if (skel.setAnimation) {
       skel.setAnimation(0, name, loop)
     }
   }
 
-  setSkeletonData(data: string) {
-    const skel: any = this.node.instance
-    const atlas = data.replace('.json', '.atlas')
-    skel.initWithArgs(data, atlas, this.node.scale)
+  setSkeletonData(data: SpineData) {
+    const skel = this.node.instance
+    const { atlas, skeleton } = data
+    skel.initWithArgs(skeleton, atlas)
   }
 }
 
@@ -36,11 +35,10 @@ export class SpineSystem implements System {
   configure(event_manager: EventManager) {
     event_manager.subscribe(EventTypes.ComponentAdded, SpineSkeleton, this.onAddSpineSkeleton)
   }
-  private onAddSpineSkeleton = ({ entity }) => {
-    const spineComp = entity.getComponent(SpineSkeleton)
-    const { data, skin, animation, loop, timeScale = 1 } = spineComp.props
+  private onAddSpineSkeleton: EventReceiveCallback<SpineSkeleton> = ({ entity, component: spineComp }) => {
+    const { data, skin, animation, loop = true, timeScale = 1 } = spineComp.props
     const { atlas, skeleton } = data
-    // cc.log(skel, atlas);
+    // console.log('spineComp', spineComp)
     const node = SkeletonAnimation.createWithJsonFile(skeleton, atlas, timeScale)
     if (skin) {
       node.setSkin(skin)

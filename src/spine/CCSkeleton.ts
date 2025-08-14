@@ -33,9 +33,8 @@ import { WebGLRenderCmd } from './CCSkeletonWebGLRenderCmd'
 /**
  * The main namespace of Spine, all classes, functions, properties and constants of Spine are defined in this namespace
  * @namespace
- * @name gworld
+ * @name
  */
-var gworld = gworld || {}
 /**
  * <p>
  *     The skeleton of Spine.                                                                          <br/>
@@ -46,374 +45,350 @@ var gworld = gworld || {}
  * @class
  * @extends cc.Node
  */
-gworld.Skeleton = cc.Node.extend(
-  /** @lends gworld.Skeleton# */ {
-    _skeleton: null,
-    _rootBone: null,
-    _timeScale: 1,
-    _debugSlots: false,
-    _debugBones: false,
-    _premultipliedAlpha: false,
-    _ownsSkeletonData: null,
-    _atlas: null,
+export class Skeleton extends cc.Node {
+  _skeleton = null
+  _rootBone = null
+  _timeScale = 1
+  _debugSlots = false
+  _debugBones = false
+  _premultipliedAlpha
+  _ownsSkeletonData = null
+  _atlas = null
 
-    /**
-     * The constructor of gworld.Skeleton. override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
-     */
-    ctor: function (skeletonDataFile, atlasFile, scale) {
-      cc.Node.prototype.ctor.call(this)
+  constructor(skeletonDataFile?: string, atlasFile?: string, scale?: number) {
+    super()
+    super.init()
+    this._premultipliedAlpha = cc._renderType === cc.game.RENDER_TYPE_WEBGL && cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA
+    this.initWithArgs(skeletonDataFile, atlasFile, scale)
+  }
 
-      if (arguments.length === 0) this.init()
-      else this.initWithArgs(skeletonDataFile, atlasFile, scale)
-    },
+  _createRenderCmd() {
+    if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) return new CanvasRenderCmd(this)
+    else return new WebGLRenderCmd(this)
+  }
 
-    _createRenderCmd: function () {
-      if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) return new CanvasRenderCmd(this)
-      else return new WebGLRenderCmd(this)
-    },
+  onEnter() {
+    super.onEnter()
+    this.scheduleUpdate()
+  }
 
-    /**
-     * Initializes a gworld.Skeleton. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
-     */
-    init: function () {
-      cc.Node.prototype.init.call(this)
-      this._premultipliedAlpha = cc._renderType === cc.game.RENDER_TYPE_WEBGL && cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA
-    },
+  onExit() {
+    this.unscheduleUpdate()
+    super.onExit()
+  }
 
-    onEnter: function () {
-      cc.Node.prototype.onEnter.call(this)
-      this.scheduleUpdate()
-    },
+  /**
+   * Sets whether open debug slots.
+   * @param {boolean} enable true to open, false to close.
+   */
+  setDebugSolots(enable: boolean) {
+    this._debugSlots = enable
+  }
 
-    onExit: function () {
-      this.unscheduleUpdate()
-      cc.Node.prototype.onExit.call(this)
-    },
+  /**
+   * Sets whether open debug bones.
+   * @param {boolean} enable
+   */
+  setDebugBones(enable: boolean) {
+    this._debugBones = enable
+  }
 
-    /**
-     * Sets whether open debug slots.
-     * @param {boolean} enable true to open, false to close.
-     */
-    setDebugSolots: function (enable) {
-      this._debugSlots = enable
-    },
+  /**
+   * Sets whether open debug slots.
+   * @param {boolean} enabled true to open, false to close.
+   */
+  setDebugSlotsEnabled(enabled: boolean) {
+    this._debugSlots = enabled
+  }
 
-    /**
-     * Sets whether open debug bones.
-     * @param {boolean} enable
-     */
-    setDebugBones: function (enable) {
-      this._debugBones = enable
-    },
+  /**
+   * Gets whether open debug slots.
+   * @returns {boolean} true to open, false to close.
+   */
+  getDebugSlotsEnabled(): boolean {
+    return this._debugSlots
+  }
 
-    /**
-     * Sets whether open debug slots.
-     * @param {boolean} enabled true to open, false to close.
-     */
-    setDebugSlotsEnabled: function (enabled) {
-      this._debugSlots = enabled
-    },
+  /**
+   * Sets whether open debug bones.
+   * @param {boolean} enabled
+   */
+  setDebugBonesEnabled(enabled: boolean) {
+    this._debugBones = enabled
+  }
 
-    /**
-     * Gets whether open debug slots.
-     * @returns {boolean} true to open, false to close.
-     */
-    getDebugSlotsEnabled: function () {
-      return this._debugSlots
-    },
+  /**
+   * Gets whether open debug bones.
+   * @returns {boolean} true to open, false to close.
+   */
+  getDebugBonesEnabled(): boolean {
+    return this._debugBones
+  }
 
-    /**
-     * Sets whether open debug bones.
-     * @param {boolean} enabled
-     */
-    setDebugBonesEnabled: function (enabled) {
-      this._debugBones = enabled
-    },
+  /**
+   * Sets the time scale of Skeleton.
+   * @param {Number} scale
+   */
+  setTimeScale(scale: number) {
+    this._timeScale = scale
+  }
 
-    /**
-     * Gets whether open debug bones.
-     * @returns {boolean} true to open, false to close.
-     */
-    getDebugBonesEnabled: function () {
-      return this._debugBones
-    },
+  getTimeScale(): number {
+    return this._timeScale
+  }
 
-    /**
-     * Sets the time scale of gworld.Skeleton.
-     * @param {Number} scale
-     */
-    setTimeScale: function (scale) {
-      this._timeScale = scale
-    },
+  /**
+   * Initializes Skeleton with Data.
+   * @param {.spine.SkeletonData|String} skeletonDataFile
+   * @param {String|spine.Atlas|spine.SkeletonData} atlasFile atlas filename or atlas data or owns SkeletonData
+   * @param {Number} [scale] scale can be specified on the JSON or binary loader which will scale the bone positions, image sizes, and animation translations.
+   */
+  initWithArgs(skeletonDataFile: string, atlasFile: string, scale?: number) {
+    const argSkeletonFile = skeletonDataFile,
+      argAtlasFile = atlasFile
+    let skeletonData, atlas, ownsSkeletonData
 
-    getTimeScale: function () {
-      return this._timeScale
-    },
-
-    /**
-     * Initializes gworld.Skeleton with Data.
-     * @param {gworld.spine.SkeletonData|String} skeletonDataFile
-     * @param {String|spine.Atlas|spine.SkeletonData} atlasFile atlas filename or atlas data or owns SkeletonData
-     * @param {Number} [scale] scale can be specified on the JSON or binary loader which will scale the bone positions, image sizes, and animation translations.
-     */
-    initWithArgs: function (skeletonDataFile, atlasFile, scale) {
-      let argSkeletonFile = skeletonDataFile,
-        argAtlasFile = atlasFile,
-        skeletonData,
-        atlas,
-        ownsSkeletonData
-
-      if (cc.isString(argSkeletonFile)) {
-        if (cc.isString(argAtlasFile)) {
-          const data = cc.loader.getRes(argAtlasFile)
-          _atlasLoader.setAtlasFile(argAtlasFile)
-          atlas = new TextureAtlas(data)
-          for (const page of atlas.pages) {
-            const texture = _atlasLoader.load(page.name)
-            page.setTexture(texture)
-          }
+    if (cc.isString(argSkeletonFile)) {
+      if (cc.isString(argAtlasFile)) {
+        const data = cc.loader.getRes(argAtlasFile)
+        _atlasLoader.setAtlasFile(argAtlasFile)
+        atlas = new TextureAtlas(data)
+        for (const page of atlas.pages) {
+          const texture = _atlasLoader.load(page.name)
+          page.setTexture(texture)
         }
-        scale = scale || 1 / cc.director.getContentScaleFactor()
-
-        const attachmentLoader = new AtlasAttachmentLoader(atlas)
-        const skeletonJsonReader = new SkeletonJson(attachmentLoader)
-        skeletonJsonReader.scale = scale
-
-        const skeletonJson = cc.loader.getRes(argSkeletonFile)
-        skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
-        atlas.dispose(skeletonJsonReader)
-        ownsSkeletonData = true
-      } else {
-        skeletonData = skeletonDataFile
-        ownsSkeletonData = atlasFile
       }
-      this.setSkeletonData(skeletonData, ownsSkeletonData)
-      this.init()
-    },
+      scale = scale || 1 / cc.director.getContentScaleFactor()
 
-    /**
-     * Returns the bounding box of gworld.Skeleton.
-     * @returns {cc.Rect}
-     */
-    getBoundingBox: function () {
-      let minX = cc.FLT_MAX,
-        minY = cc.FLT_MAX,
-        maxX = cc.FLT_MIN,
-        maxY = cc.FLT_MIN
-      let scaleX = this.getScaleX(),
-        scaleY = this.getScaleY(),
-        vertices,
-        slots = this._skeleton.slots,
-        VERTEX = spine.RegionAttachment
+      const attachmentLoader = new AtlasAttachmentLoader(atlas)
+      const skeletonJsonReader = new SkeletonJson(attachmentLoader)
+      skeletonJsonReader.scale = scale
 
-      for (let i = 0, slotCount = slots.length; i < slotCount; ++i) {
-        const slot = slots[i]
-        const attachment = slot.attachment
-        if (!attachment || !(attachment instanceof spine.RegionAttachment)) continue
-        vertices = spine.Utils.setArraySize([], 8, 0)
-        attachment.computeWorldVertices(slot, vertices, 0, 2)
-        minX = Math.min(
-          minX,
-          vertices[VERTEX.X1] * scaleX,
-          vertices[VERTEX.X4] * scaleX,
-          vertices[VERTEX.X2] * scaleX,
-          vertices[VERTEX.X3] * scaleX,
-        )
-        minY = Math.min(
-          minY,
-          vertices[VERTEX.Y1] * scaleY,
-          vertices[VERTEX.Y4] * scaleY,
-          vertices[VERTEX.Y2] * scaleY,
-          vertices[VERTEX.Y3] * scaleY,
-        )
-        maxX = Math.max(
-          maxX,
-          vertices[VERTEX.X1] * scaleX,
-          vertices[VERTEX.X4] * scaleX,
-          vertices[VERTEX.X2] * scaleX,
-          vertices[VERTEX.X3] * scaleX,
-        )
-        maxY = Math.max(
-          maxY,
-          vertices[VERTEX.Y1] * scaleY,
-          vertices[VERTEX.Y4] * scaleY,
-          vertices[VERTEX.Y2] * scaleY,
-          vertices[VERTEX.Y3] * scaleY,
-        )
-      }
-      const position = this.getPosition()
-      return cc.rect(position.x + minX, position.y + minY, maxX - minX, maxY - minY)
-    },
+      const skeletonJson = cc.loader.getRes(argSkeletonFile)
+      skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
+      atlas.dispose(skeletonJsonReader)
+      ownsSkeletonData = true
+    } else {
+      skeletonData = skeletonDataFile
+      ownsSkeletonData = atlasFile
+    }
+    this.setSkeletonData(skeletonData, ownsSkeletonData)
+    this.init()
+  }
 
-    /**
-     * Computes the world SRT from the local SRT for each bone.
-     */
-    updateWorldTransform: function () {
-      this._skeleton.updateWorldTransform(true)
-    },
+  /**
+   * Returns the bounding box of Skeleton.
+   * @returns {cc.Rect}
+   */
+  getBoundingBox() {
+    let minX = cc.FLT_MAX,
+      minY = cc.FLT_MAX,
+      maxX = cc.FLT_MIN,
+      maxY = cc.FLT_MIN
+    const scaleX = this.getScaleX(),
+      scaleY = this.getScaleY(),
+      slots = this._skeleton.slots,
+      VERTEX = spine.RegionAttachment
+    let vertices
 
-    /**
-     * Sets the bones and slots to the setup pose.
-     */
-    setToSetupPose: function () {
-      this._skeleton.setToSetupPose()
-    },
+    for (let i = 0, slotCount = slots.length; i < slotCount; ++i) {
+      const slot = slots[i]
+      const attachment = slot.attachment
+      if (!attachment || !(attachment instanceof spine.RegionAttachment)) continue
+      vertices = spine.Utils.setArraySize([], 8, 0)
+      attachment.computeWorldVertices(slot, vertices, 0, 2)
+      minX = Math.min(
+        minX,
+        vertices[VERTEX.X1] * scaleX,
+        vertices[VERTEX.X4] * scaleX,
+        vertices[VERTEX.X2] * scaleX,
+        vertices[VERTEX.X3] * scaleX,
+      )
+      minY = Math.min(
+        minY,
+        vertices[VERTEX.Y1] * scaleY,
+        vertices[VERTEX.Y4] * scaleY,
+        vertices[VERTEX.Y2] * scaleY,
+        vertices[VERTEX.Y3] * scaleY,
+      )
+      maxX = Math.max(
+        maxX,
+        vertices[VERTEX.X1] * scaleX,
+        vertices[VERTEX.X4] * scaleX,
+        vertices[VERTEX.X2] * scaleX,
+        vertices[VERTEX.X3] * scaleX,
+      )
+      maxY = Math.max(
+        maxY,
+        vertices[VERTEX.Y1] * scaleY,
+        vertices[VERTEX.Y4] * scaleY,
+        vertices[VERTEX.Y2] * scaleY,
+        vertices[VERTEX.Y3] * scaleY,
+      )
+    }
+    const position = this.getPosition()
+    return cc.rect(position.x + minX, position.y + minY, maxX - minX, maxY - minY)
+  }
 
-    /**
-     * Sets the bones to the setup pose, using the values from the `BoneData` list in the `SkeletonData`.
-     */
-    setBonesToSetupPose: function () {
-      this._skeleton.setBonesToSetupPose()
-    },
+  /**
+   * Computes the world SRT from the local SRT for each bone.
+   */
+  updateWorldTransform() {
+    this._skeleton.updateWorldTransform(true)
+  }
 
-    /**
-     * Sets the slots to the setup pose, using the values from the `SlotData` list in the `SkeletonData`.
-     */
-    setSlotsToSetupPose: function () {
-      this._skeleton.setSlotsToSetupPose()
-    },
+  /**
+   * Sets the bones and slots to the setup pose.
+   */
+  setToSetupPose() {
+    this._skeleton.setToSetupPose()
+  }
 
-    /**
-     * Finds a bone by name. This does a string comparison for every bone.
-     * @param {String} boneName
-     * @returns {gworld.spine.Bone}
-     */
-    findBone: function (boneName) {
-      return this._skeleton.findBone(boneName)
-    },
+  /**
+   * Sets the bones to the setup pose, using the values from the `BoneData` list in the `SkeletonData`.
+   */
+  setBonesToSetupPose() {
+    this._skeleton.setBonesToSetupPose()
+  }
 
-    /**
-     * Finds a slot by name. This does a string comparison for every slot.
-     * @param {String} slotName
-     * @returns {gworld.spine.Slot}
-     */
-    findSlot: function (slotName) {
-      return this._skeleton.findSlot(slotName)
-    },
+  /**
+   * Sets the slots to the setup pose, using the values from the `SlotData` list in the `SkeletonData`.
+   */
+  setSlotsToSetupPose() {
+    this._skeleton.setSlotsToSetupPose()
+  }
 
-    /**
-     * Finds a skin by name and makes it the active skin. This does a string comparison for every skin. Note that setting the skin does not change which attachments are visible.
-     * @param {string} skinName
-     * @returns {gworld.spine.Skin}
-     */
-    setSkin: function (skinName) {
-      return this._skeleton.setSkinByName(skinName)
-    },
+  /**
+   * Finds a bone by name. This does a string comparison for every bone.
+   * @param {String} boneName
+   * @returns {.spine.Bone}
+   */
+  findBone(boneName: string) {
+    return this._skeleton.findBone(boneName)
+  }
 
-    /**
-     * Returns the attachment for the slot and attachment name. The skeleton looks first in its skin, then in the skeleton data’s default skin.
-     * @param {String} slotName
-     * @param {String} attachmentName
-     * @returns {gworld.spine.Attachment}
-     */
-    getAttachment: function (slotName, attachmentName) {
-      return this._skeleton.getAttachmentByName(slotName, attachmentName)
-    },
+  /**
+   * Finds a slot by name. This does a string comparison for every slot.
+   * @param {String} slotName
+   * @returns {.spine.Slot}
+   */
+  findSlot(slotName: string) {
+    return this._skeleton.findSlot(slotName)
+  }
 
-    /**
-     * Sets the attachment for the slot and attachment name. The skeleton looks first in its skin, then in the skeleton data’s default skin.
-     * @param {String} slotName
-     * @param {String} attachmentName
-     */
-    setAttachment: function (slotName, attachmentName) {
-      this._skeleton.setAttachment(slotName, attachmentName)
-    },
+  /**
+   * Finds a skin by name and makes it the active skin. This does a string comparison for every skin. Note that setting the skin does not change which attachments are visible.
+   * @param {string} skinName
+   * @returns {.spine.Skin}
+   */
+  setSkin(skinName: string) {
+    return this._skeleton.setSkinByName(skinName)
+  }
 
-    /**
-     * Sets the premultiplied alpha value to gworld.Skeleton.
-     * @param {Number} alpha
-     */
-    setPremultipliedAlpha: function (premultiplied) {
-      this._premultipliedAlpha = premultiplied
-    },
+  /**
+   * Returns the attachment for the slot and attachment name. The skeleton looks first in its skin, then in the skeleton data’s default skin.
+   * @param {String} slotName
+   * @param {String} attachmentName
+   * @returns {.spine.Attachment}
+   */
+  getAttachment(slotName: string, attachmentName: string) {
+    return this._skeleton.getAttachmentByName(slotName, attachmentName)
+  }
 
-    /**
-     * Returns whether to enable premultiplied alpha.
-     * @returns {boolean}
-     */
-    isPremultipliedAlpha: function () {
-      return this._premultipliedAlpha
-    },
+  /**
+   * Sets the attachment for the slot and attachment name. The skeleton looks first in its skin, then in the skeleton data’s default skin.
+   * @param {String} slotName
+   * @param {String} attachmentName
+   */
+  setAttachment(slotName: string, attachmentName: string) {
+    this._skeleton.setAttachment(slotName, attachmentName)
+  }
 
-    /**
-     * Sets skeleton data to gworld.Skeleton.
-     * @param {gworld.spine.SkeletonData} skeletonData
-     * @param {gworld.spine.SkeletonData} ownsSkeletonData
-     */
-    setSkeletonData: function (skeletonData, ownsSkeletonData) {
-      if (skeletonData.width != null && skeletonData.height != null)
-        this.setContentSize(
-          skeletonData.width / cc.director.getContentScaleFactor(),
-          skeletonData.height / cc.director.getContentScaleFactor(),
-        )
+  /**
+   * Sets the premultiplied alpha value to Skeleton.
+   * @param {Number} alpha
+   */
+  setPremultipliedAlpha(premultiplied: boolean) {
+    this._premultipliedAlpha = premultiplied
+  }
 
-      this._skeleton = new spine.Skeleton(skeletonData)
-      this._skeleton.updateWorldTransform(true)
-      this._rootBone = this._skeleton.getRootBone()
-      this._ownsSkeletonData = ownsSkeletonData
+  /**
+   * Returns whether to enable premultiplied alpha.
+   * @returns {boolean}
+   */
+  isPremultipliedAlpha(): boolean {
+    return this._premultipliedAlpha
+  }
 
-      this._renderCmd._createChildFormSkeletonData()
-    },
+  /**
+   * Sets skeleton data to Skeleton.
+   * @param {.spine.SkeletonData} skeletonData
+   * @param {.spine.SkeletonData} ownsSkeletonData
+   */
+  setSkeletonData(skeletonData: any, ownsSkeletonData: any) {
+    if (skeletonData.width != null && skeletonData.height != null)
+      this.setContentSize(
+        skeletonData.width / cc.director.getContentScaleFactor(),
+        skeletonData.height / cc.director.getContentScaleFactor(),
+      )
 
-    /**
-     * Return the renderer of attachment.
-     * @param {gworld.spine.RegionAttachment|gworld.spine.BoundingBoxAttachment} regionAttachment
-     * @returns {gworld.spine.TextureAtlasRegion}
-     */
-    getTextureAtlas: function (regionAttachment) {
-      return regionAttachment.region
-    },
+    this._skeleton = new spine.Skeleton(skeletonData)
+    this._skeleton.updateWorldTransform(true)
+    this._rootBone = this._skeleton.getRootBone()
+    this._ownsSkeletonData = ownsSkeletonData
+    ;(this as any)._renderCmd._createChildFormSkeletonData()
+  }
 
-    /**
-     * Returns the blendFunc of gworld.Skeleton.
-     * @returns {cc.BlendFunc}
-     */
-    getBlendFunc: function () {
-      const slot = this._skeleton.drawOrder[0]
-      if (slot) {
-        const blend = this._renderCmd._getBlendFunc(slot.data.blendMode, this._premultipliedAlpha)
-        return blend
-      } else {
-        return {}
-      }
-    },
+  /**
+   * Return the renderer of attachment.
+   * @param {.spine.RegionAttachment|.spine.BoundingBoxAttachment} regionAttachment
+   * @returns {.spine.TextureAtlasRegion}
+   */
+  getTextureAtlas(regionAttachment: any) {
+    return regionAttachment.region
+  }
 
-    /**
-     * Sets the blendFunc of gworld.Skeleton, it won't have any effect for skeleton, skeleton is using slot's data to determine the blend function.
-     * @param {cc.BlendFunc|Number} src
-     * @param {Number} [dst]
-     */
-    setBlendFunc: function (src, dst) {
-      return
-    },
+  /**
+   * Returns the blendFunc of Skeleton.
+   * @returns {cc.BlendFunc}
+   */
+  getBlendFunc(): any {
+    const slot = this._skeleton.drawOrder[0]
+    if (slot) {
+      const blend = (this as any)._renderCmd._getBlendFunc(slot.data.blendMode, this._premultipliedAlpha)
+      return blend
+    } else {
+      return {}
+    }
+  }
 
-    /**
-     * Update will be called automatically every frame if "scheduleUpdate" is called when the node is "live".
-     * @param {Number} dt Delta time since last update
-     */
-    update: function (dt) {
-      this._skeleton.update(dt)
-    },
-  },
-)
+  /**
+   * Sets the blendFunc of Skeleton, it won't have any effect for skeleton, skeleton is using slot's data to determine the blend function.
+   * @param {cc.BlendFunc|Number} src
+   * @param {Number} [dst]
+   */
+  setBlendFunc(src: any, dst?: any)
+  setBlendFunc() {
+    return
+  }
 
-cc.defineGetterSetter(gworld.Skeleton.prototype, 'opacityModifyRGB', gworld.Skeleton.prototype.isOpacityModifyRGB)
+  /**
+   * Update will be called automatically every frame if "scheduleUpdate" is called when the node is "live".
+   * @param {Number} dt Delta time since last update
+   */
+  update(dt: number) {
+    this._skeleton.update(dt)
+  }
+
+  // Static create method
+  static create(skeletonDataFile: string, atlasFile: string, scale?: number) {
+    return new Skeleton(skeletonDataFile, atlasFile, scale)
+  }
+}
+cc.defineGetterSetter(Skeleton.prototype, 'opacityModifyRGB', Skeleton.prototype.isOpacityModifyRGB)
 
 // For renderer webgl to identify skeleton's default texture and blend function
-cc.defineGetterSetter(gworld.Skeleton.prototype, '_blendFunc', gworld.Skeleton.prototype.getBlendFunc)
-cc.defineGetterSetter(gworld.Skeleton.prototype, '_texture', function () {
+cc.defineGetterSetter(Skeleton.prototype, '_blendFunc', Skeleton.prototype.getBlendFunc)
+cc.defineGetterSetter(Skeleton.prototype, '_texture', function () {
   return this._renderCmd._currTexture
 })
-
-/**
- * Creates a skeleton object.
- * @deprecated since v3.0, please use new gworld.Skeleton(skeletonDataFile, atlasFile, scale) instead.
- * @param {spine.SkeletonData|String} skeletonDataFile
- * @param {String|spine.Atlas|spine.SkeletonData} atlasFile atlas filename or atlas data or owns SkeletonData
- * @param {Number} [scale] scale can be specified on the JSON or binary loader which will scale the bone positions, image sizes, and animation translations.
- * @returns {gworld.Skeleton}
- */
-gworld.Skeleton.create = function (skeletonDataFile, atlasFile /* or atlas*/, scale) {
-  return new gworld.Skeleton(skeletonDataFile, atlasFile, scale)
-}
-export const Skeleton = gworld.Skeleton
