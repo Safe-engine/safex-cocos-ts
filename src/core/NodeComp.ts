@@ -5,7 +5,7 @@ import { EventRegister, ExtraDataComp } from '../norender'
 import { Size, Vec2 } from '../polyfills'
 import { ComponentType, EnhancedComponent } from './EnhancedComponent'
 
-export type EventCallbackType = (...args) => void
+export type EventCallbackType<T = void> = (args?: T) => void
 export class NodeComp<C extends cc.Node = cc.Node> {
   entity: Entity
   instance: C

@@ -11,7 +11,7 @@ export interface EventMap {
 export class EventRegister extends NoRenderComponentX {
   private events: EventMap = {}
 
-  on(name: string, callback: EventCallbackType, target?: any) {
+  on<T>(name: string, callback: EventCallbackType<T>, target?: any) {
     const bound = target ? callback.bind(target) : callback
     if (this.events[name]) {
       this.events[name].push(bound)
