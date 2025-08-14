@@ -14,7 +14,7 @@ function cloneRect(origin) {
   return cc.rect(origin.x, origin.y, origin.width, origin.height)
 }
 interface ColliderProps extends BaseComponentProps<Collider> {
-  tag?: number
+  // tag?: number
   onCollisionEnter?: (other: Collider) => void
   onCollisionExit?: (other: Collider) => void
   onCollisionStay?: (other: Collider) => void
@@ -42,8 +42,8 @@ export class Collider extends NoRenderComponentX<ColliderProps> {
 
 interface BoxColliderProps extends BaseComponentProps<BoxCollider> {
   offset?: [number, number]
-  width: number
-  height: number
+  width?: number
+  height?: number
 }
 export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
   get size() {
@@ -60,11 +60,14 @@ export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
       return
     }
     const collider = this.getComponent(Collider)
-    const [x, y] = this.props.offset || [0, 0]
-    const hw = this.props.width * 0.5
-    const hh = this.props.height * 0.5
+    const { height, width, offset = [0, 0] } = this.props
+    const [x, y] = offset
+    const rw = width || this.node.contentSize.width
+    const rh = height || this.node.contentSize.height
+    const hw = rw * 0.5
+    const hh = rh * 0.5
     const transform = getNodeToWorldTransformAR(this.node)
-    const rect = cc.rect(x - hw, y - hh, this.props.width, this.props.height)
+    const rect = cc.rect(x - hw, y - hh, rw, rh)
     const rectTrs = cc.rectApplyAffineTransform(rect, transform)
     // cc.log(rectTrs);
     collider._worldPoints[0] = Vec2(rectTrs.x, rectTrs.y)
@@ -87,7 +90,7 @@ export class BoxCollider extends NoRenderComponentX<BoxColliderProps> {
 
 interface CircleColliderProps extends BaseComponentProps<CircleCollider> {
   offset?: [number, number]
-  radius: number
+  radius?: number
 }
 export class CircleCollider extends NoRenderComponentX<CircleColliderProps> {
   update(dt, draw: cc.DrawNode) {
@@ -96,8 +99,10 @@ export class CircleCollider extends NoRenderComponentX<CircleColliderProps> {
     }
     const transform = getNodeToWorldTransformAR(this.node)
     const collider = this.getComponent(Collider)
-    collider._worldRadius = this.props.radius * this.node.scaleX
-    const [x, y] = this.props.offset || [0, 0]
+    const { radius, offset = [0, 0] } = this.props
+    const [x, y] = offset
+    const rr = radius || this.node.contentSize.width * 0.5
+    collider._worldRadius = rr * this.node.scaleX
     collider._worldPosition = cc.pointApplyAffineTransform(cc.p(x, y), transform)
     if (draw) {
       draw.drawDot(collider._worldPosition, collider._worldRadius, cc.Color.DEBUG_FILL_COLOR)
