@@ -12,7 +12,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   parent: NodeComp
   children: NodeComp[] = []
   name: string
-  private _group
+  // private _group
   private _active = true
 
   constructor(instance: C, entity: Entity) {
@@ -149,13 +149,13 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.setVisible(val)
   }
 
-  get group() {
-    return this._group
-  }
+  // get group() {
+  //   return this._group
+  // }
 
-  set group(val: string | number) {
-    this._group = val
-  }
+  // set group(val: string | number) {
+  //   this._group = val
+  // }
 
   // get width() {
   //   return this.instance.width

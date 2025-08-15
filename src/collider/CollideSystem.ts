@@ -2,12 +2,11 @@ import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
 import { GameWorld } from '../gworld'
-import { instantiate } from '../helper'
 import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from './CollideComponent'
 
 export function shouldCollider(colA: Collider, colB: Collider) {
-  const groupA = colA.node.group
-  const groupB = colB.node.group
+  const groupA = colA.props.tag
+  const groupB = colB.props.tag
   if (groupA === undefined || groupB === undefined) {
     return true
   }
@@ -34,16 +33,14 @@ export class CollideSystem implements System {
   }
 
   private onAddCollider = ({ entity, component }) => {
-    let collider = entity.getComponent(Collider)
-    if (!collider) {
-      collider = entity.assign(instantiate(Collider))
-    }
+    // let collider = entity.getComponent(Collider)
+    // if (!collider) {
+    //   collider = entity.assign(instantiate(Collider))
+    // }
     // console.log('onAddCollider', component, collider)
-    collider.node = entity.getComponent(NodeComp)
-    // collider.props = component.props
-    // collider.props.enable = true
+    // collider.node = entity.getComponent(NodeComp)
     component.node = entity.getComponent(NodeComp)
-    this.addCollider(collider)
+    this.addCollider(component)
   }
 
   private onRemoveCollider = ({ component }) => {
