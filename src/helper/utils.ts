@@ -36,9 +36,7 @@ export function registerSystem<T extends ComponentX>(component: Constructor<T>) 
     }
   }
   Object.defineProperty(NewSystem, 'name', { value: `${component.name}System` })
-  GameWorld.Instance.systems.add(NewSystem)
-  GameWorld.Instance.systems.configureOnce(NewSystem)
-  GameWorld.Instance.listUpdate.push(NewSystem)
+  GameWorld.Instance.addSystemAndUpdate(NewSystem)
   return NewSystem
 }
 

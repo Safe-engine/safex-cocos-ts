@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "1.10.5",
+  "version": "1.10.6",
   "description": "safe-engine with cocos renderer support",
   "type": "module",
   "main": "dist/index.js",
@@ -22,11 +22,11 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@esotericsoftware/spine-core": "^4.2.88",
+    "@esotericsoftware/spine-core": "^4.2.89",
     "box2d-wasm": "^7.0.0",
-    "pixi.js": "5.3.12",
-    "pixi5-dragonbones": "5.7.0-2b",
-    "entityx-ts": "^2.2.1"
+    "entityx-ts": "^2.3.1",
+    "pixi.js": "8.12.0",
+    "pixi5-dragonbones": "5.7.0-2b"
   },
   "author": "",
   "license": "ISC"

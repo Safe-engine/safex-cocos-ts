@@ -1,22 +1,16 @@
-import { CollideSystem } from './collider/CollideSystem'
 import { GUISystem } from './gui'
 import { GameWorld } from './gworld'
 import { NoRenderSystem } from './norender'
 import { RenderSystem } from './render'
 
 export function initWorld(defaultFont?: string) {
-  GameWorld.Instance.systems.add(RenderSystem)
-  GameWorld.Instance.systems.add(CollideSystem)
-  GameWorld.Instance.systems.add(GUISystem)
-  GameWorld.Instance.systems.add(NoRenderSystem)
-  GameWorld.Instance.listUpdate.push(CollideSystem)
-  GameWorld.Instance.systems.configureOnce(RenderSystem)
-  GameWorld.Instance.systems.configureOnce(CollideSystem)
-  GameWorld.Instance.systems.configureOnce(GUISystem)
-  GameWorld.Instance.systems.configureOnce(NoRenderSystem)
+  const world = GameWorld.Instance
+  world.systems.add(RenderSystem)
+  const fontSystem = world.systems.add(GUISystem)
+  world.systems.add(NoRenderSystem)
+  world.systems.configure()
   if (defaultFont) {
-    const guiSystem = GameWorld.Instance.systems.get(GUISystem)
-    guiSystem.defaultFont = defaultFont
+    fontSystem.defaultFont = defaultFont
   }
 }
 interface RunOptions {

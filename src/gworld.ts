@@ -1,9 +1,15 @@
 import { Constructor, System, World } from 'entityx-ts'
 
 export class GameWorld extends World {
-  listUpdate: (System | Constructor<System>)[] = []
+  listUpdate: Constructor<System>[] = []
+
+  addSystemAndUpdate<T extends System>(system: Constructor<T>) {
+    this.listUpdate.push(system)
+    return this.systems.addThenConfigure(system)
+  }
+
   update(dt: number) {
-    this.listUpdate.forEach((system: any) => {
+    this.listUpdate.forEach((system) => {
       this.systems.update(system, dt)
     })
   }
@@ -11,7 +17,6 @@ export class GameWorld extends World {
   private static _instance: GameWorld
 
   public static get Instance() {
-    // Do you need arguments? Make it a regular static method instead.
     return this._instance || (this._instance = new this())
   }
 }
