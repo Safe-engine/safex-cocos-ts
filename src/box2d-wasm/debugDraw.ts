@@ -56,7 +56,7 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const setCtxColor = (rgbStr: Color4B) => {
-    graphics.color = rgbStr
+    // graphics.color = rgbStr
     // graphics.strokeStyle = { color: rgbStr }
   }
 
@@ -66,8 +66,9 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const drawPolygon = (vertices, fill) => {
-    // console.log("drawPolygon", vertices[0].y, fill);
-    graphics.drawPoly(vertices, Color4B(255, 0, 0, 50), fill ? 1 : 0)
+    // console.log('drawPolygon', vertices, fill)
+    if (fill) graphics.drawPoly(vertices, Color4B(255, 0, 0, 50), 2, Color4B(255, 0, 0, 250))
+    else graphics.drawPoly(vertices, Color4B(255, 0, 0, 0), 2, Color4B(255, 255, 255, 150))
     // graphics.drawPoly(vertices[vertices.length - 1].x * pixelsPerMeter, vertices[vertices.length - 1].y * pixelsPerMeter)
     // vertices.forEach((v) => {
     //   graphics.lineTo(v.x * pixelsPerMeter, v.y * pixelsPerMeter)
