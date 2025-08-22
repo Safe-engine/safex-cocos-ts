@@ -1,4 +1,4 @@
-import { ComponentX, NoRenderComponentX } from '../core/decorator'
+import { ComponentX, render } from '../core/decorator'
 import { Size, Vec2 } from '../polyfills'
 import { BaseComponentProps, ColorSource } from '../safex'
 
@@ -17,7 +17,7 @@ interface ButtonCompProps {
   zoomScale?: number
   onPress?: (target: ButtonComp) => void
 }
-export class ButtonComp extends NoRenderComponentX<ButtonCompProps> {
+export class ButtonComp extends ComponentX<ButtonCompProps> {
   // clickEvents = []
   // setOnPress(cb: (target: ButtonComp) => void) {
   //   this.props.onPress = cb
@@ -105,4 +105,9 @@ export class InputComp extends ComponentX<InputCompProps & BaseComponentProps<In
   }
 }
 
-export class BlockInputEventsComp extends NoRenderComponentX {}
+export class BlockInputEventsComp extends ComponentX {}
+
+Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
+Object.defineProperty(LabelComp.prototype, 'render', { value: render })
+Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })
+Object.defineProperty(InputComp.prototype, 'render', { value: render })

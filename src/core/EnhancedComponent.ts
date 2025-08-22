@@ -4,7 +4,6 @@ import { BaseComponentProps } from '../safex'
 import { NodeComp } from './NodeComp'
 
 export class EnhancedComponent<Props = object, N extends NodeComp<any> = NodeComp<any>> {
-  static hasRender = true
   props: Props = {} as any
   node: N
   enabled = true

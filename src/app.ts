@@ -5,10 +5,9 @@ import { RenderSystem } from './render'
 
 export function initWorld(defaultFont?: string) {
   const world = GameWorld.Instance
-  world.systems.add(RenderSystem)
-  const fontSystem = world.systems.add(GUISystem)
-  world.systems.add(NoRenderSystem)
-  world.systems.configure()
+  world.systems.addThenConfigure(RenderSystem)
+  const fontSystem = world.systems.addThenConfigure(GUISystem)
+  world.systems.addThenConfigure(NoRenderSystem)
   if (defaultFont) {
     fontSystem.defaultFont = defaultFont
   }

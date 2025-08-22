@@ -1,4 +1,4 @@
-import { NoRenderComponentX } from '../core/decorator'
+import { ComponentX } from '../core/decorator'
 import { EventCallbackType, NodeComp } from '../core/NodeComp'
 import { Touch } from '../polyfills'
 
@@ -8,7 +8,7 @@ export interface EventMap {
   [key: string]: [EventCallbackType]
 }
 
-export class EventRegister extends NoRenderComponentX {
+export class EventRegister extends ComponentX {
   private events: EventMap = {}
 
   on<T>(name: string, callback: EventCallbackType<T>, target?: any) {
@@ -39,7 +39,7 @@ interface TouchEventProps {
   onTouchEnd?: TouchEVentCallback
   onTouchCancel?: TouchEVentCallback
 }
-export class TouchEventRegister extends NoRenderComponentX<TouchEventProps> {
+export class TouchEventRegister extends ComponentX<TouchEventProps> {
   listener: cc.EventListener
   touch: cc.Touch
   setEnabled(enabled: boolean) {
@@ -51,7 +51,7 @@ interface ExtraDataProps {
   key: string
   value: Integer | Float | string
 }
-export class ExtraDataComp extends NoRenderComponentX<ExtraDataProps> {
+export class ExtraDataComp extends ComponentX<ExtraDataProps> {
   data: { [key: string]: any } = {}
   getData<T>(key: string): T {
     return this.data[key]

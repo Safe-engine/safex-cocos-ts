@@ -1,5 +1,5 @@
 import { BaseComponentProps } from '..'
-import { NoRenderComponentX } from '../core/decorator'
+import { ComponentX } from '../core/decorator'
 import { getMax, getMin } from '../helper/math'
 import { Vec2 } from '../polyfills'
 
@@ -20,7 +20,7 @@ interface ColliderProps extends BaseComponentProps<Collider> {
   onCollisionExit?: (other: Collider) => void
   onCollisionStay?: (other: Collider) => void
 }
-export class Collider<T = ColliderProps> extends NoRenderComponentX<T> {
+export class Collider<T = ColliderProps> extends ComponentX<T> {
   _worldPoints: cc.Vec2[] | cc.Point[] = []
   _worldPosition: cc.Vec2 | cc.Point
   _worldRadius

@@ -1,4 +1,4 @@
-import { ComponentX } from '../core/decorator'
+import { ComponentX, render } from '../core/decorator'
 import { BaseComponentProps } from '../safex'
 import { HtmlTextParser } from './html-text-parser'
 
@@ -37,3 +37,4 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
     }
   }
 }
+Object.defineProperty(RichTextComp.prototype, 'render', { value: render })

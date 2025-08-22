@@ -1,6 +1,6 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
-import { BaseComponentProps, ComponentX, GameWorld, NodeComp } from '..'
+import { BaseComponentProps, ComponentX, GameWorld, NodeComp, render } from '..'
 import { SkeletonAnimation } from './CCSkeletonAnimation'
 
 export interface SpineData {
@@ -53,6 +53,7 @@ export class SpineSystem implements System {
     // throw new Error('Method not implemented.');
   }
 }
+Object.defineProperty(SpineSkeleton.prototype, 'render', { value: render })
 
 export function setupSpine() {
   GameWorld.Instance.systems.addThenConfigure(SpineSystem)

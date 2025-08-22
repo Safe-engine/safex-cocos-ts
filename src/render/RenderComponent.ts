@@ -1,4 +1,4 @@
-import { ComponentX } from '../core/decorator'
+import { ComponentX, render } from '../core/decorator'
 import { Color4B, Vec2 } from '../polyfills'
 import { BaseComponentProps, ColorSource } from '../safex'
 
@@ -123,3 +123,10 @@ interface TiledMapProps {
 }
 
 export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
+
+Object.defineProperty(NodeRender.prototype, 'render', { value: render })
+Object.defineProperty(SpriteRender.prototype, 'render', { value: render })
+Object.defineProperty(MaskRender.prototype, 'render', { value: render })
+Object.defineProperty(ParticleComp.prototype, 'render', { value: render })
+Object.defineProperty(GraphicsRender.prototype, 'render', { value: render })
+Object.defineProperty(TiledMap.prototype, 'render', { value: render })

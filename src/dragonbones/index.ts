@@ -1,7 +1,7 @@
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
-import { ComponentX } from '../core/decorator'
+import { ComponentX, render } from '../core/decorator'
 import { GameWorld } from '../gworld'
 import { BaseComponentProps } from '../safex'
 import { PixiDragonBonesSprite } from './PixiDragonBonesSprite'
@@ -142,3 +142,4 @@ export function setupDragonBones() {
 }
 
 export * from './PixiDragonBonesSprite'
+Object.defineProperty(DragonBonesComp.prototype, 'render', { value: render })
