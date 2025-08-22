@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "1.10.6",
+  "version": "1.10.7",
   "description": "safe-engine with cocos renderer support",
   "type": "module",
   "main": "dist/index.js",
@@ -25,7 +25,7 @@
     "@esotericsoftware/spine-core": "^4.2.89",
     "box2d-wasm": "^7.0.0",
     "entityx-ts": "^2.3.1",
-    "pixi.js": "8.12.0",
+    "pixi.js": "5.3.12",
     "pixi5-dragonbones": "5.7.0-2b"
   },
   "author": "",
