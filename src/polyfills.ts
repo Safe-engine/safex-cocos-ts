@@ -158,6 +158,10 @@ export function Size(x?: number, y?: number): Size {
 
 export class Touch extends cc.Touch {
   declare getLocation: () => Vec2
+  declare getDelta: () => Vec2
+  declare getPreviousLocation: () => Vec2
+  declare getStartLocation: () => Vec2
+  declare getLocationInView: () => Vec2
 }
 
 export function getWinSize(): Size {
