@@ -169,8 +169,7 @@ export class CollideSystem implements System {
 
   addDebugNode(root: cc.Scene) {
     this.debugGraphics = new cc.DrawNode()
-    this.debugGraphics.zIndex = 1000
-    root.addChild(this.debugGraphics)
+    root.addChild(this.debugGraphics, 1000)
   }
   toggleDebugDraw(enable = true) {
     this.enabledDebugDraw = enable

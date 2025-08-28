@@ -116,14 +116,20 @@ export class CircleCollider extends Collider<ColliderProps & CircleColliderProps
 }
 
 interface PolygonColliderProps extends BaseComponentProps<PolygonCollider> {
-  points: Array<Vec2>
+  points: Array<Vec2> | [number, number][]
 }
 
 export class PolygonCollider extends Collider<ColliderProps & PolygonColliderProps> {
   get points(): Vec2[] {
-    const [x, y] = this.props.offset || [0, 0]
-    const pointsList = this.props.points.map((p) => Vec2(p.x + x, p.y + y))
-    return pointsList
+    const { points = [], offset = [0, 0] } = this.props
+    const [x, y] = offset || [0, 0]
+    const { width, height } = this.node.contentSize
+    const { scaleX, scaleY, anchorX, anchorY } = this.node
+    const fixedPoints = points.map((p) => {
+      if (p.x) return Vec2(p.x + x - width * anchorX * scaleX, -p.y + y + height * scaleY * anchorY)
+      return Vec2(p[0] + x - width * anchorX * scaleX, -p[1] + y + height * scaleY * anchorY)
+    })
+    return fixedPoints
   }
 
   set points(points: Vec2[]) {
@@ -149,7 +155,6 @@ export class PolygonCollider extends Collider<ColliderProps & PolygonColliderPro
     this._AABB.width = getMax(listX) - this._AABB.x
     this._AABB.height = getMax(listY) - this._AABB.y
     // draw.drawRect(cc.p(this._AABB.x, this._AABB.y), cc.p(max(listX), max(listY)),
-    // cc.Color.WHITE, 3, cc.Color.DEBUG_BORDER_COLOR);
   }
 }
 
