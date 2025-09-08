@@ -33,10 +33,23 @@ export class RenderSystem implements System {
   }
 
   private onAddSpriteRender: EventReceiveCallback<SpriteRender> = ({ entity, component: spriteComp }) => {
-    const { spriteFrame, type } = spriteComp.props
+    const { spriteFrame, type, capInsets } = spriteComp.props
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     // console.log('frame', spriteFrame, frame)
-    const node = type === SpriteTypes.TILED ? new TiledSprite({ texture: spriteFrame }) : new cc.Sprite(frame || spriteFrame)
+    let node
+    switch (type) {
+      case SpriteTypes.TILED:
+        node = new TiledSprite({ texture: spriteFrame })
+        break
+      case SpriteTypes.SLICED:
+        node = new (ccui as any).Scale9Sprite(frame || spriteFrame, capInsets, capInsets)
+        // console.log('Scale9Sprite', node)
+        break
+
+      default:
+        node = new cc.Sprite(frame || spriteFrame)
+        break
+    }
     const ett = entity
     spriteComp.node = ett.assign(new NodeComp(node, ett))
   }

@@ -15,9 +15,8 @@ enum SpriteTypes {
 }
 interface SpriteRenderProps {
   spriteFrame: string
-  texType?: number
   type?: SpriteTypes
-  capInsets: cc.Rect
+  capInsets?: cc.Rect
 }
 
 export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentProps<SpriteRender>, cc.Sprite> {

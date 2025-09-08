@@ -80,7 +80,7 @@ export function loadAll(assets: string[] = [], cb?: (progress: number) => void, 
       // console.log(result)
       if (result instanceof cc.Texture2D) {
         // cc.textureCache.addImage(result.url)
-        const frame = new cc.SpriteFrame(result.url, cc.rect(0, 0, result.getPixelsWide(), result.getPixelsHigh()))
+        const frame = new cc.SpriteFrame(result, cc.rect(0, 0, result.getPixelsWide(), result.getPixelsHigh()))
         // console.log('cc.Texture2D', result, frame)
         cc.spriteFrameCache.addSpriteFrame(frame, result.url)
       }
