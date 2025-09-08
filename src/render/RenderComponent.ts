@@ -5,11 +5,19 @@ import { BaseComponentProps, ColorSource } from '../safex'
 export class NodeRender extends ComponentX {
   nodeName: string
 }
-
+enum SpriteTypes {
+  SIMPLE,
+  SLICED,
+  TILED,
+  FILLED,
+  MESH,
+  ANIMATION,
+}
 interface SpriteRenderProps {
   spriteFrame: string
   texType?: number
-  type?: number
+  type?: SpriteTypes
+  capInsets: cc.Rect
 }
 
 export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentProps<SpriteRender>, cc.Sprite> {

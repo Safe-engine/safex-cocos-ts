@@ -19,7 +19,7 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
     this.props.string = val
     if (this.node.instance instanceof ccui.RichText) {
       const newTextArray = _htmlTextParser.parse(val)
-      console.log(newTextArray)
+      // console.log(newTextArray)
       this.node.instance._richElements = []
       this.node.instance._formatTextDirty = true
       this.node.instance.formatText()
@@ -29,7 +29,7 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
         const fontName = cc.path.basename(this.props.font, '.ttf')
         const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.props.size || 64)
         // if (style && style.newline) {
-        console.log('richText', richText)
+        // console.log('richText', richText)
         // this.node.instance._addNewLine()
         // }
         this.node.instance.pushBackElement(richText)

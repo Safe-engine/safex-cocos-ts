@@ -3,6 +3,7 @@ import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System }
 import { NodeComp } from '../core/NodeComp'
 import { BLUE, RED } from '../polyfills'
 import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
+import { TiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
   SIMPLE,
@@ -32,10 +33,10 @@ export class RenderSystem implements System {
   }
 
   private onAddSpriteRender: EventReceiveCallback<SpriteRender> = ({ entity, component: spriteComp }) => {
-    const { spriteFrame } = spriteComp.props
+    const { spriteFrame, type } = spriteComp.props
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     // console.log('frame', spriteFrame, frame)
-    const node = new cc.Sprite(frame || spriteFrame)
+    const node = type === SpriteTypes.TILED ? new TiledSprite({ texture: spriteFrame }) : new cc.Sprite(frame || spriteFrame)
     const ett = entity
     spriteComp.node = ett.assign(new NodeComp(node, ett))
   }

@@ -45,7 +45,7 @@ export async function startGame(defaultFont: string, { width, height }, option?:
         showFPS: false,
         frameRate: 60,
         id: 'gameCanvas',
-        renderMode: 0,
+        renderMode: 2,
         ...(option || {}),
       },
       function onStart() {
