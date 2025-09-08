@@ -30,16 +30,9 @@ export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentPr
     if (this.node && this.node.instance instanceof cc.Sprite) {
       this.node.instance.setTexture(frame)
     }
-    // } else if (this.node.instance instanceof ccui.ImageView) {
-    //   if (this.texType) {
-    //     this.node.instance.loadTexture(frame, this.texType)
-    //   } else {
-    //     this.node.instance.loadTexture(frame)
-    //   }
-    //   const sprite = new cc.Sprite(frame)
-    //   this.node.setContentSize(sprite.getContentSize())
-    // } else if (this.node.instance instanceof ccui.Button) {
-    //   this.node.instance.loadTextureNormal(frame)
+  }
+  updateTiled() {
+    // effect to native only
   }
 }
 interface MaskRenderProps {
