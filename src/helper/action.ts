@@ -11,6 +11,18 @@ export function scaleTo(t: number, x: number, y?: number) {
   return cc.scaleTo(t, x, y)
 }
 
+export function scaleBy(t: number, x: number, y?: number) {
+  return cc.scaleBy(t, x, y)
+}
+
+export function rotateBy(t: number, x: number, y?: number) {
+  return cc.rotateBy(t, x, y)
+}
+
+export function rotateTo(t: number, x: number, y?: number) {
+  return cc.rotateTo(t, x, y)
+}
+
 export function callFunc(cb: () => void, target?, data?) {
   return cc.callFunc(cb, target, data)
 }
@@ -29,6 +41,22 @@ export function repeat(action: cc.FiniteTimeAction, times: Integer) {
 
 export function delayTime(time: Float) {
   return cc.delayTime(time)
+}
+
+export function blink(time: Float, blinks: Integer) {
+  return cc.blink(time, blinks)
+}
+
+export function fadeTo(time: Float, opacity: Integer) {
+  return cc.fadeTo(time, opacity)
+}
+
+export function fadeIn(time: Float) {
+  return cc.fadeIn(time)
+}
+
+export function fadeOut(time: Float) {
+  return cc.fadeOut(time)
 }
 
 export function easeBackOut(action: cc.ActionInterval) {
