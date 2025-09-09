@@ -16,7 +16,7 @@ enum SpriteTypes {
 interface SpriteRenderProps {
   spriteFrame: string
   type?: SpriteTypes
-  capInsets?: cc.Rect
+  capInsets?: cc.Rect | [number, number, number, number]
 }
 
 export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentProps<SpriteRender>, cc.Sprite> {
@@ -124,9 +124,23 @@ interface TiledMapProps {
 
 export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
 
+interface MotionStreakProps {
+  spriteFrame: string
+  fade?: number
+  minSeg?: number
+  stroke?: number
+  color?: Color4B
+}
+export class MotionStreak extends ComponentX<MotionStreakProps & { $ref?: MotionStreak }, cc.MotionStreak> {
+  reset() {
+    this.node.instance.reset()
+  }
+}
+
 Object.defineProperty(NodeRender.prototype, 'render', { value: render })
 Object.defineProperty(SpriteRender.prototype, 'render', { value: render })
 Object.defineProperty(MaskRender.prototype, 'render', { value: render })
 Object.defineProperty(ParticleComp.prototype, 'render', { value: render })
 Object.defineProperty(GraphicsRender.prototype, 'render', { value: render })
 Object.defineProperty(TiledMap.prototype, 'render', { value: render })
+Object.defineProperty(MotionStreak.prototype, 'render', { value: render })

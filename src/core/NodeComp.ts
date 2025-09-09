@@ -157,21 +157,21 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   //   this._group = val
   // }
 
-  // get width() {
-  //   return this.instance.width
-  // }
+  get w() {
+    return this.instance.width
+  }
 
-  // set width(val) {
-  //   this.instance.setContentSize(val, this.height)
-  // }
+  set w(val) {
+    this.instance.setContentSize(val, this.h)
+  }
 
-  // get height() {
-  //   return this.instance.height
-  // }
+  get h() {
+    return this.instance.height
+  }
 
-  // set height(val) {
-  //   this.instance.setContentSize(this.width, val)
-  // }
+  set h(val) {
+    this.instance.setContentSize(this.w, val)
+  }
 
   get zIndex() {
     return this.instance.zIndex

@@ -2,7 +2,7 @@ import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System }
 
 import { NodeComp } from '../core/NodeComp'
 import { BLUE, RED } from '../polyfills'
-import { GraphicsRender, MaskRender, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
+import { GraphicsRender, MaskRender, MotionStreak, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
 import { TiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
@@ -22,6 +22,7 @@ export class RenderSystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, GraphicsRender, this.onAddGraphicsRender)
     event_manager.subscribe(EventTypes.ComponentAdded, ParticleComp, this.onAddParticleComp)
     event_manager.subscribe(EventTypes.ComponentAdded, TiledMap, this.onAddTiledMap)
+    event_manager.subscribe(EventTypes.ComponentAdded, MotionStreak, this.onAddMotionStreak)
     event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, this.onRemovedNodeComp)
   }
 
@@ -42,8 +43,16 @@ export class RenderSystem implements System {
         node = new TiledSprite({ texture: spriteFrame })
         break
       case SpriteTypes.SLICED:
-        node = new (ccui as any).Scale9Sprite(frame || spriteFrame, capInsets, capInsets)
-        // console.log('Scale9Sprite', node)
+        {
+          let rect: cc.Rect
+          if (capInsets instanceof cc.Rect) {
+            rect = capInsets
+          } else {
+            rect = cc.rect(...capInsets)
+          }
+          node = new ccui.Scale9Sprite(frame || spriteFrame, rect, rect)
+          // console.log('Scale9Sprite', node)
+        }
         break
 
       default:
@@ -83,6 +92,19 @@ export class RenderSystem implements System {
     const { mapFile } = tiledMapComp.props
     const node = new cc.TMXTiledMap(mapFile)
     tiledMapComp.node = entity.assign(new NodeComp(node, entity))
+  }
+
+  private onAddMotionStreak: EventReceiveCallback<MotionStreak> = ({ entity }) => {
+    const motionStreakComp = entity.getComponent(MotionStreak)
+    const { spriteFrame, fade, minSeg, stroke, color } = motionStreakComp.props
+    const node = new cc.MotionStreak(
+      fade || 0.4, // fade (vệt tồn tại 0.4s)
+      minSeg || 1, // minSeg
+      stroke || 20, // stroke (độ rộng vệt)
+      color || cc.color(255, 255, 255, 255),
+      spriteFrame,
+    )
+    motionStreakComp.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onRemovedNodeComp = ({ component }) => {
