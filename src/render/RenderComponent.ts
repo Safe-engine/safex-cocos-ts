@@ -1,5 +1,5 @@
 import { ComponentX, render } from '../core/decorator'
-import { Color4B, Vec2 } from '../polyfills'
+import { Color4B, Size, Vec2 } from '../polyfills'
 import { BaseComponentProps, ColorSource } from '../safex'
 
 export class NodeRender extends ComponentX {
@@ -17,6 +17,7 @@ interface SpriteRenderProps {
   spriteFrame: string
   type?: SpriteTypes
   capInsets?: [number, number, number, number]
+  tiledSize?: Size
 }
 
 export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentProps<SpriteRender>, cc.Sprite> {

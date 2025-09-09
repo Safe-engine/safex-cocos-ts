@@ -34,13 +34,13 @@ export class RenderSystem implements System {
   }
 
   private onAddSpriteRender: EventReceiveCallback<SpriteRender> = ({ entity, component: spriteComp }) => {
-    const { spriteFrame, type, capInsets } = spriteComp.props
+    const { spriteFrame, type, capInsets, tiledSize } = spriteComp.props
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     // console.log('frame', spriteFrame, frame)
     let node
     switch (type) {
       case SpriteTypes.TILED:
-        node = new TiledSprite({ texture: spriteFrame })
+        node = new TiledSprite({ texture: spriteFrame, width: tiledSize.width, height: tiledSize.height })
         break
       case SpriteTypes.SLICED:
         {

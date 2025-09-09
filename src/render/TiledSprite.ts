@@ -68,10 +68,11 @@ export const TiledSprite: any = cc.Sprite.extend({
       this._tilingSprite.height = this.height
       this._canvas.width = this.width
       this._canvas.height = this.height
+      // console.log('_updateRepeat', this._pixiApp, this._tilingSprite)
       this._pixiApp.renderer.render(this._pixiApp.stage)
       this._texture.initWithElement(this._canvas)
       this._texture.handleLoadedTexture()
-      // console.log('_texture', this._texture)
+      // console.log('_texture', this._texture, this)
       this.setTexture(this._texture)
     }
   },
