@@ -44,12 +44,7 @@ export class RenderSystem implements System {
         break
       case SpriteTypes.SLICED:
         {
-          let rect: cc.Rect
-          if (capInsets instanceof cc.Rect) {
-            rect = capInsets
-          } else {
-            rect = cc.rect(...capInsets)
-          }
+          const rect = cc.rect(...capInsets)
           node = new ccui.Scale9Sprite(frame || spriteFrame, rect, rect)
           // console.log('Scale9Sprite', node)
         }

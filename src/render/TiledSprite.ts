@@ -66,6 +66,8 @@ export const TiledSprite: any = cc.Sprite.extend({
     if (this._tilingSprite) {
       this._tilingSprite.width = this.width
       this._tilingSprite.height = this.height
+      this._canvas.width = this.width
+      this._canvas.height = this.height
       this._pixiApp.renderer.render(this._pixiApp.stage)
       this._texture.initWithElement(this._canvas)
       this._texture.handleLoadedTexture()
