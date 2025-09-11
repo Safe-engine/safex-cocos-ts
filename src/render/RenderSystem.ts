@@ -2,7 +2,7 @@ import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System }
 
 import { NodeComp } from '../core/NodeComp'
 import { BLUE, RED } from '../polyfills'
-import { GraphicsRender, MaskRender, MotionStreak, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
+import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
 import { TiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
@@ -22,7 +22,7 @@ export class RenderSystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, GraphicsRender, this.onAddGraphicsRender)
     event_manager.subscribe(EventTypes.ComponentAdded, ParticleComp, this.onAddParticleComp)
     event_manager.subscribe(EventTypes.ComponentAdded, TiledMap, this.onAddTiledMap)
-    event_manager.subscribe(EventTypes.ComponentAdded, MotionStreak, this.onAddMotionStreak)
+    event_manager.subscribe(EventTypes.ComponentAdded, MotionStreakComp, this.onAddMotionStreak)
     event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, this.onRemovedNodeComp)
   }
 
@@ -34,25 +34,18 @@ export class RenderSystem implements System {
   }
 
   private onAddSpriteRender: EventReceiveCallback<SpriteRender> = ({ entity, component: spriteComp }) => {
-    const { spriteFrame, type, capInsets, tiledSize } = spriteComp.props
+    const { spriteFrame, capInsets, tiledSize } = spriteComp.props
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     // console.log('frame', spriteFrame, frame)
     let node
-    switch (type) {
-      case SpriteTypes.TILED:
-        node = new TiledSprite({ texture: spriteFrame, width: tiledSize.width, height: tiledSize.height })
-        break
-      case SpriteTypes.SLICED:
-        {
-          const rect = cc.rect(...capInsets)
-          node = new ccui.Scale9Sprite(frame || spriteFrame, rect, rect)
-          // console.log('Scale9Sprite', node)
-        }
-        break
-
-      default:
-        node = new cc.Sprite(frame || spriteFrame)
-        break
+    if (tiledSize) {
+      node = new TiledSprite({ texture: spriteFrame, width: tiledSize.width, height: tiledSize.height })
+    } else if (capInsets) {
+      const rect = cc.rect(...capInsets)
+      node = new ccui.Scale9Sprite(frame || spriteFrame, rect, rect)
+      // console.log('Scale9Sprite', node)
+    } else {
+      node = new cc.Sprite(frame || spriteFrame)
     }
     const ett = entity
     spriteComp.node = ett.assign(new NodeComp(node, ett))
@@ -89,9 +82,8 @@ export class RenderSystem implements System {
     tiledMapComp.node = entity.assign(new NodeComp(node, entity))
   }
 
-  private onAddMotionStreak: EventReceiveCallback<MotionStreak> = ({ entity }) => {
-    const motionStreakComp = entity.getComponent(MotionStreak)
-    const { spriteFrame, fade, minSeg, stroke, color } = motionStreakComp.props
+  private onAddMotionStreak: EventReceiveCallback<MotionStreakComp> = ({ entity, component }) => {
+    const { spriteFrame, fade, minSeg, stroke, color } = component.props
     const node = new cc.MotionStreak(
       fade || 0.4, // fade (vệt tồn tại 0.4s)
       minSeg || 1, // minSeg
@@ -99,7 +91,7 @@ export class RenderSystem implements System {
       color || cc.color(255, 255, 255, 255),
       spriteFrame,
     )
-    motionStreakComp.node = entity.assign(new NodeComp(node, entity))
+    component.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onRemovedNodeComp = ({ component }) => {

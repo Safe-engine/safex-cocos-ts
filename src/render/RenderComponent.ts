@@ -5,17 +5,17 @@ import { BaseComponentProps, ColorSource } from '../safex'
 export class NodeRender extends ComponentX {
   nodeName: string
 }
-enum SpriteTypes {
-  SIMPLE,
-  SLICED,
-  TILED,
-  FILLED,
-  MESH,
-  ANIMATION,
-}
+// enum SpriteTypes {
+//   SIMPLE,
+//   SLICED,
+//   TILED,
+//   FILLED,
+//   MESH,
+//   ANIMATION,
+// }
 interface SpriteRenderProps {
   spriteFrame: string
-  type?: SpriteTypes
+  // type?: SpriteTypes
   capInsets?: [number, number, number, number]
   tiledSize?: Size
 }
@@ -132,7 +132,7 @@ interface MotionStreakProps {
   stroke?: number
   color?: Color4B
 }
-export class MotionStreak extends ComponentX<MotionStreakProps & { $ref?: MotionStreak }, cc.MotionStreak> {
+export class MotionStreakComp extends ComponentX<MotionStreakProps & { $ref?: MotionStreakComp }, cc.MotionStreak> {
   reset() {
     this.node.instance.reset()
   }
@@ -144,4 +144,4 @@ Object.defineProperty(MaskRender.prototype, 'render', { value: render })
 Object.defineProperty(ParticleComp.prototype, 'render', { value: render })
 Object.defineProperty(GraphicsRender.prototype, 'render', { value: render })
 Object.defineProperty(TiledMap.prototype, 'render', { value: render })
-Object.defineProperty(MotionStreak.prototype, 'render', { value: render })
+Object.defineProperty(MotionStreakComp.prototype, 'render', { value: render })
