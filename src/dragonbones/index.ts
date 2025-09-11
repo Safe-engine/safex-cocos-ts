@@ -1,3 +1,4 @@
+import { PixiArmatureDisplay } from 'dragonbones-pixijs'
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
@@ -24,23 +25,10 @@ interface DragonBonesProps {
   onAnimationEnd?: () => void
   onAnimationComplete?: () => void
 }
-interface PixiDragonBonesAnimation {
-  lastAnimationName: string
-  gotoAndPlayByTime: (name: string, index?: number, playTimes?: number) => void
-  play: (name: string, index?: number, playTimes?: number) => void
-  timeScale: Float
-}
-interface PixiDragonBonesArmature {
-  animation: PixiDragonBonesAnimation
-  _armature: {
-    flipX: boolean
-  }
-  removeDBEventListener: () => void
-  addDBEventListener: (name: string, cb: (event: any) => void, target: any) => void
-}
-export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, cc.Node> {
-  armature: PixiDragonBonesArmature
-  dragon: any
+
+export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, PixiDragonBonesSprite> {
+  armature: PixiArmatureDisplay
+
   setAnimation(name: string, playTimes = 0) {
     if (this.armature) {
       if (this.armature.animation.lastAnimationName === name) return
@@ -68,29 +56,23 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
 
 export class DragonBonesSystem implements System {
   configure(event_manager: EventManager) {
-    event_manager.subscribe(EventTypes.ComponentAdded, DragonBonesComp, ({ entity }) => {
+    event_manager.subscribe(EventTypes.ComponentAdded, DragonBonesComp, async ({ entity }) => {
       const dbComp = entity.getComponent(DragonBonesComp)
       const { data, animation, playTimes = 0, timeScale = 1 } = dbComp.props
       const { atlas, skeleton, texture } = data
       const dragon = new PixiDragonBonesSprite({
-        ske: skeleton,
-        texJson: atlas,
-        texPng: texture,
+        skeleton,
+        atlas,
+        texture,
         animationName: animation,
         playTimes,
         // width: dataSkel.armature[0].aabb.width,
         // height: dataSkel.armature[0].aabb.height,
       })
-      dbComp.dragon = dragon
       dbComp.armature = dragon._armatureDisplay
-      const node: any = new cc.Node()
-      node.addChild(dragon)
       // console.log('armature', dbComp.armature)
       dbComp.armature.animation.timeScale = timeScale
-      // if (skin) {
-      //   node.setSkin(skin)
-      // }
-      dbComp.node = entity.assign(new NodeComp(node, entity))
+      dbComp.node = entity.assign(new NodeComp(dragon, entity))
       if (dbComp.props.onAnimationStart)
         dbComp.armature.addDBEventListener(
           dragonBones.EventObject.START,
@@ -127,11 +109,10 @@ export class DragonBonesSystem implements System {
   update(entities: EntityManager) {
     // console.log('update', dt)
     const animations = entities.entities_with_components(DragonBonesComp)
-    // cc.log(animations);
     animations.forEach((ett) => {
       const dbComp = ett.getComponent(DragonBonesComp)
       if (dbComp.node && dbComp.node.active) {
-        dbComp.dragon.updateTexture()
+        dbComp.node.instance.updateTexture()
       }
     })
   }
