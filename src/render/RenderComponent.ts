@@ -36,7 +36,8 @@ export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentPr
   }
 }
 interface MaskRenderProps {
-  spriteFrame: string
+  spriteFrame?: string
+  cropSize?: Size
   alphaThreshold?: number
   inverted?: boolean
 }
