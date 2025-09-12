@@ -54,8 +54,8 @@ interface GraphicsRenderProps {
 }
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseComponentProps<GraphicsRender>, cc.DrawNode> {
-  drawDot(x: number, y: number, r: number) {
-    this.node.instance.drawDot(cc.p(x, y), r, this.props.fillColor)
+  drawDot(center: Vec2, r: number) {
+    this.node.instance.drawDot(center, r, this.props.fillColor)
   }
   drawLine(origin: Vec2, destination: Vec2, thickness?: Float, color?: Color4B) {
     this.node.instance.drawSegment(origin, destination, thickness || this.props.lineWidth, color || this.props.strokeColor)
