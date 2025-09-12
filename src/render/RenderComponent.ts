@@ -36,8 +36,8 @@ export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentPr
   }
 }
 interface MaskRenderProps {
-  type?: number
-  segments?: number
+  spriteFrame: string
+  alphaThreshold?: number
   inverted?: boolean
 }
 export class MaskRender extends ComponentX<MaskRenderProps, cc.ClippingNode> {}
@@ -54,15 +54,9 @@ interface GraphicsRenderProps {
 }
 
 export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseComponentProps<GraphicsRender>, cc.DrawNode> {
-  drawDot(x, y, r) {
+  drawDot(x: number, y: number, r: number) {
     this.node.instance.drawDot(cc.p(x, y), r, this.props.fillColor)
   }
-
-  // drawPoint(position: Vec2, pointSize: Float, color:  Color4B, pointType = PointType.Rect) {
-
-  // }
-  // // drawPoints(points: Vec2[], color: Color4B) {
-  // // }
   drawLine(origin: Vec2, destination: Vec2, thickness?: Float, color?: Color4B) {
     this.node.instance.drawSegment(origin, destination, thickness || this.props.lineWidth, color || this.props.strokeColor)
   }
@@ -84,9 +78,10 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
     )
   }
 
-  // drawSolidCircle(origin: Vec2, destination: Vec2, color: Color4B) {
-
-  // }
+  drawSolidCircle(center: Vec2, radius: Float, angle = 0, segments = 64, color?: Color4B) {
+    this.node.instance.drawCircle(center, radius, angle, segments, true, this.props.lineWidth, color || this.props.fillColor)
+    this.node.instance.drawDot(center, radius, this.props.fillColor)
+  }
   // drawQuadBezier(origin: Vec2, destination: Vec2, color: Color4B) {
 
   // }
@@ -98,12 +93,10 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   // drawCatmullRom(points: Vec2[], color: Color4B) {
   // }
   drawPoly(points: Vec2[], color?: Color4B, thickness?: Float) {
-    this.node.instance.drawPoly(points, color || this.props.fillColor, thickness || this.props.lineWidth)
+    this.node.instance.drawPoly(points, color || this.props.fillColor, thickness || this.props.lineWidth, this.props.strokeColor)
   }
   // drawSolidPoly(points: Vec2[], color: Color4B) {
   //   this.node.instance.drawPoly(points, color)
-  // }
-  // drawDot(points: Vec2[], color: Color4B) {
   // }
   // drawSegment(from: Vec2, to: Vec2, color: Color4B) {
   // }

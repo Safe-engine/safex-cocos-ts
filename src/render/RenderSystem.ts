@@ -52,10 +52,12 @@ export class RenderSystem implements System {
   }
 
   private onAddMaskRender: EventReceiveCallback<MaskRender> = ({ entity, component: maskComp }) => {
-    const { inverted } = maskComp.props
-    const node = new cc.ClippingNode()
-    node.setInverted(inverted)
-    maskComp.node = entity.assign(new NodeComp(node, entity))
+    const { inverted = false, spriteFrame, alphaThreshold = 0.05 } = maskComp.props
+    const stencil = new cc.Sprite(spriteFrame)
+    const clipper = new cc.ClippingNode(stencil)
+    clipper.setAlphaThreshold(alphaThreshold)
+    clipper.setInverted(inverted)
+    maskComp.node = entity.assign(new NodeComp(clipper, entity))
   }
 
   private onAddGraphicsRender = ({ entity }) => {
