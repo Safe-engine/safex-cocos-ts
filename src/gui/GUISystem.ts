@@ -79,9 +79,9 @@ export class GUISystem implements System {
     node.setContentSize(contentSize)
     node.setViewSize(viewSize)
     node.setDirection(direction as number)
-    if (isScrollToTop) node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
+    if (isScrollToTop !== undefined) node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
     // node.setTouchEnabled(false)
-    node.setBounceable(isBounced)
+    node.setBounceable(isBounced !== undefined)
     scrollView.node = entity.assign(new NodeComp(node, entity))
   }
 

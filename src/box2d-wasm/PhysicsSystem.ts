@@ -96,7 +96,7 @@ export class PhysicsSystem implements System {
       fixtureDef.set_density(density)
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
-      fixtureDef.set_isSensor(isSensor)
+      fixtureDef.set_isSensor(isSensor !== undefined)
       rigidBody.body.CreateFixture(fixtureDef)
       rigidBody.body.SetTransform(position, 0)
       rigidBody.body.SetLinearVelocity(zero)

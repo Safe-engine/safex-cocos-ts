@@ -52,7 +52,7 @@ export class RenderSystem implements System {
   }
 
   private onAddMaskRender: EventReceiveCallback<MaskRender> = ({ entity, component: maskComp }) => {
-    const { inverted = false, spriteFrame, cropSize, alphaThreshold = 0.05 } = maskComp.props
+    const { inverted, spriteFrame, cropSize, alphaThreshold = 0.05 } = maskComp.props
     let stencil: cc.Node = new cc.Sprite(spriteFrame)
     if (cropSize) {
       const { width, height } = cropSize
@@ -60,7 +60,7 @@ export class RenderSystem implements System {
     }
     const clipper = new cc.ClippingNode(stencil)
     clipper.setAlphaThreshold(!spriteFrame ? 1 : alphaThreshold)
-    clipper.setInverted(inverted)
+    clipper.setInverted(inverted !== undefined)
     maskComp.node = entity.assign(new NodeComp(clipper, entity))
   }
 
