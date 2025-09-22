@@ -24,16 +24,21 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
       this.node.instance._richElements = []
       this.node.instance._formatTextDirty = true
       this.node.instance.formatText()
+      const fontSize = this.props.size || 64
       for (let index = 0; index < newTextArray.length; index++) {
-        const { style, text } = newTextArray[index]
-        const color = style && style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
+        const { style = {}, text } = newTextArray[index]
         const fontName = cc.path.basename(this.props.font || GUISystem.defaultFont, '.ttf')
-        const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.props.size || 64)
-        // if (style && style.newline) {
-        // console.log('richText', richText)
-        // this.node.instance._addNewLine()
-        // }
-        this.node.instance.pushBackElement(richText)
+        if (style.outline) {
+          // console.log('richText', richText, (ccui as any).RichElementCustomNode)
+          const label = new ccui.Text(text, fontName, fontSize)
+          label.enableOutline(cc.hexToColor(style.outline.color), style.outline.width || 3)
+          const customElem = new (ccui as any).RichElementCustomNode.create(1, cc.color(255, 0, 0), 255, label)
+          this.node.instance.pushBackElement(customElem)
+        } else {
+          const color = style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
+          const richText = ccui.RichElementText.create(index, color, 255, text, fontName, fontSize)
+          this.node.instance.pushBackElement(richText)
+        }
       }
     }
   }
