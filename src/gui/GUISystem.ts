@@ -74,14 +74,14 @@ export class GUISystem implements System {
   }
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {
-    const { viewSize, contentSize, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
+    const { viewSize, contentSize, isScrollToTop, isBounced, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
     const node = new cc.ScrollView(viewSize)
     node.setContentSize(contentSize)
     node.setViewSize(viewSize)
     node.setDirection(direction as number)
-    // node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
+    if (isScrollToTop) node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
     // node.setTouchEnabled(false)
-    node.setBounceable(false)
+    node.setBounceable(isBounced)
     scrollView.node = entity.assign(new NodeComp(node, entity))
   }
 

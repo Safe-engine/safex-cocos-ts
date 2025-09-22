@@ -83,6 +83,8 @@ interface ScrollViewProps {
   viewSize: Size
   contentSize: Size
   direction?: ScrollViewDirection
+  isScrollToTop?: boolean
+  isBounced?: boolean
 }
 export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, cc.ScrollView> {
   zoom(scale: number) {
