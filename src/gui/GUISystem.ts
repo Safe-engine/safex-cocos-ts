@@ -5,7 +5,7 @@ import { Vec2 } from '../polyfills'
 import { BlockInputEventsComp, ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
 
 export class GUISystem implements System {
-  defaultFont: string
+  static defaultFont: string
   configure(event_manager: EventManager) {
     event_manager.subscribe(EventTypes.ComponentAdded, ButtonComp, this.onAddButtonComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ProgressTimerComp, this.onAddProgressTimerComp)
@@ -57,7 +57,7 @@ export class GUISystem implements System {
   }
 
   private onAddLabelComp: EventReceiveCallback<LabelComp> = ({ entity, component: label }) => {
-    const { string = '', font = this.defaultFont, size = 64, outline, shadow } = label.props
+    const { string = '', font = GUISystem.defaultFont, size = 64, outline, shadow } = label.props
     const fontName = cc.path.basename(font, '.ttf')
     const node = new ccui.Text(string, fontName, size)
     node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
@@ -69,6 +69,7 @@ export class GUISystem implements System {
       const [color, blur, offset] = shadow
       node.enableShadow(color, offset, blur)
     }
+    node.ignoreContentAdaptWithSize(false)
     label.node = entity.assign(new NodeComp(node, entity))
   }
 
@@ -94,7 +95,7 @@ export class GUISystem implements System {
   }
 
   private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {
-    const { placeHolder = '', font = this.defaultFont, size = 64, maxLength = 20, isPassword = false } = textInput.props
+    const { placeHolder = '', font = GUISystem.defaultFont, size = 64, maxLength = 20, isPassword = false } = textInput.props
     const textField = new ccui.TextField()
     textField.setPlaceHolder(placeHolder)
     textField.setFontName(font)

@@ -1,3 +1,4 @@
+import { GUISystem } from '..'
 import { ComponentX, render } from '../core/decorator'
 import { BaseComponentProps } from '../safex'
 import { HtmlTextParser } from './html-text-parser'
@@ -26,7 +27,7 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
       for (let index = 0; index < newTextArray.length; index++) {
         const { style, text } = newTextArray[index]
         const color = style && style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
-        const fontName = cc.path.basename(this.props.font, '.ttf')
+        const fontName = cc.path.basename(this.props.font || GUISystem.defaultFont, '.ttf')
         const richText = ccui.RichElementText.create(index, color, 255, text, fontName, this.props.size || 64)
         // if (style && style.newline) {
         // console.log('richText', richText)
