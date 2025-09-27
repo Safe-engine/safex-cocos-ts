@@ -2,6 +2,7 @@ import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
 import { GameWorld } from '../gworld'
+import { instantiate } from '../helper'
 import { BoxCollider, CircleCollider, Collider, CollisionType, Contract, PolygonCollider } from './CollideComponent'
 
 export function shouldCollider(colA: Collider, colB: Collider) {
@@ -33,12 +34,12 @@ export class CollideSystem implements System {
   }
 
   private onAddCollider = ({ entity, component }) => {
-    // let collider = entity.getComponent(Collider)
-    // if (!collider) {
-    //   collider = entity.assign(instantiate(Collider))
-    // }
+    let collider = entity.getComponent(Collider)
+    if (!collider) {
+      collider = entity.assign(instantiate(Collider))
+    }
     // console.log('onAddCollider', component, collider)
-    // collider.node = entity.getComponent(NodeComp)
+    collider.node = entity.getComponent(NodeComp)
     component.node = entity.getComponent(NodeComp)
     this.addCollider(component)
   }

@@ -2,6 +2,7 @@ import { PixiArmatureDisplay, PixiFactory } from 'dragonbones-pixijs'
 import { Application, Assets } from 'pixi.js'
 
 export function loadDragonBonesAssets(skeleton, atlas, texture) {
+  // console.log('loadDragonBonesAssets', skeleton, atlas, texture)
   return Assets.load([skeleton, atlas, texture])
 }
 export class PixiDragonBonesSprite extends cc.Sprite {
@@ -42,13 +43,14 @@ export class PixiDragonBonesSprite extends cc.Sprite {
   }
 
   _setupArmature() {
-    const { key, skeleton, atlas, texture, playTimes, animationName, scale = 1 } = this._config
+    const { skeleton, atlas, texture, playTimes, animationName, scale = 1 } = this._config
     const factory = PixiFactory.factory
-    const dragonData = factory.parseDragonBonesData(Assets.get(skeleton), key)
-    factory.parseTextureAtlasData(Assets.get(atlas), Assets.get(texture), key)
+    const atlasAsset = Assets.get(atlas)
+    const dragonData = factory.parseDragonBonesData(Assets.get(skeleton), atlasAsset.name)
+    factory.parseTextureAtlasData(Assets.get(atlas), Assets.get(texture), atlasAsset.name)
     const { armatureNames } = dragonData
     const armatureName = armatureNames[0]
-    const display = factory.buildArmatureDisplay(armatureName, key)
+    const display = factory.buildArmatureDisplay(armatureName, atlasAsset.name)
     if (!display) {
       console.error('Cannot build armature:', armatureName)
       return
@@ -64,7 +66,7 @@ export class PixiDragonBonesSprite extends cc.Sprite {
   }
 
   updateTexture() {
-    if (this._armatureDisplay && this._pixiApp.renderer) {
+    if (this._armatureDisplay && this._pixiApp.renderer && this._pixiApp.stage) {
       this._pixiApp.renderer.render(this._pixiApp.stage)
       this._texture.initWithElement(this._canvas)
       this._texture.handleLoadedTexture()
