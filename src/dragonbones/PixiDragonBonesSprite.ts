@@ -78,6 +78,8 @@ export class PixiDragonBonesSprite extends cc.Sprite {
     // this.unschedule(this.updateTexture);
     this._pixiApp.destroy(true, { children: true })
     this._canvas.remove()
+    this._armatureDisplay.destroy()
+    this._armatureDisplay = null
     super.onExit()
   }
 }

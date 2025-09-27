@@ -23,9 +23,12 @@ export class DragonBonesSystem implements System {
         // height: dataSkel.armature[0].aabb.height,
       })
       dbComp.armature = dragon._armatureDisplay
+      dbComp.dragon = dragon
       // console.log('armature', dbComp.armature)
       dbComp.armature.animation.timeScale = timeScale
-      dbComp.node = entity.assign(new NodeComp(dragon, entity))
+      const node = new cc.Node()
+      node.addChild(dragon)
+      dbComp.node = entity.assign(new NodeComp(node, entity))
       if (dbComp.props.onAnimationStart)
         dbComp.armature.addDBEventListener(
           EventObject.START,
@@ -55,17 +58,18 @@ export class DragonBonesSystem implements System {
       const dbComp = component as DragonBonesComp
       // dbComp.armature.removeDBEventListener()
       dbComp.armature.destroy()
+      // console.log('remove dragonbones component', dbComp.node.entity.id)
     })
   }
 
   // update(entities: EntityManager, events: EventManager, dt: number)
   update(entities: EntityManager) {
-    // console.log('update', dt)
     const animations = entities.entities_with_components(DragonBonesComp)
     animations.forEach((ett) => {
       const dbComp = ett.getComponent(DragonBonesComp)
       if (dbComp.node && dbComp.node.active) {
-        dbComp.node.instance.updateTexture()
+        // console.log(' dragonbones updateTexture', dbComp.node.entity.id)
+        dbComp.dragon.updateTexture()
       }
     })
   }

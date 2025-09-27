@@ -22,8 +22,9 @@ interface DragonBonesProps {
   onAnimationComplete?: () => void
 }
 
-export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, PixiDragonBonesSprite> {
+export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, cc.Node> {
   armature: PixiArmatureDisplay
+  dragon: PixiDragonBonesSprite
 
   setAnimation(name: string, playTimes = 0) {
     if (this.armature) {
