@@ -64,32 +64,34 @@ export async function startGame(defaultFont: string, { width, height }, option?:
   })
 }
 
-export function loadAll(assets: string[] = [], cb?: (progress: number) => void, onCompleted?: () => void) {
-  cc.loader.load(
-    assets.map((value) => {
-      if (value.endsWith('.ttf')) {
-        return {
-          type: 'font',
-          name: cc.path.basename(value, '.ttf'),
-          srcs: [value],
+export function loadAll(assets: string[] = [], cb?: (progress: number) => void) {
+  return new Promise((resolve: any) => {
+    cc.loader.load(
+      assets.map((value) => {
+        if (value.endsWith('.ttf')) {
+          return {
+            type: 'font',
+            name: cc.path.basename(value, '.ttf'),
+            srcs: [value],
+          }
         }
-      }
-      return value
-    }),
-    function (result, count, loadedCount) {
-      // console.log(result)
-      if (result instanceof cc.Texture2D) {
-        // cc.textureCache.addImage(result.url)
-        const frame = new cc.SpriteFrame(result, cc.rect(0, 0, result.getPixelsWide(), result.getPixelsHigh()))
-        // console.log('cc.Texture2D', result, frame)
-        cc.spriteFrameCache.addSpriteFrame(frame, result.url)
-      }
-      let percent = loadedCount / count
-      percent = Math.min(percent, 1)
-      if (cb) cb(percent)
-    },
-    onCompleted,
-  )
+        return value
+      }),
+      function (result, count, loadedCount) {
+        // console.log(result)
+        if (result instanceof cc.Texture2D) {
+          // cc.textureCache.addImage(result.url)
+          const frame = new cc.SpriteFrame(result, cc.rect(0, 0, result.getPixelsWide(), result.getPixelsHigh()))
+          // console.log('cc.Texture2D', result, frame)
+          cc.spriteFrameCache.addSpriteFrame(frame, result.url)
+        }
+        let percent = loadedCount / count
+        percent = Math.min(percent, 1)
+        if (cb) cb(percent)
+      },
+      resolve,
+    )
+  })
 }
 
 export function loadJsonFromCache<T>(filePath: string): T {
