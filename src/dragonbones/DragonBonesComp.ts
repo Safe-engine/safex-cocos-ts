@@ -43,7 +43,7 @@ export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponent
   //   skel.armature.armatureData(data, atlas, this.node.scale);
   // }
   setFLipX(isFlipX: boolean) {
-    this.armature._armature.flipX = isFlipX
+    this.armature.armature.flipX = isFlipX
   }
 
   setTimeScale(timeScale: Float) {
