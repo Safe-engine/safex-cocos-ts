@@ -1,6 +1,5 @@
-import { GUISystem } from '..'
+import { BaseComponentProps, GUISystem } from '..'
 import { ComponentX, render } from '../core/decorator'
-import { BaseComponentProps } from '../safex'
 import { HtmlTextParser } from './html-text-parser'
 
 const _htmlTextParser = new HtmlTextParser()

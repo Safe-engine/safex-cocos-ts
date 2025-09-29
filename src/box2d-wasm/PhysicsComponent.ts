@@ -1,6 +1,6 @@
+import { BaseComponentProps } from '..'
 import { ComponentX } from '../core/decorator'
 import { Vec2 } from '../polyfills'
-import { BaseComponentProps } from '../safex'
 import { PhysicsSprite } from './PhysicsSprite'
 import { box2D } from './PhysicsSystem'
 

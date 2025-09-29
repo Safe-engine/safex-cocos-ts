@@ -1,7 +1,7 @@
 import { PixiArmatureDisplay } from 'dragonbones-pixijs'
 
+import { BaseComponentProps } from '..'
 import { ComponentX, render } from '../core/decorator'
-import { BaseComponentProps } from '../safex'
 import { PixiDragonBonesSprite } from './PixiDragonBonesSprite'
 
 export interface DragonBonesData {

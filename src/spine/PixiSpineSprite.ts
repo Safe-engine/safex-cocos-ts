@@ -1,7 +1,7 @@
 import { Spine } from '@esotericsoftware/spine-pixi-v8'
 import { Application, Assets } from 'pixi.js'
 
-export function loadSpineAssets(skeleton, atlas, texture) {
+export function loadSpineAssets({ skeleton, atlas, texture }) {
   return Assets.load([skeleton, atlas, texture])
 }
 
@@ -14,7 +14,6 @@ export class PixiSpineSprite extends cc.Sprite {
   constructor(config) {
     super()
     super.ctor() // always call this for compatibility with cocos2dx JS Javascript class system
-    // this.scheduleUpdate()
     this._canvas = document.createElement('canvas')
     this._canvas.width = config.width || 1024
     this._canvas.height = config.height || 1024
@@ -37,42 +36,43 @@ export class PixiSpineSprite extends cc.Sprite {
     this.initWithTexture(this._texture)
 
     this._config = config
-    this._armatureDisplay = null
-    this._setupArmature()
-
-    // this.schedule(this.updateTexture, 1 / 30);
+    this._setupSpine()
   }
 
-  _setupArmature() {
+  _setupSpine() {
     const { skeleton, atlas, loop, skin, timeScale, animationName } = this._config
-    const display = Spine.from({ skeleton, atlas })
+    // console.log('_setupSpine', this._config, Assets.get(this._config.texture))
+    const display = Spine.from({ skeleton, atlas, scale: timeScale })
     if (!display) {
-      console.error('Cannot build armature:', skeleton)
+      console.error('Cannot build spine:', skeleton)
       return
     }
     if (skin) {
-      display.skeleton.setSkin(skin)
+      const skeletonData = display.skeleton.data
+      const newSkin = skeletonData.findSkin(skin)
+      display.skeleton.setSkin(newSkin)
+      display.skeleton.setSlotsToSetupPose()
     }
-    display.state.setAnimation(0, animationName, loop)
+    if (animationName) display.state.setAnimation(0, animationName, loop)
     display.x = this._canvas.width / 2
     display.y = this._canvas.height
-    display.state.timeScale = timeScale
 
     this._pixiApp.stage.addChild(display)
     this._armatureDisplay = display
   }
 
   updateTexture() {
-    if (this._armatureDisplay && this._pixiApp.renderer) {
+    if (this._armatureDisplay && this._pixiApp.renderer && this._texture) {
       this._pixiApp.renderer.render(this._pixiApp.stage)
       this._texture.initWithElement(this._canvas)
       this._texture.handleLoadedTexture()
+      // console.log('updateTexture', this._texture.getPixelsHigh(), this._texture.getPixelsWide())
       this.setTexture(this._texture)
     }
   }
 
   onExit() {
-    // this.unschedule(this.updateTexture);
+    // console.log('onExit')
     this._pixiApp.destroy(true, { children: true })
     this._canvas.remove()
     super.onExit()

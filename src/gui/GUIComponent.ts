@@ -1,6 +1,6 @@
+import { BaseComponentProps, ColorSource } from '..'
 import { ComponentX, render } from '../core/decorator'
 import { Size, Vec2 } from '../polyfills'
-import { BaseComponentProps, ColorSource } from '../safex'
 
 export const FillType = {
   HORIZONTAL: 0,

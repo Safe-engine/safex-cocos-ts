@@ -1,10 +1,11 @@
 import { PixiArmatureDisplay, PixiFactory } from 'dragonbones-pixijs'
 import { Application, Assets } from 'pixi.js'
 
-export function loadDragonBonesAssets(skeleton, atlas, texture) {
+export function loadDragonBonesAssets({ skeleton, atlas, texture }) {
   // console.log('loadDragonBonesAssets', skeleton, atlas, texture)
   return Assets.load([skeleton, atlas, texture])
 }
+
 export class PixiDragonBonesSprite extends cc.Sprite {
   _canvas: any
   _pixiApp: Application

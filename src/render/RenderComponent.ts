@@ -1,6 +1,6 @@
+import { BaseComponentProps, ColorSource } from '..'
 import { ComponentX, render } from '../core/decorator'
 import { Color4B, Size, Vec2 } from '../polyfills'
-import { BaseComponentProps, ColorSource } from '../safex'
 
 export class NodeRender extends ComponentX {
   nodeName: string

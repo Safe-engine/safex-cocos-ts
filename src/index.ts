@@ -1,3 +1,4 @@
+import { Color4B, NodeComp } from '.'
 export * from './app'
 export * from './collider'
 export * from './core/decorator'
@@ -13,6 +14,13 @@ export * from './polyfills'
 export { type Touch } from './polyfills'
 export * from './render'
 export * from './richtext'
-export * from './safex'
-export * from './spine'
+export type ColorSource = ReturnType<typeof Color4B>
 
+export interface BaseComponentProps<T> {
+  $ref?: T
+  $push?: T[]
+  $refNode?: NodeComp
+  $pushNode?: NodeComp[]
+  node?: Partial<NodeComp>
+  // [$key: `$${string}`]: string
+}

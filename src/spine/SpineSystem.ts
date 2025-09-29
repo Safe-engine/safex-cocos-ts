@@ -1,4 +1,5 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
+
 import { NodeComp } from '../core/NodeComp'
 import { PixiSpineSprite } from './PixiSpineSprite'
 import { SpineSkeleton } from './SpineSkeleton'

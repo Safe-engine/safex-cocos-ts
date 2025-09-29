@@ -17,7 +17,7 @@ interface SpineSkeletonProps {
 export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>, cc.Node> {
   spine: PixiSpineSprite
 
-  setAnimation(name: string, loop = false) {
+  setAnimation(name: string, loop = true) {
     const skel = this.spine
     if (skel._armatureDisplay.state.setAnimation) {
       skel._armatureDisplay.state.setAnimation(0, name, loop)
