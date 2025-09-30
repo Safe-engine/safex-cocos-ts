@@ -1,7 +1,6 @@
-import { PixiArmatureDisplay } from 'dragonbones-pixijs'
-
 import { BaseComponentProps } from '..'
 import { ComponentX, render } from '../core/decorator'
+import { CocosArmatureDisplay } from './db-cocos/CocosArmatureDisplay'
 
 export interface DragonBonesData {
   atlas: string
@@ -21,31 +20,34 @@ interface DragonBonesProps {
   onAnimationComplete?: () => void
 }
 
-export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, cc.Node> {
-  armature: PixiArmatureDisplay
-
+export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, CocosArmatureDisplay> {
   setAnimation(name: string, playTimes = 0) {
-    if (this.armature) {
-      if (this.armature.animation.lastAnimationName === name) return
-      this.armature.animation.gotoAndPlayByTime(name, 0, playTimes)
+    const armature = this.node.instance
+    if (armature) {
+      if (armature.animation.lastAnimationName === name) return
+      armature.animation.gotoAndPlayByTime(name, 0, playTimes)
     }
   }
 
   getAnimationName() {
-    return this.armature.animation.lastAnimationName
+    const armature = this.node.instance
+    return armature.animation.lastAnimationName
   }
 
-  // setSkeletonData(data: string) {
-  //   const skel = this.node.instance as CocosArmatureDisplay;
-  //   const atlas = data.replace('.json', '.atlas');
-  //   skel.armature.armatureData(data, atlas, this.node.scale);
-  // }
+  setSkeletonData(data: string) {
+    const skel = this.node.instance
+    const atlas = data.replace('.json', '.atlas')
+    skel.armature.display.initWithArgs(data, atlas, this.node.scale)
+  }
+
   setFLipX(isFlipX: boolean) {
-    this.armature.armature.flipX = isFlipX
+    const armature = this.node.instance
+    armature.armature.flipX = isFlipX
   }
 
   setTimeScale(timeScale: Float) {
-    this.armature.animation.timeScale = timeScale
+    const armature = this.node.instance
+    armature.animation.timeScale = timeScale
   }
 }
 

@@ -1,6 +1,6 @@
-import { EventObject } from 'dragonbones-pixijs'
 import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
 
+import { EventObject } from '@cocos/dragonbones-js'
 import { NodeComp } from '../core/NodeComp'
 import { DragonBonesComp } from './DragonBonesComp'
 import { CocosFactory } from './db-cocos/CocosFactory'
@@ -25,9 +25,7 @@ export class DragonBonesSystem implements System {
       // factory.loadDragonBonesData(skel)
       // console.log(skeleton, dataSkel)
       const node = factory.buildArmatureDisplay(dataSkel.armature[0].name, dataSkel.name)
-
-      // console.log('armature', armature)
-      // console.log('node', node);
+      // console.log('node', node)
       // armature.animation.gotoAndPlay('run', 0.2)
       node.armature.animation.timeScale = timeScale
       if (animation) {
@@ -64,9 +62,8 @@ export class DragonBonesSystem implements System {
         )
     })
     event_manager.subscribe(EventTypes.ComponentRemoved, DragonBonesComp, ({ component }) => {
-      const dbComp = component as DragonBonesComp
-      // dbComp.armature.removeDBEventListener()
-      // dbComp.armature.destroy()
+      const armature = component.node.instance
+      armature.destroy()
       // console.log('remove dragonbones component', dbComp.node.entity.id)
     })
   }
