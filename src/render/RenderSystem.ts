@@ -3,7 +3,6 @@ import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System }
 import { NodeComp } from '../core/NodeComp'
 import { BLUE, RED } from '../polyfills'
 import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
-import { TiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
   SIMPLE,
@@ -12,6 +11,47 @@ export enum SpriteTypes {
   FILLED,
   MESH,
   ANIMATION,
+}
+
+function createTiledSprite(src, totalW, totalH) {
+  // tạo sprite từ input
+  const tileSprite = new cc.Sprite(src)
+  // lấy kích thước gốc của texture
+  const frame = tileSprite.getSpriteFrame()
+  const tileW = frame ? frame.getRect().width : tileSprite.getContentSize().width
+  const tileH = frame ? frame.getRect().height : tileSprite.getContentSize().height
+
+  // tạo renderTexture với kích thước cần phủ
+  const rt = new cc.RenderTexture(totalW, totalH)
+  rt.beginWithClear(0, 0, 0, 0)
+
+  const drawSprite = new cc.Sprite(tileSprite.getTexture())
+  // if (frame) {
+  //   drawSprite.setSpriteFrame(frame)
+  // }
+  drawSprite.setAnchorPoint(0, 0)
+
+  // số tile theo trục x,y
+  const cols = Math.ceil(totalW / tileW)
+  const rows = Math.ceil(totalH / tileH)
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const s = new cc.Sprite(frame)
+      s.setAnchorPoint(0, 0)
+      s.setPosition(c * tileW, r * tileH)
+      s.visit(rt)
+    }
+  }
+
+  rt.end()
+
+  const finalSprite = rt.sprite
+  finalSprite.setFlippedY(true) // RenderTexture bị lật
+  finalSprite.setAnchorPoint(0, 0)
+  finalSprite.setContentSize(cc.size(totalW, totalH))
+
+  return new cc.Sprite(finalSprite.texture)
 }
 
 export class RenderSystem implements System {
@@ -39,7 +79,7 @@ export class RenderSystem implements System {
     // console.log('frame', spriteFrame, frame)
     let node
     if (tiledSize) {
-      node = new TiledSprite({ texture: spriteFrame, width: tiledSize.width, height: tiledSize.height })
+      node = createTiledSprite(spriteFrame, tiledSize.width, tiledSize.height)
     } else if (capInsets) {
       const rect = cc.rect(...capInsets)
       node = new ccui.Scale9Sprite(frame || spriteFrame, rect, rect)

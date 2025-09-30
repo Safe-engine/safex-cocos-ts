@@ -33,6 +33,7 @@ export class SpriteRender extends ComponentX<SpriteRenderProps & BaseComponentPr
   }
   updateTiled() {
     // effect to native only
+    // createTiledSprite()
   }
 }
 interface MaskRenderProps {
