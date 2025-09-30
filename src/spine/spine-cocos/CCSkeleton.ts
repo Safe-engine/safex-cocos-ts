@@ -156,11 +156,9 @@ gworld.Skeleton = cc.Node.extend(
      * @param {Number} [scale] scale can be specified on the JSON or binary loader which will scale the bone positions, image sizes, and animation translations.
      */
     initWithArgs: function (skeletonDataFile, atlasFile, scale) {
-      let argSkeletonFile = skeletonDataFile,
-        argAtlasFile = atlasFile,
-        skeletonData,
-        atlas,
-        ownsSkeletonData
+      const argSkeletonFile = skeletonDataFile
+      const argAtlasFile = atlasFile
+      let skeletonData, atlas, ownsSkeletonData
 
       if (cc.isString(argSkeletonFile)) {
         if (cc.isString(argAtlasFile)) {
