@@ -1,5 +1,4 @@
 import { BaseComponentProps, ComponentX, render } from '..'
-import { PixiSpineSprite } from './PixiSpineSprite'
 
 export interface SpineData {
   atlas: string
@@ -15,20 +14,18 @@ interface SpineSkeletonProps {
   loop?: boolean
 }
 export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>, cc.Node> {
-  spine: PixiSpineSprite
-
-  setAnimation(name: string, loop = true) {
-    const skel = this.spine
-    if (skel._armatureDisplay.state.setAnimation) {
-      skel._armatureDisplay.state.setAnimation(0, name, loop)
+  setAnimation(name: string, loop = false) {
+    const skel: any = this.node.instance
+    if (skel.setAnimation) {
+      skel.setAnimation(0, name, loop)
     }
   }
 
-  // setSkeletonData(data: SpineData) {
-  //   const skel = this.node.instance
-  //   const { atlas, skeleton } = data
-  //   skel._armatureDisplay.
-  // }
+  setSkeletonData(data: string) {
+    const skel: any = this.node.instance
+    const atlas = data.replace('.json', '.atlas')
+    skel.initWithArgs(data, atlas, this.node.scale)
+  }
 }
 
 Object.defineProperty(SpineSkeleton.prototype, 'render', { value: render })

@@ -2,7 +2,6 @@ import { PixiArmatureDisplay } from 'dragonbones-pixijs'
 
 import { BaseComponentProps } from '..'
 import { ComponentX, render } from '../core/decorator'
-import { PixiDragonBonesSprite } from './PixiDragonBonesSprite'
 
 export interface DragonBonesData {
   atlas: string
@@ -24,7 +23,6 @@ interface DragonBonesProps {
 
 export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, cc.Node> {
   armature: PixiArmatureDisplay
-  dragon: PixiDragonBonesSprite
 
   setAnimation(name: string, playTimes = 0) {
     if (this.armature) {
