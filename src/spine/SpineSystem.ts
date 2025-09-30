@@ -1,9 +1,8 @@
 import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
-import { AtlasAttachmentLoader, SkeletonBinary, TextureAtlas } from '@esotericsoftware/spine-core'
 import { NodeComp } from '../core/NodeComp'
 import { SpineSkeleton } from './SpineSkeleton'
-import { _atlasLoader, SkeletonAnimation } from './spine-cocos/CCSkeletonAnimation'
+import { SkeletonAnimation } from './spine-cocos/CCSkeletonAnimation'
 
 export class SpineSystem implements System {
   configure(event_manager: EventManager) {
@@ -13,22 +12,11 @@ export class SpineSystem implements System {
     const { data, skin, animation, loop = true, timeScale = 1 } = spineComp.props
     const { atlas: argAtlasFile, skeleton } = data
     // console.log('spineComp', data)
-    let node: typeof SkeletonAnimation
+    let node: SkeletonAnimation
     if (skeleton.endsWith('.json')) {
       node = SkeletonAnimation.createWithJsonFile(skeleton, argAtlasFile, timeScale)
     } else {
-      const dataTex = cc.loader.getRes(argAtlasFile)
-      _atlasLoader.setAtlasFile(argAtlasFile)
-      const atlas = new TextureAtlas(dataTex)
-      for (const page of atlas.pages) {
-        const texture = _atlasLoader.load(page.name)
-        page.setTexture(texture)
-      }
-      const attachmentLoader = new AtlasAttachmentLoader(atlas)
-      const skeletonJsonReader = new SkeletonBinary(attachmentLoader)
-      const skeletonJson = cc.loader.getRes(skeleton)
-      const skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
-      node = SkeletonAnimation.create(skeletonData)
+      node = SkeletonAnimation.createWithBinaryFile(skeleton, argAtlasFile, timeScale)
     }
     if (skin) {
       node.setSkin(skin)

@@ -23,15 +23,13 @@ import * as spine from '@esotericsoftware/spine-core';
  THE SOFTWARE.
  ****************************************************************************/
 
-var gworld = gworld || {}
-;(function () {
-  gworld.Skeleton.CanvasRenderCmd = function (renderableObject) {
+  export const CanvasRenderCmd = function (renderableObject) {
     this._rootCtor(renderableObject)
     this._needDraw = true
   }
 
-  const proto = (gworld.Skeleton.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype))
-  proto.constructor = gworld.Skeleton.CanvasRenderCmd
+  const proto = (CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype))
+  proto.constructor = CanvasRenderCmd
 
   proto.rendering = function (wrapper, scaleX, scaleY) {
     const node = this._node
@@ -248,4 +246,3 @@ var gworld = gworld || {}
       slotNode.setVisible(true)
     }
   }
-})()

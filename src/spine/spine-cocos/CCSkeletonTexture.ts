@@ -22,14 +22,13 @@ import * as spine from '@esotericsoftware/spine-core'
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-var gworld = gworld || {}
 
-gworld.SkeletonTexture = function (image) {
+export const SkeletonTexture = function (image) {
   // spine.Texture.call(this, image);
 }
-cc.inherits(gworld.SkeletonTexture, spine.Texture)
-cc.extend(gworld.SkeletonTexture.prototype, {
-  name: 'gworld.SkeletonTexture',
+cc.inherits(SkeletonTexture, spine.Texture)
+cc.extend(SkeletonTexture.prototype, {
+  name: 'SkeletonTexture',
   _texture: null,
 
   setRealTexture: function (tex) {
@@ -66,4 +65,3 @@ cc.extend(gworld.SkeletonTexture.prototype, {
     }
   },
 })
-export const SkeletonTexture = gworld.SkeletonTexture
