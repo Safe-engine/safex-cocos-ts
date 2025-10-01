@@ -13,16 +13,17 @@ interface SpineSkeletonProps {
   animation?: string
   timeScale?: number
   loop?: boolean
+  onAnimationComplete?
 }
 export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>, SkeletonAnimation> {
-  setFLipX(flip: boolean) {
+  set scaleX(flip: number) {
     const skel = this.node.instance
-    console.log('setFLipX', skel, flip)
-    if (skel._skeleton.setFLipX) {
-      skel._skeleton.setFLipX(flip)
-    }
+    skel._skeleton.scaleX = flip
   }
-
+  getAnimationName() {
+    const skel = this.node.instance
+    return skel.getState().getCurrent(0).animation.name
+  }
   setAnimation(name: string, loop = false) {
     const skel = this.node.instance
     if (skel.setAnimation) {
@@ -30,11 +31,11 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponent
     }
   }
 
-  setSkeletonData(data: string) {
-    const skel = this.node.instance
-    const atlas = data.replace('.json', '.atlas')
-    skel.initWithArgs(data, atlas, this.node.scale)
-  }
+  // setSkeletonData(data: string) {
+  //   const skel = this.node.instance
+  //   const atlas = data.replace('.json', '.atlas')
+  //   skel.initWithArgs(data, atlas, this.node.scale)
+  // }
 }
 
 Object.defineProperty(SpineSkeleton.prototype, 'render', { value: render })

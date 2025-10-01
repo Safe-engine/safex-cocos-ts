@@ -1,4 +1,3 @@
-import * as spine from '@esotericsoftware/spine-core'
 /****************************************************************************
  Copyright (c) 2017 Chukong Technologies Inc.
 
@@ -23,10 +22,12 @@ import * as spine from '@esotericsoftware/spine-core'
  THE SOFTWARE.
  ****************************************************************************/
 
-export const SkeletonTexture = function (image) {
-  // spine.Texture.call(this, image);
+import { Texture } from '@esotericsoftware/spine-core'
+
+export const SkeletonTexture = function () {
+  // Texture.call(this, image);
 }
-cc.inherits(SkeletonTexture, spine.Texture)
+cc.inherits(SkeletonTexture, Texture)
 cc.extend(SkeletonTexture.prototype, {
   name: 'SkeletonTexture',
   _texture: null,

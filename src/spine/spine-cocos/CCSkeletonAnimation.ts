@@ -1,6 +1,14 @@
-import * as spine from '@esotericsoftware/spine-core'
-
-import { Skeleton } from './CCSkeleton'
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+import {
+  Animation,
+  AnimationState,
+  AnimationStateData,
+  AtlasAttachmentLoader,
+  Physics,
+  SkeletonBinary,
+  TextureAtlas,
+} from '@esotericsoftware/spine-core'
+import { CCSkeleton } from './CCSkeleton'
 import { SkeletonTexture } from './CCSkeletonTexture'
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -36,11 +44,11 @@ export const _atlasLoader = {
   load: function (line) {
     const texturePath = cc.path.join(cc.path.dirname(this.spAtlasFile), line)
     const texture = cc.textureCache.addImage(texturePath)
-    const tex = new SkeletonTexture({ width: texture.getPixelsWide(), height: texture.getPixelsHigh() })
+    const tex = new SkeletonTexture()
     tex.setRealTexture(texture)
     return tex
   },
-  unload: function (obj) { },
+  unload: function () {},
 }
 
 /**
@@ -57,7 +65,14 @@ export const ANIMATION_EVENT_TYPE = {
   EVENT: 5,
 }
 
-export const TrackEntryListeners = function (startListener?, endListener?, completeListener?, eventListener?, interruptListener?, disposeListener?) {
+export const TrackEntryListeners = function (
+  startListener?,
+  endListener?,
+  completeListener?,
+  eventListener?,
+  interruptListener?,
+  disposeListener?,
+) {
   this.startListener = startListener || null
   this.endListener = endListener || null
   this.completeListener = completeListener || null
@@ -133,7 +148,7 @@ TrackEntryListeners.getListeners = function (entry) {
 }
 
 /**
- * The skeleton animation of spine. It updates animation's state and skeleton's world transform.
+ * The skeleton animation of  It updates animation's state and skeleton's world transform.
  * @class
  * @extends Skeleton
  * @example
@@ -141,156 +156,151 @@ TrackEntryListeners.getListeners = function (entry) {
  * this.addChild(spineBoy, 4);
  */
 
-export class SkeletonAnimation extends Skeleton {
-  _state: any = null;
-  _ownsAnimationStateData: boolean = false;
-  _listener: any = null;
-
-  constructor(skeletonDataFile?: any, atlasFile?: any, scale?: any) {
-    super(skeletonDataFile, atlasFile, scale);
-  }
-
+export class SkeletonAnimation extends CCSkeleton {
   init(): boolean {
-    super.init();
-    this._ownsAnimationStateData = true;
-    this.setAnimationStateData(new spine.AnimationStateData(this._skeleton.data));
-    return true;
+    super.init()
+    this._ownsAnimationStateData = true
+    this.setAnimationStateData(new AnimationStateData(this._skeleton.data))
+    return true
   }
 
-  setAnimationStateData(stateData: any) {
-    const state = new spine.AnimationState(stateData);
-    this._listener = new TrackEntryListeners();
-    state.addListener(this._listener);
-    this._state = state;
+  setAnimationStateData(stateData: AnimationStateData) {
+    const state = new AnimationState(stateData)
+    this._listener = new TrackEntryListeners()
+    state.addListener(this._listener)
+    this._state = state
   }
 
-  setMix(fromAnimation: string, toAnimation: string, duration: number) {
-    this._state.data.setMixWith(fromAnimation, toAnimation, duration);
+  setMix(fromAnimation: Animation, toAnimation: Animation, duration: number) {
+    this._state.data.setMixWith(fromAnimation, toAnimation, duration)
   }
 
   setAnimationListener(target: any, callback: Function) {
-    this._listener.callbackTarget = target;
-    this._listener.callback = callback;
-    this._listener.skeletonNode = this;
+    this._listener.callbackTarget = target
+    this._listener.callback = callback
+    this._listener.skeletonNode = this
   }
 
   setAnimation(trackIndex: number, name: string, loop: boolean) {
-    const animation = this._skeleton.data.findAnimation(name);
+    const animation = this._skeleton.data.findAnimation(name)
     if (!animation) {
-      cc.log(`Spine: Animation not found: ${name}`);
-      return null;
+      cc.log(
+        `Spine: Animation not found: ${name}`,
+        this._skeleton.data.animations.map((a) => a.name),
+      )
+      return null
     }
-    return this._state.setAnimationWith(trackIndex, animation, loop);
+    return this._state.setAnimationWith(trackIndex, animation, loop)
   }
 
   addAnimation(trackIndex: number, name: string, loop: boolean, delay?: number) {
-    delay = delay == null ? 0 : delay;
-    const animation = this._skeleton.data.findAnimation(name);
+    delay = delay == null ? 0 : delay
+    const animation = this._skeleton.data.findAnimation(name)
     if (!animation) {
-      cc.log(`Spine: Animation not found:${name}`);
-      return null;
+      cc.log(`Spine: Animation not found:${name}`)
+      return null
     }
-    return this._state.addAnimationWith(trackIndex, animation, loop, delay);
+    return this._state.addAnimationWith(trackIndex, animation, loop, delay)
   }
 
   findAnimation(name: string) {
-    return this._skeleton.data.findAnimation(name);
+    return this._skeleton.data.findAnimation(name)
   }
 
   getCurrent(trackIndex: number) {
-    return this._state.getCurrent(trackIndex);
+    return this._state.getCurrent(trackIndex)
   }
 
   clearTracks() {
-    this._state.clearTracks();
+    this._state.clearTracks()
   }
 
   clearTrack(trackIndex: number) {
-    this._state.clearTrack(trackIndex);
+    this._state.clearTrack(trackIndex)
   }
 
   update(dt: number) {
-    super.update(dt);
-    dt *= this._timeScale;
+    super.update(dt)
+    dt *= this._timeScale
     if (this._renderCmd && typeof this._renderCmd.setDirtyFlag === 'function') {
-      this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.contentDirty);
+      this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.contentDirty)
     }
-    this._state.update(dt);
-    this._state.apply(this._skeleton);
-    this._skeleton.updateWorldTransform(true);
+    this._state.update(dt)
+    this._state.apply(this._skeleton)
+    this._skeleton.updateWorldTransform(Physics.pose)
     if (this._renderCmd && typeof this._renderCmd._updateChild === 'function') {
-      this._renderCmd._updateChild();
+      this._renderCmd._updateChild()
     }
   }
 
   setStartListener(listener: Function) {
-    this._listener.startListener = listener;
+    this._listener.startListener = listener
   }
 
   setInterruptListener(listener: Function) {
-    this._listener.interruptListener = listener;
+    this._listener.interruptListener = listener
   }
 
   setEndListener(listener: Function) {
-    this._listener.endListener = listener;
+    this._listener.endListener = listener
   }
 
   setDisposeListener(listener: Function) {
-    this._listener.disposeListener = listener;
+    this._listener.disposeListener = listener
   }
 
   setCompleteListener(listener: Function) {
-    this._listener.completeListener = listener;
+    this._listener.completeListener = listener
   }
 
   setEventListener(listener: Function) {
-    this._listener.eventListener = listener;
+    this._listener.eventListener = listener
   }
 
   setTrackStartListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).startListener = listener;
+    TrackEntryListeners.getListeners(entry).startListener = listener
   }
 
   setTrackInterruptListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).interruptListener = listener;
+    TrackEntryListeners.getListeners(entry).interruptListener = listener
   }
 
   setTrackEndListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).endListener = listener;
+    TrackEntryListeners.getListeners(entry).endListener = listener
   }
 
   setTrackDisposeListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).disposeListener = listener;
+    TrackEntryListeners.getListeners(entry).disposeListener = listener
   }
 
   setTrackCompleteListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).completeListener = listener;
+    TrackEntryListeners.getListeners(entry).completeListener = listener
   }
 
   setTrackEventListener(entry: any, listener: Function) {
-    TrackEntryListeners.getListeners(entry).eventListener = listener;
+    TrackEntryListeners.getListeners(entry).eventListener = listener
   }
 
   getState() {
-    return this._state;
+    return this._state
   }
 
   static createWithJsonFile(skeletonDataFile: any, atlasFile: any, scale?: any) {
-    return new SkeletonAnimation(skeletonDataFile, atlasFile, scale);
+    return new SkeletonAnimation(skeletonDataFile, atlasFile, scale)
   }
 
   static createWithBinaryFile(skeletonDataFile: any, atlasFile: any, scale?: any) {
     const dataTex = cc.loader.getRes(atlasFile)
     _atlasLoader.setAtlasFile(atlasFile)
-    const atlas = new spine.TextureAtlas(dataTex)
+    const atlas = new TextureAtlas(dataTex)
     for (const page of atlas.pages) {
       const texture = _atlasLoader.load(page.name)
       page.setTexture(texture)
     }
-    const attachmentLoader = new spine.AtlasAttachmentLoader(atlas)
-    const skeletonJsonReader = new spine.SkeletonBinary(attachmentLoader)
-    const skeletonJson = cc.loader.getRes(skeletonDataFile)
-    const skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
-    return new SkeletonAnimation(skeletonData);
+    const attachmentLoader = new AtlasAttachmentLoader(atlas)
+    const skeletonBinaryReader = new SkeletonBinary(attachmentLoader)
+    const skeletonBinary = cc.loader.getRes(skeletonDataFile)
+    const skeletonData = skeletonBinaryReader.readSkeletonData(skeletonBinary)
+    return new SkeletonAnimation(skeletonData, true, scale)
   }
 }

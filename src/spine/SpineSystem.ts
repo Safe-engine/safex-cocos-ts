@@ -9,7 +9,7 @@ export class SpineSystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, SpineSkeleton, this.onAddSpineSkeleton)
   }
   private onAddSpineSkeleton: EventReceiveCallback<SpineSkeleton> = async ({ entity, component: spineComp }) => {
-    const { data, skin, animation, loop = true, timeScale = 1 } = spineComp.props
+    const { data, skin, animation, loop = true, timeScale = 1, onAnimationComplete } = spineComp.props
     const { atlas: argAtlasFile, skeleton } = data
     // console.log('spineComp', data)
     let node: SkeletonAnimation
@@ -25,6 +25,11 @@ export class SpineSystem implements System {
       node.setAnimation(0, animation, loop)
     }
     spineComp.node = entity.assign(new NodeComp(node, entity))
+    if (onAnimationComplete) {
+      node.setEventListener((event) => {
+        console.log(event)
+      })
+    }
   }
   // update(entities: EntityManager) {
   //   const animations = entities.entities_with_components(SpineSkeleton)

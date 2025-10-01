@@ -1,4 +1,3 @@
-import * as spine from '@esotericsoftware/spine-core';
 /****************************************************************************
  Copyright (c) 2013-2014 Chukong Technologies Inc.
 
@@ -22,6 +21,8 @@ import * as spine from '@esotericsoftware/spine-core';
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+
+import { BlendMode, MeshAttachment, RegionAttachment, Utils } from '@esotericsoftware/spine-core'
 
 export const WebGLRenderCmd = function (renderableObject) {
   this._rootCtor(renderableObject)
@@ -67,9 +68,9 @@ proto.uploadData = function (f32buffer, ui32buffer, vertexDataOffset) {
 
     // get the vertices length
     let vertCount = 0
-    if (attachment instanceof spine.RegionAttachment) {
+    if (attachment instanceof RegionAttachment) {
       vertCount = 6 // a quad = two triangles = six vertices
-    } else if (attachment instanceof spine.MeshAttachment) {
+    } else if (attachment instanceof MeshAttachment) {
       vertCount = attachment.regionUVs.length / 2
     } else {
       continue
@@ -82,7 +83,7 @@ proto.uploadData = function (f32buffer, ui32buffer, vertexDataOffset) {
 
     const regionTextureAtlas = node.getTextureAtlas(attachment)
     // Broken for changing batch info
-    var batchBroken
+    let batchBroken
     if (regionTextureAtlas.texture) {
       this._currTexture = regionTextureAtlas.texture.getRealTexture()
       batchBroken = cc.renderer._updateBatchedInfo(
@@ -105,9 +106,9 @@ proto.uploadData = function (f32buffer, ui32buffer, vertexDataOffset) {
 
     // update the vertex buffer
     let slotDebugPoints = null
-    if (attachment instanceof spine.RegionAttachment) {
+    if (attachment instanceof RegionAttachment) {
       slotDebugPoints = this._uploadRegionAttachmentData(attachment, slot, premultiAlpha, f32buffer, ui32buffer, vertexDataOffset)
-    } else if (attachment instanceof spine.MeshAttachment) {
+    } else if (attachment instanceof MeshAttachment) {
       this._uploadMeshAttachmentData(attachment, slot, premultiAlpha, f32buffer, ui32buffer, vertexDataOffset)
     } else {
       continue
@@ -118,7 +119,7 @@ proto.uploadData = function (f32buffer, ui32buffer, vertexDataOffset) {
     }
 
     // update the index buffer
-    if (attachment instanceof spine.RegionAttachment) {
+    if (attachment instanceof RegionAttachment) {
       cc.renderer._increaseBatchingSize(vertCount, cc.renderer.VertexType.TRIANGLE)
     } else {
       cc.renderer._increaseBatchingSize(vertCount, cc.renderer.VertexType.CUSTOM, attachment.triangles)
@@ -192,19 +193,19 @@ proto.uploadData = function (f32buffer, ui32buffer, vertexDataOffset) {
 proto._getBlendFunc = function (blendMode, premultiAlpha) {
   let ret = this._currBlendFunc
   switch (blendMode) {
-    case spine.BlendMode.Normal:
+    case BlendMode.Normal:
       ret.src = premultiAlpha ? cc.ONE : cc.SRC_ALPHA
       ret.dst = cc.ONE_MINUS_SRC_ALPHA
       break
-    case spine.BlendMode.Additive:
+    case BlendMode.Additive:
       ret.src = premultiAlpha ? cc.ONE : cc.SRC_ALPHA
       ret.dst = cc.ONE
       break
-    case spine.BlendMode.Multiply:
+    case BlendMode.Multiply:
       ret.src = cc.DST_COLOR
       ret.dst = cc.ONE_MINUS_SRC_ALPHA
       break
-    case spine.BlendMode.Screen:
+    case BlendMode.Screen:
       ret.src = cc.ONE
       ret.dst = cc.ONE_MINUS_SRC_COLOR
       break
@@ -216,9 +217,9 @@ proto._getBlendFunc = function (blendMode, premultiAlpha) {
   return ret
 }
 
-proto._createChildFormSkeletonData = function () { }
+proto._createChildFormSkeletonData = function () {}
 
-proto._updateChild = function () { }
+proto._updateChild = function () {}
 
 proto._uploadRegionAttachmentData = function (attachment, slot, premultipliedAlpha, f32buffer, ui32buffer, vertexDataOffset) {
   // the vertices in format:
@@ -235,7 +236,7 @@ proto._uploadRegionAttachmentData = function (attachment, slot, premultipliedAlp
     nodeB = nodeColor.b,
     nodeA = this._displayedOpacity
 
-  const vertices = spine.Utils.setArraySize([], 8, 0)
+  const vertices = Utils.setArraySize([], 8, 0)
   attachment.computeWorldVertices(slot, vertices, 0, 2)
 
   const uvs = attachment.uvs
@@ -289,7 +290,7 @@ proto._uploadRegionAttachmentData = function (attachment, slot, premultipliedAlp
 
   if (this._node._debugSlots) {
     // return the quad points info if debug slot enabled
-    const VERTEX = spine.RegionAttachment
+    const VERTEX = RegionAttachment
     return [
       cc.p(vertices[VERTEX.X1], vertices[VERTEX.Y1]),
       cc.p(vertices[VERTEX.X2], vertices[VERTEX.Y2]),
@@ -310,7 +311,7 @@ proto._uploadMeshAttachmentData = function (attachment, slot, premultipliedAlpha
     z = this._node.vertexZ
   // get the vertex data
   const verticesLength = attachment.worldVerticesLength
-  const vertices = spine.Utils.setArraySize([], verticesLength, 0)
+  const vertices = Utils.setArraySize([], verticesLength, 0)
   attachment.computeWorldVertices(slot, 0, verticesLength, vertices, 0, 2)
 
   const uvs = attachment.uvs
