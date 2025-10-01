@@ -26,8 +26,9 @@ export class SpineSystem implements System {
     }
     spineComp.node = entity.assign(new NodeComp(node, entity))
     if (onAnimationComplete) {
-      node.setEventListener((event) => {
-        console.log(event)
+      node.setCompleteListener((track, loopCount) => {
+        // console.log(track, loopCount)
+        onAnimationComplete(track, loopCount)
       })
     }
   }

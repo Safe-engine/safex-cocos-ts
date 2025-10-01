@@ -184,10 +184,7 @@ export class SkeletonAnimation extends CCSkeleton {
   setAnimation(trackIndex: number, name: string, loop: boolean) {
     const animation = this._skeleton.data.findAnimation(name)
     if (!animation) {
-      cc.log(
-        `Spine: Animation not found: ${name}`,
-        this._skeleton.data.animations.map((a) => a.name),
-      )
+      cc.log(`Spine: Animation not found: ${name}/${this._skeleton.data.animations.map((a) => a.name)} `)
       return null
     }
     return this._state.setAnimationWith(trackIndex, animation, loop)
