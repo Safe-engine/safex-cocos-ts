@@ -21,8 +21,8 @@ interface ColliderProps extends BaseComponentProps<Collider> {
   onCollisionStay?: (other: Collider) => void
 }
 export class Collider<T = ColliderProps> extends ComponentX<T> {
-  _worldPoints: cc.Vec2[] | cc.Point[] = []
-  _worldPosition: cc.Vec2 | cc.Point
+  _worldPoints: Vec2[] | cc.Point[] = []
+  _worldPosition: Vec2 | cc.Point
   _worldRadius
   _AABB: cc.Rect = cc.rect(0, 0, 0, 0)
   _preAabb: cc.Rect = cc.rect(0, 0, 0, 0)

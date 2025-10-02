@@ -18,8 +18,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       cocos-html5-ts:
-        specifier: ^1.2.3
-        version: 1.2.3
+        specifier: ^1.2.4
+        version: 1.2.4
       entityx-ts:
         specifier: ^2.3.1
         version: 2.3.1
@@ -42,8 +42,8 @@ packages:
   box2d-wasm@7.0.0:
     resolution: {integrity: sha512-6KbPoYDjm259fTh/3dw/HgP0tbqIBtKTNy2shtphWjMYgHOlYpmygHSLl6qOT79ObSiscVdkL8bYuH95bbLSSw==}
 
-  cocos-html5-ts@1.2.3:
-    resolution: {integrity: sha512-dI2PLw3ZOLvEUEbjmBS0C/nw3uUC+TwCxq2wcmIy7VsTClgd3pGQ7xnvbOQ+pdUTktIWVcSkN85McPLU9/HeMQ==}
+  cocos-html5-ts@1.2.4:
+    resolution: {integrity: sha512-vTeMHLivQe+8ER8TlUl6FIiibvkeuOAy5nZ92/e9gozMiazh3n867fusvCjEpiCmSJXiTur7rrQRYZKbR03/Lw==}
 
   entityx-ts@2.3.1:
     resolution: {integrity: sha512-y4wEkwO44+xwtFU1R2Nq4+xiUowp8TH91EFd2RXEDu4C11SXeU8L3x3S3ORZy7pSoIUdQ4TaxkgiRuitk/XFMQ==}
@@ -65,7 +65,7 @@ snapshots:
     dependencies:
       '@types/emscripten': 1.41.2
 
-  cocos-html5-ts@1.2.3: {}
+  cocos-html5-ts@1.2.4: {}
 
   entityx-ts@2.3.1: {}
 

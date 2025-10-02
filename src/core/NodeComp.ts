@@ -237,7 +237,7 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     return Vec2(x, y)
   }
 
-  convertToWorldSpaceAR(point: cc.Vec2) {
+  convertToWorldSpaceAR(point: Vec2) {
     const { x, y } = this.instance.convertToWorldSpaceAR(point)
     return Vec2(x, y)
   }
