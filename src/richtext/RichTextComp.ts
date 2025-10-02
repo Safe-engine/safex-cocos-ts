@@ -31,7 +31,7 @@ export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentPr
           // console.log('richText', richText, (ccui as any).RichElementCustomNode)
           const label = new ccui.Text(text, fontName, fontSize)
           label.enableOutline(cc.hexToColor(style.outline.color), style.outline.width || 3)
-          const customElem = new (ccui as any).RichElementCustomNode.create(1, cc.color(255, 0, 0), 255, label)
+          const customElem = ccui.RichElementCustomNode.create(1, cc.color(255, 0, 0), 255, label)
           this.node.instance.pushBackElement(customElem)
         } else {
           const color = style.color ? cc.hexToColor(style.color) : cc.Color.WHITE
