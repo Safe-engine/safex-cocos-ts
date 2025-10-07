@@ -44,7 +44,7 @@ export const _atlasLoader = {
   load: function (line) {
     const texturePath = cc.path.join(cc.path.dirname(this.spAtlasFile), line)
     const texture = cc.textureCache.addImage(texturePath)
-    const tex = new SkeletonTexture()
+    const tex = new SkeletonTexture({ width: texture.getPixelsWide(), height: texture.getPixelsHigh() })
     tex.setRealTexture(texture)
     return tex
   },

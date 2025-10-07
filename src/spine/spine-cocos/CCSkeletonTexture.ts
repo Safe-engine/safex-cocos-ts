@@ -24,45 +24,44 @@
 
 import { Texture } from '@esotericsoftware/spine-core'
 
-export const SkeletonTexture = function () {
-  // Texture.call(this, image);
-}
-cc.inherits(SkeletonTexture, Texture)
-cc.extend(SkeletonTexture.prototype, {
-  name: 'SkeletonTexture',
-  _texture: null,
+export class SkeletonTexture extends Texture {
+  constructor(image) {
+    super(image)
+  }
+  name = 'SkeletonTexture'
+  _texture = null
 
-  setRealTexture: function (tex) {
+  setRealTexture(tex) {
     this._texture = tex
-  },
+  }
 
-  getRealTexture: function () {
+  getRealTexture() {
     return this._texture
-  },
+  }
 
-  setFilters: function (minFilter, magFilter) {
+  setFilters(minFilter, magFilter) {
     if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
       const gl = cc._renderContext
       this.bind()
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, minFilter)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magFilter)
     }
-  },
+  }
 
-  setWraps: function (uWrap, vWrap) {
+  setWraps(uWrap, vWrap) {
     if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
       const gl = cc._renderContext
       this.bind()
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, uWrap)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, vWrap)
     }
-  },
+  }
 
-  dispose: function () {},
+  dispose() {}
 
-  bind: function () {
+  bind() {
     if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
       cc.glBindTexture2D(this._texture)
     }
-  },
-})
+  }
+}

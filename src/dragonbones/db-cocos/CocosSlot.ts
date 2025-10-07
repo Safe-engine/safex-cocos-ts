@@ -45,15 +45,11 @@ export class CocosSlot extends Slot {
   }
 
   protected _initDisplay(value: any, isRetain: boolean): void {
-    // tslint:disable-next-line:no-unused-expression
-    value
-    // tslint:disable-next-line:no-unused-expression
-    isRetain
+    // value
+    // isRetain
   }
 
   protected _disposeDisplay(value: any, isRelease: boolean): void {
-    // tslint:disable-next-line:no-unused-expression
-    value
     if (!isRelease) {
       ;(value as cc.Node).release()
     }
@@ -103,14 +99,15 @@ export class CocosSlot extends Slot {
 
   protected _updateColor(): void {
     const alpha = this._colorTransform.alphaMultiplier * this._globalAlpha
-    this._renderDisplay.alpha = alpha
-
-    if (this._renderDisplay instanceof cc.Sprite || this._renderDisplay instanceof Cocos.SimpleMesh) {
-      const color =
-        (Math.round(this._colorTransform.redMultiplier * 0xff) << 16) +
-        (Math.round(this._colorTransform.greenMultiplier * 0xff) << 8) +
-        Math.round(this._colorTransform.blueMultiplier * 0xff)
-      this._renderDisplay.tint = color
+    this._renderDisplay.opacity = alpha * 255
+    if (this._renderDisplay instanceof cc.Sprite || this._renderDisplay instanceof cc.SimpleMesh) {
+      const color = cc.color(
+        Math.round(this._colorTransform.redMultiplier * 0xff),
+        Math.round(this._colorTransform.greenMultiplier * 0xff),
+        Math.round(this._colorTransform.blueMultiplier * 0xff),
+        255,
+      )
+      this._renderDisplay.color = color
     }
     // TODO child armature.
   }
