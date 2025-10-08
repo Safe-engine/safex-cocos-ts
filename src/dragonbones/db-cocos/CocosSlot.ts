@@ -61,18 +61,23 @@ export class CocosSlot extends Slot {
     const container = this._armature.display as CocosArmatureDisplay
     container.addChild(this._renderDisplay, this._zOrder)
   }
-
   protected _replaceDisplay(value: any): void {
-    const container = this._armature.display as CocosArmatureDisplay
+    const container = this._armature.display as cc.Node
     const prevDisplay = value as cc.Node
-    container.addChild(this._renderDisplay)
-    // container.swapChildren(this._renderDisplay, prevDisplay);
-    container.removeChild(prevDisplay)
+
+    if (this._renderDisplay.parent !== container) {
+      container.addChild(this._renderDisplay, prevDisplay.getLocalZOrder())
+    }
+
+    // container.removeChild(prevDisplay, false);
+    // this._renderDisplay.active = true
+    // prevDisplay.active = false
+
     this._textureScale = 1.0
   }
 
   protected _removeDisplay(): void {
-    this._renderDisplay.parent.removeChild(this._renderDisplay)
+    this._renderDisplay.parent.removeChild(this._renderDisplay, false)
   }
 
   protected _updateZOrder(): void {
@@ -93,7 +98,7 @@ export class CocosSlot extends Slot {
     if (this._childArmature) {
       const childSlots = this._childArmature.getSlots()
       for (let i = 0, l = childSlots.length; i < l; i++) {
-        const slot = childSlots[i]
+        const slot = childSlots[i] as CocosSlot
         slot._blendMode = this._blendMode
         slot._updateBlendMode()
       }
@@ -148,7 +153,7 @@ export class CocosSlot extends Slot {
           const uvOffset = vertexOffset + vertexCount * 2
           const scale = this._armature._armatureData.scale
 
-          const meshDisplay = this._renderDisplay as cc.SimpleMesh
+          const meshDisplay = this._renderDisplay as SimpleMeshNode
 
           const vertices = new Float32Array(vertexCount * 2) as any
           const uvs = new Float32Array(vertexCount * 2) as any
@@ -199,7 +204,7 @@ export class CocosSlot extends Slot {
     }
 
     if (this._geometryData) {
-      const meshDisplay = this._renderDisplay as cc.SimpleMesh
+      const meshDisplay = this._renderDisplay as SimpleMeshNode
       meshDisplay.texture = null as any
       meshDisplay.x = 0.0
       meshDisplay.y = 0.0
