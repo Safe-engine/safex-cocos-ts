@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * The MIT License (MIT)
  *
@@ -26,6 +25,7 @@ import { BaseObject, BinaryOffset, BoneType, Slot, Transform } from '@cocos/drag
 
 import { CocosArmatureDisplay } from './CocosArmatureDisplay'
 import { CocosTextureAtlasData, CocosTextureData } from './CocosTextureAtlasData'
+import { SimpleMeshNode } from './SimpleMeshNode'
 
 export class CocosSlot extends Slot {
   _updateGlueMesh(): void {}
@@ -36,6 +36,8 @@ export class CocosSlot extends Slot {
   private _ccMeshDirty = false
   private _textureScale: number
   private _renderDisplay: cc.Node
+  _geometryData
+  _geometryBones
 
   protected _onClear(): void {
     super._onClear()
@@ -45,7 +47,7 @@ export class CocosSlot extends Slot {
     // this._updateTransform = cc[0] === '3' ? this._updateTransformV3 : this._updateTransformV4;
   }
 
-  protected _initDisplay(value: any, isRetain: boolean): void {}
+  protected _initDisplay(): void {}
 
   protected _disposeDisplay(value: any, isRelease: boolean): void {
     if (!isRelease) {
@@ -142,9 +144,9 @@ export class CocosSlot extends Slot {
           const data = this._geometryData.data
           const intArray = data.intArray
           const floatArray = data.floatArray
-          const vertexCount = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexCount]
-          const triangleCount = intArray[this._geometryData.offset + BinaryOffset.GeometryTriangleCount]
-          let vertexOffset = intArray[this._geometryData.offset + BinaryOffset.GeometryFloatOffset]
+          const vertexCount = intArray[this._geometryData.offset + BinaryOffset.MeshVertexCount]
+          const triangleCount = intArray[this._geometryData.offset + BinaryOffset.MeshTriangleCount]
+          let vertexOffset = intArray[this._geometryData.offset + BinaryOffset.MeshFloatOffset]
 
           if (vertexOffset < 0) {
             vertexOffset += 65536 // Fixed out of bouds bug.
@@ -163,7 +165,7 @@ export class CocosSlot extends Slot {
           }
 
           for (let i = 0; i < triangleCount * 3; ++i) {
-            indices[i] = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexIndices + i]
+            indices[i] = intArray[this._geometryData.offset + BinaryOffset.MeshVertexIndices + i]
           }
 
           for (let i = 0, l = vertexCount * 2; i < l; i += 2) {
@@ -180,10 +182,10 @@ export class CocosSlot extends Slot {
           }
 
           this._textureScale = 1.0
-          meshDisplay.texture = renderTexture as any
-          meshDisplay.vertices = vertices
-          meshDisplay.uvBuffer.update(uvs)
-          meshDisplay.geometry.addIndex(indices)
+          meshDisplay.setTexture(renderTexture as any)
+          meshDisplay.setVertices(vertices)
+          // meshDisplay.uvBuffer.update(uvs)
+          // meshDisplay.geometry.addIndex(indices)
 
           const isSkinned = this._geometryData.weight !== null
           const isSurface = this._parent._boneData.type !== BoneType.Bone
@@ -205,13 +207,13 @@ export class CocosSlot extends Slot {
 
     if (this._geometryData) {
       const meshDisplay = this._renderDisplay as SimpleMeshNode
-      meshDisplay.texture = null as any
+      meshDisplay.setTexture(null)
       meshDisplay.x = 0.0
       meshDisplay.y = 0.0
       meshDisplay.visible = false
     } else {
       const normalDisplay = this._renderDisplay as cc.Sprite
-      normalDisplay.texture = null as any
+      normalDisplay.texture = null
       normalDisplay.x = 0.0
       normalDisplay.y = 0.0
       normalDisplay.visible = false
@@ -224,10 +226,10 @@ export class CocosSlot extends Slot {
     // console.log(this._renderDisplay)
     const deformVertices = this._deformVertices
     const bones = this._geometryBones
-    const geometryData = this._geometryData as GeometryData
+    const geometryData = this._geometryData
     const weightData = deformVertices.verticesData.weight
 
-    const hasDeform = deformVertices.length > 0 && deformVertices.verticesData.inheritDeform
+    const hasDeform = deformVertices.vertices.length > 0 && deformVertices.verticesData.inheritDeform
     // const meshDisplay = (this._renderDisplay.getComponent(cc.Sprite) as any)._sgNode; // as cc.Scale9Sprite;
     const polygonInfo = this._meshDisplay._polygonInfo
     if (!polygonInfo) {
@@ -355,8 +357,8 @@ export class CocosSlot extends Slot {
     boundsRect.height -= boundsRect.y
 
     polygonInfo.rect = boundsRect
-    meshDisplay.setContentSize(cc.size(boundsRect.width, boundsRect.height))
-    meshDisplay.setMeshPolygonInfo(polygonInfo)
+    this.meshDisplay.setContentSize(cc.size(boundsRect.width, boundsRect.height))
+    this.meshDisplay.setMeshPolygonInfo(polygonInfo)
 
     if (weightData !== null) {
       this._identityTransform()
