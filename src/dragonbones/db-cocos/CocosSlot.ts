@@ -33,6 +33,7 @@ export class CocosSlot extends Slot {
     return '[class dragonBones.CocosSlot]'
   }
 
+  private _ccMeshDirty = false
   private _textureScale: number
   private _renderDisplay: cc.Node
 
@@ -44,10 +45,7 @@ export class CocosSlot extends Slot {
     // this._updateTransform = cc[0] === '3' ? this._updateTransformV3 : this._updateTransformV4;
   }
 
-  protected _initDisplay(value: any, isRetain: boolean): void {
-    // value
-    // isRetain
-  }
+  protected _initDisplay(value: any, isRetain: boolean): void {}
 
   protected _disposeDisplay(value: any, isRelease: boolean): void {
     if (!isRelease) {
@@ -61,7 +59,7 @@ export class CocosSlot extends Slot {
 
   protected _addDisplay(): void {
     const container = this._armature.display as CocosArmatureDisplay
-    container.addChild(this._renderDisplay)
+    container.addChild(this._renderDisplay, this._zOrder)
   }
 
   protected _replaceDisplay(value: any): void {
@@ -92,24 +90,24 @@ export class CocosSlot extends Slot {
   }
 
   protected _updateBlendMode(): void {
-    if (this._renderDisplay instanceof cc.Sprite) {
+    if (this._childArmature) {
+      const childSlots = this._childArmature.getSlots()
+      for (let i = 0, l = childSlots.length; i < l; i++) {
+        const slot = childSlots[i]
+        slot._blendMode = this._blendMode
+        slot._updateBlendMode()
+      }
     }
-    // TODO child armature.
   }
 
   protected _updateColor(): void {
-    const alpha = this._colorTransform.alphaMultiplier * this._globalAlpha
-    this._renderDisplay.opacity = alpha * 255
-    if (this._renderDisplay instanceof cc.Sprite || this._renderDisplay instanceof cc.SimpleMesh) {
-      const color = cc.color(
-        Math.round(this._colorTransform.redMultiplier * 0xff),
-        Math.round(this._colorTransform.greenMultiplier * 0xff),
-        Math.round(this._colorTransform.blueMultiplier * 0xff),
-        255,
-      )
-      this._renderDisplay.color = color
-    }
-    // TODO child armature.
+    const color = cc.color(
+      Math.round(this._colorTransform.redMultiplier * 255),
+      Math.round(this._colorTransform.greenMultiplier * 255),
+      Math.round(this._colorTransform.blueMultiplier * 255),
+      Math.round(this._colorTransform.alphaMultiplier * 255),
+    )
+    this._renderDisplay.color = color
   }
 
   protected _updateFrame(): void {

@@ -18,13 +18,13 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@cocos/dragonbones-js": "^1.0.2",
     "@esotericsoftware/spine-core": "^4.2.93",
     "box2d-wasm": "^7.0.0",
-    "cocos-html5-ts": "^1.2.4",
+    "cocos-html5-ts": "^2.0.1",
     "entityx-ts": "^2.3.1"
   },
   "author": "",
