@@ -80,6 +80,9 @@ export class SimpleMeshNode extends cc.Node {
   setTexture(tex: cc.Texture2D): void {
     this._texture = tex
   }
+  setSpriteFrame(renderTexture) {
+    this._texture = renderTexture._texture
+  }
 
   // override visit to draw mesh at correct point in scene graph
   visit(ctx?: unknown): void {
@@ -277,8 +280,9 @@ export class SimpleMeshNode extends cc.Node {
     if (this._texture) {
       gl.activeTexture(gl.TEXTURE0)
       const webTex = this._texture._webTextureObj || (this._texture.getTexture ? this._texture.getTexture() : null)
+      // console.log(gl.TEXTURE_2D, webTex)
       if (webTex) {
-        gl.bindTexture(gl.TEXTURE_2D, webTex)
+        gl.bindTexture(gl.TEXTURE_2D, webTex._webTextureObj)
       } else {
         const img = this._texture.getHtmlElementObj ? this._texture.getHtmlElementObj() : this._texture
         if (img) {
@@ -373,7 +377,7 @@ export class SimpleMeshNode extends cc.Node {
         if (this._ibo) this._gl.deleteBuffer(this._ibo)
         if (this._program) this._gl.deleteProgram(this._program)
       } catch (e) {
-        /* ignore */
+        console.log('onExit', e)
       }
       this._gl = null
     }

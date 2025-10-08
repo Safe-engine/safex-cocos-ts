@@ -99,7 +99,7 @@ export class CocosTextureAtlasData extends TextureAtlasData {
 
         const spriteFrame = new cc.SpriteFrame(this._renderTexture, rect, textureData.rotated, offset, originSize)
         // console.log('sf', sf)
-        textureData.renderTexture = spriteFrame
+        textureData.spriteFrame = spriteFrame
       }
     } else {
       for (const k in this.textures) {
@@ -107,7 +107,7 @@ export class CocosTextureAtlasData extends TextureAtlasData {
         // if (textureData.renderTexture !== null) {
         //   textureData.renderTexture.destroy();
         // }
-        textureData.renderTexture = null
+        textureData.spriteFrame = null
       }
     }
   }
@@ -120,15 +120,15 @@ export class CocosTextureData extends TextureData {
     return '[class dragonBones.CocosTextureData]'
   }
 
-  public renderTexture: cc.SpriteFrame | null = null // Initial value.
+  public spriteFrame: cc.SpriteFrame | null = null // Initial value.
 
   protected _onClear(): void {
     super._onClear()
 
-    // if (this.renderTexture !== null) {
-    //   this.renderTexture.destroy();
+    // if (this.spriteFrame !== null) {
+    //   this.spriteFrame.destroy();
     // }
 
-    this.renderTexture = null
+    this.spriteFrame = null
   }
 }

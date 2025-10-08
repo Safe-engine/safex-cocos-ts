@@ -205,8 +205,8 @@ export class CocosFactory extends BaseFactory {
    */
   public getTextureDisplay(textureName: string, textureAtlasName: string | null = null): cc.Sprite | null {
     const textureData = this._getTextureData(textureAtlasName !== null ? textureAtlasName : '', textureName) as CocosTextureData
-    if (textureData !== null && textureData.renderTexture !== null) {
-      return new cc.Sprite(textureData.renderTexture)
+    if (textureData !== null && textureData.spriteFrame !== null) {
+      return new cc.Sprite(textureData.spriteFrame)
     }
 
     return null

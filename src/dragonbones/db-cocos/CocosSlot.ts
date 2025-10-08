@@ -137,7 +137,7 @@ export class CocosSlot extends Slot {
         currentTextureData = currentTextureAtlasData.getTexture(currentTextureData.name) as CocosTextureData
       }
 
-      const renderTexture = currentTextureData.renderTexture
+      const renderTexture = currentTextureData.spriteFrame
       if (renderTexture !== null) {
         if (this._geometryData) {
           // Mesh.
@@ -196,6 +196,7 @@ export class CocosSlot extends Slot {
           // Normal texture.
           this._textureScale = currentTextureData.parent.scale * this._armature._armatureData.scale
           const normalDisplay = this._renderDisplay as cc.Sprite
+          // console.log(normalDisplay, renderTexture)
           normalDisplay.setSpriteFrame(renderTexture)
         }
 
