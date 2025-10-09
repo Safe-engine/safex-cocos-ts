@@ -36,15 +36,14 @@ import {
 import { CocosArmatureDisplay } from './CocosArmatureDisplay'
 import { CocosSlot } from './CocosSlot'
 import { CocosTextureAtlasData, CocosTextureData } from './CocosTextureAtlasData'
-import { SimpleMeshNode } from './SimpleMeshNode'
 
 /**
- * - The PixiJS factory.
+ * - The Cocos factory.
  * @version DragonBones 3.0
  * @language en_US
  */
 /**
- * - PixiJS 工厂。
+ * - Cocos 工厂。
  * @version DragonBones 3.0
  * @language zh_CN
  */
@@ -61,11 +60,6 @@ export class CocosFactory extends BaseFactory {
   public static advanceTime(passedTime: number): void {
     this._dragonBonesInstance.advanceTime(passedTime)
   }
-
-  /*
-   * whether use `PIXI.Ticker.shared`
-   */
-  public static useSharedTicker = true
 
   /**
    * - A global factory instance that can be used directly.
@@ -138,7 +132,7 @@ export class CocosFactory extends BaseFactory {
 
   protected _buildSlot(_dataPackage: BuildArmaturePackage, slotData: SlotData, armature: DisplayData[]): Slot {
     const slot = BaseObject.borrowObject(CocosSlot)
-    slot.init(slotData, armature, new cc.Sprite(), new SimpleMeshNode())
+    slot.init(slotData, armature, new cc.Sprite(), new cc.Sprite())
 
     return slot
   }
