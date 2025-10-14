@@ -49,23 +49,23 @@ export class CocosSlot extends Slot {
 
   protected _initDisplay(): void {}
 
-  protected _disposeDisplay(value: any, isRelease: boolean): void {
+  protected _disposeDisplay(value: cc.Node, isRelease: boolean): void {
     if (!isRelease) {
-      ;(value as cc.Node).release()
+      value.release()
     }
   }
 
   protected _onUpdateDisplay(): void {
-    this._renderDisplay = (this._display ? this._display : this._rawDisplay) as cc.Node
+    this._renderDisplay = this._display ? this._display : this._rawDisplay
   }
 
   protected _addDisplay(): void {
     const container = this._armature.display as CocosArmatureDisplay
     container.addChild(this._renderDisplay, this._zOrder)
   }
-  protected _replaceDisplay(value: any): void {
+  protected _replaceDisplay(value: cc.Node): void {
     const container = this._armature.display as cc.Node
-    const prevDisplay = value as cc.Node
+    const prevDisplay = value
 
     if (this._renderDisplay.parent !== container) {
       container.addChild(this._renderDisplay, prevDisplay.getLocalZOrder())

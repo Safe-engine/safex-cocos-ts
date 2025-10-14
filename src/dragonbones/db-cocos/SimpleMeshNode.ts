@@ -35,7 +35,7 @@ export class SimpleMeshNode extends cc.Node {
     this._indices = indices || new Uint16Array(0)
 
     this._fallbackDraw = new cc.DrawNode()
-    this._useWebGL = !!(cc as unknown as { _renderContext?: WebGLRenderingContext })._renderContext
+    this._useWebGL = !!cc._renderContext
 
     // size/anchor auto-estimate from vertex bounds (optional)
     this._updateContentSizeFromVertices()
@@ -96,7 +96,7 @@ export class SimpleMeshNode extends cc.Node {
 
   // core drawing function
   _drawMesh(): void {
-    if (this._useWebGL && (cc as unknown as { _renderContext?: WebGLRenderingContext })._renderContext) {
+    if (this._useWebGL && cc._renderContext) {
       this._drawMeshWebGL()
     } else {
       this._drawMeshCanvasFallback()
@@ -105,7 +105,7 @@ export class SimpleMeshNode extends cc.Node {
 
   _ensureGL(): void {
     if (this._gl && this._program) return
-    const gl: WebGLRenderingContext | undefined = (cc as unknown as { _renderContext?: WebGLRenderingContext })._renderContext
+    const gl: WebGLRenderingContext | undefined = cc._renderContext
     if (!gl) {
       this._useWebGL = false
       return
@@ -223,9 +223,9 @@ export class SimpleMeshNode extends cc.Node {
     const c = -sin * sy
     const d = cos * sy
 
-    const anchor = this.getAnchorPoint ? (this as any).getAnchorPoint() : { x: 0, y: 0 }
-    const aw = anchor.x * (this as any).width
-    const ah = anchor.y * (this as any).height
+    const anchor = this.getAnchorPoint ? this.getAnchorPoint() : { x: 0, y: 0 }
+    const aw = anchor.x * this.width
+    const ah = anchor.y * this.height
     const e = tx - (a * aw + c * ah)
     const f = ty - (b * aw + d * ah)
 
@@ -233,7 +233,7 @@ export class SimpleMeshNode extends cc.Node {
   }
 
   _drawMeshWebGL(): void {
-    const gl: WebGLRenderingContext | undefined = (cc as any)._renderContext
+    const gl: WebGLRenderingContext | undefined = cc._renderContext
     if (!gl) {
       this._useWebGL = false
       return
@@ -301,7 +301,7 @@ export class SimpleMeshNode extends cc.Node {
 
     // resolution
     const uResLoc = gl.getUniformLocation(this._program, 'u_resolution')
-    const viewAny = cc.view as unknown as { getFrameSize?: () => { width: number; height: number } }
+    const viewAny = cc.view
     const sz = viewAny.getFrameSize
       ? viewAny.getFrameSize()
       : { width: cc.director.getWinSize().width, height: cc.director.getWinSize().height }
