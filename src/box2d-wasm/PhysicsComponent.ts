@@ -22,6 +22,7 @@ export class RigidBody extends ComponentX<RigidBodyProps> {
   body: Box2D.b2Body
   physicSprite: PhysicsSprite
   set linearVelocity(vel: Vec2) {
+    // console.log('set linearVelocity(', vel)
     if (!this.node) {
       return
     }
@@ -51,6 +52,8 @@ export class RigidBody extends ComponentX<RigidBodyProps> {
     if (!this.node) {
       return
     }
+    // console.log('applyLinearImpulse', vel, pos)
+    this.body.SetAwake(true)
     if (pos) {
       this.body.ApplyLinearImpulse(new box2D.b2Vec2(vel.x, vel.y), new box2D.b2Vec2(pos.x, pos.y), true)
     } else {

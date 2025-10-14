@@ -1,4 +1,5 @@
 import { Vec2 } from '../polyfills'
+import { PTM_RATIO } from './PhysicsSystem'
 
 export class PhysicsSprite {
   node: cc.Node
@@ -16,8 +17,8 @@ export class PhysicsSprite {
     // const pos = this.physicsBody.GetPosition()
     // use cc.lerp to smooth the position update
     const pos = Vec2(
-      cc.lerp(this.node.x, this.physicsBody.GetPosition().x, dt * 10),
-      cc.lerp(this.node.y, this.physicsBody.GetPosition().y, dt * 10),
+      cc.lerp(this.node.x, this.physicsBody.GetPosition().x * PTM_RATIO, dt * 10),
+      cc.lerp(this.node.y, this.physicsBody.GetPosition().y * PTM_RATIO, dt * 10),
     )
     this.node.setPosition(pos.x, pos.y)
     // lerp the rotation

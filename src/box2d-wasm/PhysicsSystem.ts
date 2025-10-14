@@ -12,6 +12,7 @@ import { PhysicsSprite } from './PhysicsSprite'
 export const DynamicBody = 2
 export const KinematicBody = 1
 export const StaticBody = 0
+export const PTM_RATIO = 64
 export let box2D: typeof Box2D
 
 export async function initBox2d(wasmUrl?: string) {
@@ -66,7 +67,7 @@ export class PhysicsSystem implements System {
     const scene = cc.director.getRunningScene()
     scene.addChild(graphics)
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsBoxCollider, ({ entity, component: box }) => {
-      // console.log('ComponentAddedEvent PhysicsBoxCollider', component)
+      // console.log('ComponentAddedEvent PhysicsBoxCollider', box)
       let rigidBody = entity.getComponent(RigidBody)
       if (!rigidBody) {
         rigidBody = instantiate(RigidBody)
@@ -85,18 +86,18 @@ export class PhysicsSystem implements System {
       const physicsNode = new PhysicsSprite(node.instance, rigidBody.body)
       rigidBody.physicSprite = physicsNode
       rigidBody.node = node
-      // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
-      // body.setMassData({ mass: 1 } as any)
-      const position = new b2Vec2(node.posX, node.posY)
+      // console.log('body', rigidBody.props, type, b2_staticBody, b2_kinematicBody, b2_dynamicBody, getPointer(body))
+      // body.SetMassData(1)
+      const position = new b2Vec2(node.posX / PTM_RATIO, node.posY / PTM_RATIO)
       const square = new b2PolygonShape()
       const [x = 0, y = 0] = offset
-      square.SetAsBox(width / 2, height / 2, new b2Vec2(x, y), 0)
+      square.SetAsBox(width / 2 / PTM_RATIO, height / 2 / PTM_RATIO, new b2Vec2(x, y), 0)
       const fixtureDef = new b2FixtureDef()
       fixtureDef.set_shape(square)
       fixtureDef.set_density(density)
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
-      fixtureDef.set_isSensor(isSensor !== undefined)
+      fixtureDef.set_isSensor(isSensor)
       rigidBody.body.CreateFixture(fixtureDef)
       rigidBody.body.SetTransform(position, 0)
       rigidBody.body.SetLinearVelocity(zero)
@@ -112,12 +113,12 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = StaticBody, gravityScale = 1, density = 100, friction = 0.5, restitution = 0.3, isSensor = false } = rigidBody.props
+      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor = false } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { radius, offset = [] } = component.props
       const [x = 0, y = 0] = offset
       const zero = new b2Vec2(0, 0)
-      const position = new b2Vec2(node.posX, node.posY)
+      const position = new b2Vec2(node.posX / PTM_RATIO, node.posY / PTM_RATIO)
 
       const bd = new b2BodyDef()
       bd.set_type(type)
@@ -126,11 +127,11 @@ export class PhysicsSystem implements System {
       const body = this.world.CreateBody(bd)
       rigidBody.body = body
       // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
-      // body.setMassData({ mass: 1 } as any)
+      // body.SetMassData(1)
       const physicsNode = new PhysicsSprite(node.instance, body)
       const circleShape = new b2CircleShape()
-      circleShape.set_m_radius(radius)
-      circleShape.set_m_p(new b2Vec2(x, y))
+      circleShape.set_m_radius(radius / PTM_RATIO)
+      circleShape.set_m_p(new b2Vec2(x / PTM_RATIO, y / PTM_RATIO))
       const fixtureDef = new b2FixtureDef()
       fixtureDef.set_shape(circleShape)
       fixtureDef.set_density(density)
@@ -138,12 +139,14 @@ export class PhysicsSystem implements System {
       fixtureDef.set_friction(friction)
       fixtureDef.set_restitution(restitution)
       body.CreateFixture(fixtureDef)
+      body.ResetMassData()
       body.SetTransform(position, 0)
       body.SetLinearVelocity(zero)
       body.SetAwake(true)
       body.SetEnabled(true)
       metadata[getPointer(body)] = node
-
+      console.log('body type', body.GetType())
+      // console.log(position instanceof b2Vec2, zero instanceof b2Vec2)
       rigidBody.physicSprite = physicsNode
       rigidBody.node = node
       component.node = node
@@ -160,7 +163,7 @@ export class PhysicsSystem implements System {
       const { points, offset = [] } = component.props
       const [x = 0, y = 0] = offset
       const zero = new b2Vec2(0, 0)
-      const position = new b2Vec2(node.posX, node.posY)
+      const position = new b2Vec2(node.posX / PTM_RATIO, node.posY / PTM_RATIO)
       const { width, height } = node.contentSize
       const { scaleX, scaleY, anchorX, anchorY } = node
 
@@ -171,12 +174,13 @@ export class PhysicsSystem implements System {
       const body = this.world.CreateBody(bd)
       rigidBody.body = body
       // console.log('body', type, b2_dynamicBody, b2_staticBody, getPointer(body));
-      // body.setMassData({ mass: 1 } as any)
+      body.SetMassData(1)
       const physicsNode = new PhysicsSprite(node.instance, body)
       const polygonShape = new b2PolygonShape()
       const fixedPoints = points.map((p) => {
-        if (p.x) return Vec2(p.x + x - width * anchorX * scaleX, -p.y + y + height * scaleY * anchorY)
-        return Vec2(p[0] + x - width * anchorX * scaleX, -p[1] + y + height * scaleY * anchorY)
+        const px = p.x || p[0]
+        const py = p.y || p[1]
+        return Vec2((px + x - width * anchorX * scaleX) / PTM_RATIO, (-py + y + height * scaleY * anchorY) / PTM_RATIO)
       })
       const [vecArr, destroyVecArr] = pointsToVec2Array(fixedPoints)
       // console.log('vecArr', vecArr, vecArr.Length())

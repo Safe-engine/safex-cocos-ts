@@ -1,20 +1,6 @@
 import { Color4B, Vec2 } from '../polyfills'
+import { PTM_RATIO } from './PhysicsSystem'
 
-/**
- * Forked from Box2D.js
- * @see https://github.com/kripken/box2d.js/blob/f75077b/helpers/embox2d-helpers.js
- * @author dmagunov + Huy Nguyen + fork contributions from Alex Birch
- * @see https://github.com/kripken/box2d.js/blob/49dddd6/helpers/embox2d-html5canvas-debugDraw.js
- * @author dmagunov + fork contributions from Alex Birch
- * @license Zlib https://opensource.org/licenses/Zlib
- * License evidence: https://github.com/kripken/box2d.js/blob/master/README.markdown#box2djs
- *   "box2d.js is zlib licensed, just like Box2D."
- *
- * @typedef {import('box2d-wasm')} Box2DFactory
- * @param {CanvasRenderingContext2D} ctx
- * @param {number} pixelsPerMeter
- * @param {typeof Box2D & EmscriptenModule} box2D
- */
 export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: typeof Box2D) => {
   const {
     b2Color,
@@ -56,7 +42,8 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const setCtxColor = (rgbStr: Color4B) => {
-    // graphics.color = rgbStr
+    // console.log('setCtxColor', rgbStr)
+    graphics.color = rgbStr
     // graphics.strokeStyle = { color: rgbStr }
   }
 
@@ -66,9 +53,10 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const drawPolygon = (vertices, fill) => {
-    // console.log('drawPolygon', vertices, fill)
-    if (fill) graphics.drawPoly(vertices, Color4B(255, 0, 0, 50), 2, Color4B(255, 0, 0, 250))
-    else graphics.drawPoly(vertices, Color4B(255, 0, 0, 0), 2, Color4B(255, 255, 255, 150))
+    const fixed = vertices.map(Vec2).map((v) => v.mul(PTM_RATIO))
+    // console.log('drawPolygon', fixed, fill)
+    if (fill) graphics.drawPoly(fixed, Color4B(255, 0, 0, 50), 2, Color4B(255, 0, 0, 250))
+    else graphics.drawPoly(fixed, Color4B(255, 0, 0, 0), 2, Color4B(255, 255, 255, 150))
     // graphics.drawPoly(vertices[vertices.length - 1].x * pixelsPerMeter, vertices[vertices.length - 1].y * pixelsPerMeter)
     // vertices.forEach((v) => {
     //   graphics.lineTo(v.x * pixelsPerMeter, v.y * pixelsPerMeter)
@@ -84,7 +72,7 @@ export const makeDebugDraw = (graphics: cc.DrawNode, pixelsPerMeter, box2D: type
    * @returns {void}
    */
   const drawCircle = (center, radius, axis, fill) => {
-    graphics.drawCircle(center, radius, 0, 32, true, 2, fill)
+    graphics.drawCircle(cc.pMult(center, PTM_RATIO), radius * PTM_RATIO, 0, 32, fill, 2, Color4B(255, 0, 0, 150))
   }
 
   /**
