@@ -1,4 +1,4 @@
-import { EntityManager, EventManager, EventTypes, System } from 'entityx-ts'
+import { EventManager, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
 import { Touch } from '../polyfills'
@@ -76,8 +76,8 @@ export class NoRenderSystem implements System {
     }
   }
 
-  update(entities: EntityManager, events: EventManager, dt: number)
-  update() {
-    // throw new Error('Method not implemented.');
-  }
+  // update(entities: EntityManager, events: EventManager, dt: number)
+  // update() {
+  // throw new Error('Method not implemented.');
+  // }
 }

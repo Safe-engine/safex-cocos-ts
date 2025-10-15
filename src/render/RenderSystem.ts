@@ -1,7 +1,6 @@
 import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
-import { BLUE, RED } from '../polyfills'
 import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
 
 export enum SpriteTypes {
@@ -13,7 +12,7 @@ export enum SpriteTypes {
   ANIMATION,
 }
 
-function createTiledSprite(src, totalW, totalH) {
+function createTiledSprite(src: string, totalW: number, totalH: number) {
   // tạo sprite từ input
   const tileSprite = new cc.Sprite(src)
   // lấy kích thước gốc của texture
@@ -22,7 +21,8 @@ function createTiledSprite(src, totalW, totalH) {
   const tileH = frame ? frame.getRect().height : tileSprite.getContentSize().height
 
   // tạo renderTexture với kích thước cần phủ
-  const rt = new cc.RenderTexture(totalW, totalH)
+  const { width, height } = cc.winSize
+  const rt = new cc.RenderTexture(width, height)
   rt.beginWithClear(0, 0, 0, 0)
 
   const drawSprite = new cc.Sprite(tileSprite.getTexture())
@@ -38,16 +38,16 @@ function createTiledSprite(src, totalW, totalH) {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const s = new cc.Sprite(frame)
+      s.setFlippedY(true)
       s.setAnchorPoint(0, 0)
       s.setPosition(c * tileW, r * tileH)
       s.visit(rt)
     }
   }
-
   rt.end()
 
   const finalSprite = rt.sprite
-  finalSprite.setFlippedY(true) // RenderTexture bị lật
+  // finalSprite.setFlippedY(true) // RenderTexture bị lật
   finalSprite.setAnchorPoint(0, 0)
   finalSprite.setContentSize(cc.size(totalW, totalH))
 
@@ -93,20 +93,22 @@ export class RenderSystem implements System {
 
   private onAddMaskRender: EventReceiveCallback<MaskRender> = ({ entity, component: maskComp }) => {
     const { inverted, spriteFrame, cropSize, alphaThreshold = 0.05 } = maskComp.props
-    let stencil: cc.Node = new cc.Sprite(spriteFrame)
+    let stencil: cc.Node
     if (cropSize) {
       const { width, height } = cropSize
       stencil = new cc.LayerColor(cc.Color.WHITE, width, height)
+    } else {
+      stencil = new cc.Sprite(spriteFrame)
     }
     const clipper = new cc.ClippingNode(stencil)
     clipper.setAlphaThreshold(!spriteFrame ? 1 : alphaThreshold)
-    clipper.setInverted(inverted !== undefined)
+    clipper.setInverted(inverted)
     maskComp.node = entity.assign(new NodeComp(clipper, entity))
   }
 
   private onAddGraphicsRender = ({ entity }) => {
     const graphicsComp = entity.getComponent(GraphicsRender)
-    const { lineWidth = 5, strokeColor = RED, fillColor = BLUE } = graphicsComp.props
+    const { lineWidth = 5, strokeColor = cc.Color.RED, fillColor = cc.Color.BLUE } = graphicsComp.props
     const node = new cc.DrawNode()
     node.setColor(strokeColor)
     node.setDrawColor(fillColor)
@@ -134,7 +136,7 @@ export class RenderSystem implements System {
       fade || 0.4, // fade (vệt tồn tại 0.4s)
       minSeg || 1, // minSeg
       stroke || 20, // stroke (độ rộng vệt)
-      color || cc.color(255, 255, 255, 255),
+      color || cc.Color.WHITE,
       spriteFrame,
     )
     component.node = entity.assign(new NodeComp(node, entity))

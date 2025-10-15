@@ -12,7 +12,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   parent: NodeComp
   children: NodeComp[] = []
   name: string
-  // private _group
   private _active = true
 
   constructor(instance: C, entity: Entity) {
@@ -149,14 +148,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
     this.instance.setVisible(val)
   }
 
-  // get group() {
-  //   return this._group
-  // }
-
-  // set group(val: string | number) {
-  //   this._group = val
-  // }
-
   get w() {
     return this.instance.width
   }
@@ -228,18 +219,19 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   }
 
   convertToNodeSpace(point: cc.Point) {
-    const { x, y } = this.instance.convertToNodeSpace(point)
-    return Vec2(x, y)
+    return Vec2(this.instance.convertToNodeSpace(point))
   }
 
   convertToNodeSpaceAR(point: cc.Point) {
-    const { x, y } = this.instance.convertToNodeSpaceAR(point)
-    return Vec2(x, y)
+    return Vec2(this.instance.convertToNodeSpaceAR(point))
   }
 
   convertToWorldSpaceAR(point: Vec2) {
-    const { x, y } = this.instance.convertToWorldSpaceAR(point)
-    return Vec2(x, y)
+    return Vec2(this.instance.convertToWorldSpaceAR(point))
+  }
+
+  convertToWorldSpace(point: Vec2) {
+    return Vec2(this.instance.convertToWorldSpace(point))
   }
 
   getBoundingBox() {
@@ -303,15 +295,14 @@ export class NodeComp<C extends cc.Node = cc.Node> {
       this.instance.removeFromParent()
     }
   }
-  addChild(child: NodeComp, zOrder?: number, tag?: number)
-  addChild(child: NodeComp) {
+  addChild(child: NodeComp, zOrder?: number, tag?: number) {
     child._active = true
     child.parent = this
     this.children.push(child)
-    this.instance.addChild(child.instance)
+    this.instance.addChild(child.instance, zOrder, tag)
   }
 
-  removeAllChildren(cleanup?) {
+  removeAllChildren(cleanup?: boolean) {
     this.children.forEach((child) => {
       child.removeFromParent(cleanup)
     })

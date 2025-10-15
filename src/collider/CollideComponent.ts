@@ -2,6 +2,7 @@ import { BaseComponentProps } from '..'
 import { ComponentX } from '../core/decorator'
 import { getMax, getMin } from '../helper/math'
 import { Vec2 } from '../polyfills'
+import { CollideSystem } from './CollideSystem'
 
 function getNodeToWorldTransformAR(node) {
   const t = node.instance.getNodeToWorldTransform()
@@ -81,7 +82,7 @@ export class BoxCollider extends Collider<ColliderProps & BoxColliderProps> {
     this._AABB.width = getMax(listX) - this._AABB.x
     this._AABB.height = getMax(listY) - this._AABB.y
     if (draw) {
-      draw.drawPoly(this._worldPoints, null, 3, cc.Color.DEBUG_BORDER_COLOR)
+      draw.drawPoly(this._worldPoints, null, CollideSystem.debugWidth, CollideSystem.debugColor)
     }
   }
 }
@@ -102,7 +103,7 @@ export class CircleCollider extends Collider<ColliderProps & CircleColliderProps
     this._worldPosition = cc.pointApplyAffineTransform(cc.p(x, y), transform)
     if (draw) {
       draw.drawDot(this._worldPosition, this._worldRadius, cc.Color.DEBUG_FILL_COLOR)
-      draw.drawCircle(this._worldPosition, this._worldRadius, 0, 64, true, 3, cc.Color.DEBUG_BORDER_COLOR)
+      draw.drawCircle(this._worldPosition, this._worldRadius, 0, 64, true, CollideSystem.debugWidth, CollideSystem.debugColor)
     }
     this._preAabb = cloneRect(this._AABB)
     this._AABB.x = this._worldPosition.x - this._worldRadius
@@ -145,7 +146,7 @@ export class PolygonCollider extends Collider<ColliderProps & PolygonColliderPro
     this._worldPoints = this.points.map((p) => cc.pointApplyAffineTransform(p, transform))
     // cc.log(polyPoints);
     if (draw) {
-      draw.drawPoly(this._worldPoints, cc.Color.DEBUG_FILL_COLOR, 3, cc.Color.DEBUG_BORDER_COLOR)
+      draw.drawPoly(this._worldPoints, cc.Color.DEBUG_FILL_COLOR, CollideSystem.debugWidth, CollideSystem.debugColor)
     }
     const listX = this._worldPoints.map(({ x }) => x)
     const listY = this._worldPoints.map(({ y }) => y)

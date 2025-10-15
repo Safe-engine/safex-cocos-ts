@@ -16,6 +16,8 @@ export function shouldCollider(colA: Collider, colB: Collider) {
 }
 
 export class CollideSystem implements System {
+  static debugWidth = 3
+  static debugColor = cc.Color.DEBUG_BORDER_COLOR
   listColliders: Collider[] = []
   _contracts: Contract[] = []
   removeColliders = []

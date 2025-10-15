@@ -112,13 +112,8 @@ export enum SpriteType {
   MESH,
 }
 
-export const RED = Color4B(255, 0, 0, 255)
-export const BLACK = Color4B(0, 0, 0, 255)
-export const WHITE = Color4B(255, 255, 255, 255)
-export const GREEN = Color4B(0, 255, 0, 255)
-export const BLUE = Color4B(0, 0, 255, 255)
 cc.Color.DEBUG_FILL_COLOR = cc.color(255, 255, 0, 48)
-cc.Color.DEBUG_BORDER_COLOR = cc.color(255, 0, 0, 255)
+cc.Color.DEBUG_BORDER_COLOR = cc.Color.RED
 cc.Color.prototype.fromHEX = cc.hexToColor
 
 cc.Intersection = {
