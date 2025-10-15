@@ -1,8 +1,8 @@
-import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
+import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 import { NodeComp } from '../core/NodeComp'
 import { TouchEventRegister } from '../norender'
 import { Vec2 } from '../polyfills'
-import { BlockInputEventsComp, ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
+import { ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
 
 export class GUISystem implements System {
   static defaultFont: string
@@ -12,7 +12,6 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, BlockInputEventsComp, this.onAddBlockInputEventsComp)
   }
 
   private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
@@ -85,15 +84,6 @@ export class GUISystem implements System {
     scrollView.node = entity.assign(new NodeComp(node, entity))
   }
 
-  private onAddBlockInputEventsComp: EventReceiveCallback<BlockInputEventsComp> = ({ entity, component: blockInput }) => {
-    const node = entity.getComponent(NodeComp)
-    if (node.instance instanceof ccui.ImageView) {
-      node.instance.setTouchEnabled(true)
-      node.instance.setScale9Enabled(true)
-    }
-    blockInput.node = node
-  }
-
   private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {
     const { placeHolder = '', font = GUISystem.defaultFont, size = 64, maxLength = 20, isPassword = false } = textInput.props
     const textField = new ccui.TextField()
@@ -107,8 +97,7 @@ export class GUISystem implements System {
     textInput.node = entity.assign(new NodeComp(textField, entity))
   }
 
-  update(entities: EntityManager, events: EventManager, dt: number)
-  update() {
-    // throw new Error('Method not implemented.');
-  }
+  // update(entities: EntityManager, events: EventManager, dt: number)
+  // update() {
+  // }
 }

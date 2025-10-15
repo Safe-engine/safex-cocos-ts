@@ -107,8 +107,6 @@ export class InputComp extends ComponentX<InputCompProps & BaseComponentProps<In
   }
 }
 
-export class BlockInputEventsComp extends ComponentX {}
-
 Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })
 Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })

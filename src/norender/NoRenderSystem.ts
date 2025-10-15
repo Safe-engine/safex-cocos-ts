@@ -1,4 +1,4 @@
-import { EventManager, EventTypes, System } from 'entityx-ts'
+import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
 import { Touch } from '../polyfills'
@@ -11,10 +11,8 @@ export class NoRenderSystem implements System {
     event_manager.subscribe(EventTypes.ComponentRemoved, TouchEventRegister, this.onRemovedTouchEventRegister)
   }
 
-  onAddTouchEventRegister = ({ entity, component }) => {
-    const ett = entity
-    const touchComp = component as TouchEventRegister
-    const nodeComp = ett.getComponent(NodeComp)
+  onAddTouchEventRegister: EventReceiveCallback<TouchEventRegister> = ({ entity, component: touchComp }) => {
+    const nodeComp = entity.getComponent(NodeComp)
     touchComp.node = nodeComp
     touchComp.listener = cc.eventManager.addListener(
       {
@@ -22,6 +20,7 @@ export class NoRenderSystem implements System {
         swallowTouches: true,
         onTouchBegan: function (touch: Touch) {
           const { onTouchStart } = touchComp.props
+          if (!nodeComp.active) return false
           // console.log('onTouchBegan', onTouchStart)
           if (!nodeComp.parent) {
             if (onTouchStart) {
@@ -78,6 +77,5 @@ export class NoRenderSystem implements System {
 
   // update(entities: EntityManager, events: EventManager, dt: number)
   // update() {
-  // throw new Error('Method not implemented.');
   // }
 }
