@@ -112,6 +112,11 @@ export enum SpriteType {
   MESH,
 }
 
+cc.Color.RED = Color4B(255, 0, 0, 255)
+cc.Color.BLACK = Color4B(0, 0, 0, 255)
+cc.Color.WHITE = Color4B(255, 255, 255, 255)
+cc.Color.GREEN = Color4B(0, 255, 0, 255)
+cc.Color.BLUE = Color4B(0, 0, 255, 255)
 cc.Color.DEBUG_FILL_COLOR = cc.color(255, 255, 0, 48)
 cc.Color.DEBUG_BORDER_COLOR = cc.Color.RED
 cc.Color.prototype.fromHEX = cc.hexToColor
