@@ -20,7 +20,7 @@ export class NoRenderSystem implements System {
         swallowTouches: true,
         onTouchBegan: function (touch: Touch) {
           const { onTouchStart } = touchComp.props
-          if (!nodeComp.active) return false
+          if (!nodeComp.active || !touchComp.enabled) return false
           // console.log('onTouchBegan', onTouchStart)
           if (!nodeComp.parent) {
             if (onTouchStart) {

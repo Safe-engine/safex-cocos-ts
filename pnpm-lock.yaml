@@ -18,8 +18,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       cocos-html5-ts:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
       entityx-ts:
         specifier: ^2.3.1
         version: 2.3.1
@@ -36,14 +36,14 @@ packages:
   '@esotericsoftware/spine-core@4.2.93':
     resolution: {integrity: sha512-8A8IPkVAn3C9FkUOhromQkjh8cRCe4ZhNx76SVBnPdNNsfpXJ3+bT9Qynng3MkyjMxKWLklAFA9eQJrz2GrFog==}
 
-  '@types/emscripten@1.41.2':
-    resolution: {integrity: sha512-0EVXosRnffZuF+rsMM1ZVbfpwpvL2/hWycYQ/0GaH/VaoSJvcSmMl6fiPel9TZXHL3EhANxzqKOVFC6NFXyn8A==}
+  '@types/emscripten@1.41.4':
+    resolution: {integrity: sha512-ECf0qTibhAi2Z0K6FIY96CvBTVkVIuVunOfbTUgbaAmGmbwsc33dbK9KZPROWsmzHotddy6C5pIqYqOmsBoJEw==}
 
   box2d-wasm@7.0.0:
     resolution: {integrity: sha512-6KbPoYDjm259fTh/3dw/HgP0tbqIBtKTNy2shtphWjMYgHOlYpmygHSLl6qOT79ObSiscVdkL8bYuH95bbLSSw==}
 
-  cocos-html5-ts@2.0.3:
-    resolution: {integrity: sha512-84mSzGas7DCvNK4Ij+vcPAypQLbWwMhCF05PAIlDuLkbE1yblKayHXuzk02H8bZs0FDrinHEounZrt1R5Mx2oA==}
+  cocos-html5-ts@2.1.1:
+    resolution: {integrity: sha512-IUblDit4S8a2qkjigDE7ju/Xgd7DR9Pv7kK6wxy+QlBDbHRFxKTzJBQro5RzwOdF/YCxzakJevCEVovhQmvM6w==}
 
   entityx-ts@2.3.1:
     resolution: {integrity: sha512-y4wEkwO44+xwtFU1R2Nq4+xiUowp8TH91EFd2RXEDu4C11SXeU8L3x3S3ORZy7pSoIUdQ4TaxkgiRuitk/XFMQ==}
@@ -59,13 +59,13 @@ snapshots:
 
   '@esotericsoftware/spine-core@4.2.93': {}
 
-  '@types/emscripten@1.41.2': {}
+  '@types/emscripten@1.41.4': {}
 
   box2d-wasm@7.0.0:
     dependencies:
-      '@types/emscripten': 1.41.2
+      '@types/emscripten': 1.41.4
 
-  cocos-html5-ts@2.0.3: {}
+  cocos-html5-ts@2.1.1: {}
 
   entityx-ts@2.3.1: {}
 
