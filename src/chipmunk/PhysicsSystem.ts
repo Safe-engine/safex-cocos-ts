@@ -39,7 +39,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
+      const { type = DynamicBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
       const { width, height, offset = [] } = box.props
       const [x = 0, y = 0] = offset
       const node = entity.getComponent(NodeComp)
@@ -50,6 +50,7 @@ export class PhysicsSystem implements System {
       if (type === DynamicBody) {
         body = new cp.Body(density * gravityScale, cp.momentForBox(density, width, height))
         shape = new cp.BoxShape2(body, new cp.BB(-hw + x, -hh + y, hw + x, hh + y))
+        body.setPos(node.position)
         this.space.addShape(shape)
         this.space.addBody(body)
       } else {
@@ -57,6 +58,8 @@ export class PhysicsSystem implements System {
         body.nodeIdleTime = Infinity
         shape = new cp.BoxShape2(body, new cp.BB(-hw + x, -hh + y, hw + x, hh + y))
         this.space.addStaticShape(shape)
+        body.setPos(node.position)
+        this.space.reindexStatic()
       }
       shape.setElasticity(restitution)
       shape.setFriction(friction)
@@ -68,7 +71,6 @@ export class PhysicsSystem implements System {
       body.data = node
       shape.group = tag
       box.node = node
-      body.setPos(node.position)
     })
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsCircleCollider, ({ entity, component }) => {
       // console.log('ComponentAddedEvent PhysicsCircleCollider', component)
@@ -78,7 +80,7 @@ export class PhysicsSystem implements System {
         entity.assign(rigidBody)
       }
       const {
-        type = StaticBody,
+        type = DynamicBody,
         gravityScale = 1,
         density = 1,
         friction = 0.5,
@@ -97,6 +99,7 @@ export class PhysicsSystem implements System {
       if (type === DynamicBody) {
         body = new cp.Body(density * gravityScale, cp.momentForCircle(density, radius, radius, offVect))
         shape = new cp.CircleShape(body, radius, offVect)
+        body.setPos(node.position)
         this.space.addShape(shape)
         this.space.addBody(body)
       } else {
@@ -104,6 +107,8 @@ export class PhysicsSystem implements System {
         body.nodeIdleTime = Infinity
         shape = new cp.CircleShape(body, radius, offVect)
         this.space.addStaticShape(shape)
+        body.setPos(node.position)
+        this.space.reindexStatic()
       }
       shape.setElasticity(restitution)
       shape.setFriction(friction)
@@ -116,7 +121,6 @@ export class PhysicsSystem implements System {
       body.data = node
       shape.group = tag
       component.node = node
-      body.setPos(node.position)
     })
     event_manager.subscribe(EventTypes.ComponentAdded, PhysicsPolygonCollider, ({ entity, component }) => {
       // console.log('ComponentAddedEvent PhysicsPolygonCollider', component)
@@ -125,7 +129,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = StaticBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
+      const { type = DynamicBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { points, offset = [] } = component.props
       const [x = 0, y = 0] = offset
@@ -144,6 +148,7 @@ export class PhysicsSystem implements System {
       if (type === DynamicBody) {
         body = new cp.Body(density * gravityScale, cp.momentForPoly(density, fixedPoints, offVect))
         shape = new cp.PolyShape(body, fixedPoints, offVect)
+        body.setPos(node.position)
         this.space.addShape(shape)
         this.space.addBody(body)
       } else {
@@ -151,6 +156,8 @@ export class PhysicsSystem implements System {
         body.nodeIdleTime = Infinity
         shape = new cp.PolyShape(body, fixedPoints, offVect)
         this.space.addStaticShape(shape)
+        body.setPos(node.position)
+        this.space.reindexStatic()
       }
       shape.setElasticity(restitution)
       shape.setFriction(friction)
@@ -162,7 +169,6 @@ export class PhysicsSystem implements System {
       body.data = node
       shape.group = tag
       component.node = node
-      body.setPos(node.position)
     })
     event_manager.subscribe(EventTypes.ComponentRemoved, RigidBody, ({ component }) => {
       // console.log('ComponentRemovedEvent RigidBody', component)
