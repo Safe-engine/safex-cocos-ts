@@ -1,4 +1,4 @@
-import { EntityManager, EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
+import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
 import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
@@ -149,8 +149,7 @@ export class RenderSystem implements System {
     }
   }
 
-  update(entities: EntityManager, events: EventManager, dt: number)
-  update() {
-    // throw new Error('Method not implemented.');
-  }
+  // update(entities: EntityManager, events: EventManager, dt: number)
+  // update() {
+  // }
 }

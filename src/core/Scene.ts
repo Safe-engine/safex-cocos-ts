@@ -7,7 +7,10 @@ export class SceneComponent extends EnhancedComponent {
     const world = GameWorld.Instance
     world.entities.reset()
     const root = world.entities.create()
-    const node = root.assign(new NodeComp(cc.director.getRunningScene(), root))
+    const scene = cc.director.getRunningScene()
+    scene.unscheduleAllCallbacks()
+    scene.stopAllActions()
+    const node = root.assign(new NodeComp(scene, root))
     const sceneComponent = root.assign(this)
     sceneComponent.node = node
     return sceneComponent
