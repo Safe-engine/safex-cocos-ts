@@ -39,7 +39,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = DynamicBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
+      const { type = DynamicBody, density = 1, friction = 0.5, restitution = 0.3, isSensor, isLockRotate, tag = 0 } = rigidBody.props
       const { width, height, offset = [] } = box.props
       const [x = 0, y = 0] = offset
       const node = entity.getComponent(NodeComp)
@@ -48,7 +48,7 @@ export class PhysicsSystem implements System {
       let shape: cp.Shape
       let body: cp.Body
       if (type === DynamicBody) {
-        body = new cp.Body(density * gravityScale, cp.momentForBox(density, width, height))
+        body = new cp.Body(density, isLockRotate ? Infinity : cp.momentForBox(density, width, height))
         shape = new cp.BoxShape2(body, new cp.BB(-hw + x, -hh + y, hw + x, hh + y))
         body.setPos(node.position)
         this.space.addShape(shape)
@@ -81,7 +81,7 @@ export class PhysicsSystem implements System {
       }
       const {
         type = DynamicBody,
-        gravityScale = 1,
+        isLockRotate,
         density = 1,
         friction = 0.5,
         restitution = 0.3,
@@ -97,7 +97,7 @@ export class PhysicsSystem implements System {
       let shape: cp.Shape
       let body: cp.Body
       if (type === DynamicBody) {
-        body = new cp.Body(density * gravityScale, cp.momentForCircle(density, radius, radius, offVect))
+        body = new cp.Body(density, isLockRotate ? Infinity : cp.momentForCircle(density, radius, radius, offVect))
         shape = new cp.CircleShape(body, radius, offVect)
         body.setPos(node.position)
         this.space.addShape(shape)
@@ -129,7 +129,7 @@ export class PhysicsSystem implements System {
         rigidBody = instantiate(RigidBody)
         entity.assign(rigidBody)
       }
-      const { type = DynamicBody, gravityScale = 1, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
+      const { type = DynamicBody, isLockRotate, density = 1, friction = 0.5, restitution = 0.3, isSensor, tag = 0 } = rigidBody.props
       const node = entity.getComponent(NodeComp)
       const { points, offset = [] } = component.props
       const [x = 0, y = 0] = offset
@@ -146,7 +146,7 @@ export class PhysicsSystem implements System {
       let shape: cp.Shape
       let body: cp.Body
       if (type === DynamicBody) {
-        body = new cp.Body(density * gravityScale, cp.momentForPoly(density, fixedPoints, offVect))
+        body = new cp.Body(density, isLockRotate ? Infinity : cp.momentForPoly(density, fixedPoints, offVect))
         shape = new cp.PolyShape(body, fixedPoints, offVect)
         body.setPos(node.position)
         this.space.addShape(shape)
