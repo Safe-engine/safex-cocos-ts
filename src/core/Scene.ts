@@ -10,6 +10,7 @@ export class SceneComponent extends EnhancedComponent {
     const scene = cc.director.getRunningScene()
     scene.unscheduleAllCallbacks()
     scene.stopAllActions()
+    scene.scheduleUpdate()
     const node = root.assign(new NodeComp(scene, root))
     const sceneComponent = root.assign(this)
     sceneComponent.node = node
