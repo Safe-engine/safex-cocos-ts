@@ -13,14 +13,13 @@ export class PhysicsSprite {
     if (!this.physicsBody) {
       return
     }
-    // const pos = this.physicsBody.GetPosition()
+    const { x, y } = this.physicsBody.getPos()
     // use cc.lerp to smooth the position update
-    const pos = Vec2(cc.lerp(this.node.x, this.physicsBody.getPos().x, dt * 10), cc.lerp(this.node.y, this.physicsBody.getPos().y, dt * 10))
-    this.node.setPosition(pos.x, pos.y)
+    // const pos = Vec2(cc.lerp(this.node.x, x, dt * 10), cc.lerp(this.node.y, y, dt * 10))
+    this.node.setPosition(x, y)
     // lerp the rotation
-    this.node.setRotation(cc.lerp(this.node.rotation, cc.radiansToDegrees(-this.physicsBody.getAngVel()), dt * 10))
-    // this.node.setRotation(cc.radiansToDegrees(this.physicsBody.GetAngle()))
-    // this.node.setScale(1 / pixelsPerMeter)
+    // this.node.setRotation(cc.lerp(this.node.rotation, -cc.radiansToDegrees(this.physicsBody.a), dt * 10))
+    this.node.setRotation(-cc.radiansToDegrees(this.physicsBody.a))
     // this.node.setScale(1 / this.physicsBody.GetFixtureList().GetShape().GetRadius())
   }
 
@@ -32,12 +31,12 @@ export class PhysicsSprite {
     this.physicsBody.setPos(val)
   }
 
-  // set x(val) {
-  //   this.physicsBody.setPosition(Vec2(val, this.y))
-  // }
-  // set y(val) {
-  //   this.physicsBody.setPosition(Vec2(this.x, val))
-  // }
+  set x(val) {
+    this.physicsBody.setPos(Vec2(val, this.y))
+  }
+  set y(val) {
+    this.physicsBody.setPos(Vec2(this.x, val))
+  }
 
   get x() {
     return this.physicsBody.getPos().x
@@ -47,12 +46,12 @@ export class PhysicsSprite {
     return this.physicsBody.getPos().y
   }
 
-  // set angle(val: number) {
-  //   this.physicsBody.setAngle(val)
-  // }
+  set rotation(val: number) {
+    this.physicsBody.setAngle(-cc.degreesToRadians(val))
+  }
 
-  get angle() {
-    return -this.physicsBody.getAngVel()
+  get rotation() {
+    return -cc.radiansToDegrees(this.physicsBody.a)
   }
 
   addChild(child: cc.Node) {

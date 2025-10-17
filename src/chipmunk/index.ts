@@ -5,12 +5,10 @@ export * from './PhysicsComponent'
 export * from './PhysicsSprite'
 export * from './PhysicsSystem'
 
-export function setupPhysics(world = GameWorld.Instance, isDebugDraw = false, gravity = Vec2(0, -9.8)) {
+export function setupPhysics(world = GameWorld.Instance, isDebugDraw = false, gravity = Vec2(0, -98)) {
   const physicsSystem = world.addSystemAndUpdate(PhysicsSystem)
   if (isDebugDraw) {
     physicsSystem.addDebug()
   }
-  if (gravity) {
-    physicsSystem.space.gravity = gravity
-  }
+  physicsSystem.space.gravity = gravity
 }
