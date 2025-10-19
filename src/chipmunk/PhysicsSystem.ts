@@ -174,7 +174,7 @@ export class PhysicsSystem implements System {
       // console.log('ComponentRemovedEvent RigidBody', component)
       if (component.enabled && component.physicSprite instanceof PhysicsSprite) {
         const body = component.physicSprite.getBody()
-        if (body && this.space.containsBody(body)) {
+        if (body && (this.space.containsBody(body) || body.isStatic())) {
           body.shapeList.forEach((shape) => {
             if (shape && this.space.containsShape(shape)) {
               if (!this.listRemoveShape.includes(shape)) {
