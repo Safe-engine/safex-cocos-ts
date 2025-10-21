@@ -64,19 +64,24 @@ export async function startGame(defaultFont: string, { width, height }, option?:
   })
 }
 
-export function loadAll(assets: string[] = [], cb?: (progress: number) => void) {
+export function loadAll(assets: any, cb?: (progress: number) => void) {
+  const allAssets = []
+  Object.values(assets).forEach((value: any) => {
+    if (value.skeleton) {
+      allAssets.push(value.skeleton, value.atlas, value.texture)
+    } else if (value.endsWith('.ttf')) {
+      allAssets.push({
+        type: 'font',
+        name: cc.path.basename(value, '.ttf'),
+        srcs: [value],
+      })
+    } else {
+      allAssets.push(value)
+    }
+  })
   return new Promise((resolve: any) => {
     cc.loader.load(
-      assets.map((value) => {
-        if (value.endsWith('.ttf')) {
-          return {
-            type: 'font',
-            name: cc.path.basename(value, '.ttf'),
-            srcs: [value],
-          }
-        }
-        return value
-      }),
+      allAssets,
       function (result, count, loadedCount) {
         // console.log(result)
         if (result instanceof cc.Texture2D) {
