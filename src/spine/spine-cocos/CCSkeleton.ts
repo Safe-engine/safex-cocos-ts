@@ -62,7 +62,6 @@ export class CCSkeleton extends cc.Node {
   _debugBones = false
   _premultipliedAlpha = false
   _ownsSkeletonData: any = null
-  _renderCmd: any
   _state: AnimationState
   _ownsAnimationStateData = false
   _listener: any

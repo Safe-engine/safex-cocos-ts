@@ -2,6 +2,7 @@ import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-
 
 import { NodeComp } from '../core/NodeComp'
 import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
+import { createTiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
   SIMPLE,
@@ -10,48 +11,6 @@ export enum SpriteTypes {
   FILLED,
   MESH,
   ANIMATION,
-}
-
-function createTiledSprite(src: string, totalW: number, totalH: number) {
-  // tạo sprite từ input
-  const tileSprite = new cc.Sprite(src)
-  // lấy kích thước gốc của texture
-  const frame = tileSprite.getSpriteFrame()
-  const tileW = frame ? frame.getRect().width : tileSprite.getContentSize().width
-  const tileH = frame ? frame.getRect().height : tileSprite.getContentSize().height
-
-  // tạo renderTexture với kích thước cần phủ
-  const { width, height } = cc.winSize
-  const rt = new cc.RenderTexture(width, height)
-  rt.beginWithClear(0, 0, 0, 0)
-
-  const drawSprite = new cc.Sprite(tileSprite.getTexture())
-  // if (frame) {
-  //   drawSprite.setSpriteFrame(frame)
-  // }
-  drawSprite.setAnchorPoint(0, 0)
-
-  // số tile theo trục x,y
-  const cols = Math.ceil(totalW / tileW)
-  const rows = Math.ceil(totalH / tileH)
-
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const s = new cc.Sprite(frame)
-      s.setFlippedY(true)
-      s.setAnchorPoint(0, 0)
-      s.setPosition(c * tileW, r * tileH)
-      s.visit(rt)
-    }
-  }
-  rt.end()
-
-  const finalSprite = rt.sprite
-  // finalSprite.setFlippedY(true) // RenderTexture bị lật
-  finalSprite.setAnchorPoint(0, 0)
-  finalSprite.setContentSize(cc.size(totalW, totalH))
-
-  return new cc.Sprite(finalSprite.texture)
 }
 
 export class RenderSystem implements System {
