@@ -1,7 +1,7 @@
 import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 
 import { NodeComp } from '../core/NodeComp'
-import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender, TiledMap } from './RenderComponent'
+import { GraphicsRender, MaskRender, MotionStreakComp, NodeRender, ParticleComp, SpriteRender } from './RenderComponent'
 import { createTiledSprite } from './TiledSprite'
 
 export enum SpriteTypes {
@@ -20,7 +20,6 @@ export class RenderSystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, MaskRender, this.onAddMaskRender)
     event_manager.subscribe(EventTypes.ComponentAdded, GraphicsRender, this.onAddGraphicsRender)
     event_manager.subscribe(EventTypes.ComponentAdded, ParticleComp, this.onAddParticleComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, TiledMap, this.onAddTiledMap)
     event_manager.subscribe(EventTypes.ComponentAdded, MotionStreakComp, this.onAddMotionStreak)
     event_manager.subscribe(EventTypes.ComponentRemoved, NodeComp, this.onRemovedNodeComp)
   }
@@ -80,13 +79,6 @@ export class RenderSystem implements System {
     const { plistFile } = particleComp.props
     const node = new cc.ParticleSystem(plistFile)
     particleComp.node = entity.assign(new NodeComp(node, entity))
-  }
-
-  private onAddTiledMap = ({ entity }) => {
-    const tiledMapComp = entity.getComponent(TiledMap)
-    const { mapFile } = tiledMapComp.props
-    const node = new cc.TMXTiledMap(mapFile)
-    tiledMapComp.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onAddMotionStreak: EventReceiveCallback<MotionStreakComp> = ({ entity, component }) => {

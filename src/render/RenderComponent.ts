@@ -114,12 +114,6 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   }
 }
 
-interface TiledMapProps {
-  mapFile: string
-}
-
-export class TiledMap extends ComponentX<TiledMapProps & { $ref?: TiledMap }, cc.TMXTiledMap> {}
-
 interface MotionStreakProps {
   spriteFrame: string
   fade?: number
@@ -138,5 +132,4 @@ Object.defineProperty(SpriteRender.prototype, 'render', { value: render })
 Object.defineProperty(MaskRender.prototype, 'render', { value: render })
 Object.defineProperty(ParticleComp.prototype, 'render', { value: render })
 Object.defineProperty(GraphicsRender.prototype, 'render', { value: render })
-Object.defineProperty(TiledMap.prototype, 'render', { value: render })
 Object.defineProperty(MotionStreakComp.prototype, 'render', { value: render })
