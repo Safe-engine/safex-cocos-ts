@@ -64,7 +64,7 @@ export async function startGame(defaultFont: string, { width, height }, option?:
   })
 }
 
-export function loadAll(assets: any, cb?: (progress: number) => void) {
+function getAllAssets(assets: any) {
   const allAssets = []
   Object.values(assets).forEach((value: any) => {
     if (value.skeleton) {
@@ -88,6 +88,11 @@ export function loadAll(assets: any, cb?: (progress: number) => void) {
       allAssets.push(value)
     }
   })
+  return allAssets
+}
+
+export function loadAll(assets: any, cb?: (progress: number) => void) {
+  const allAssets = getAllAssets(assets)
   return new Promise((resolve: any) => {
     cc.loader.load(
       allAssets,
@@ -105,6 +110,13 @@ export function loadAll(assets: any, cb?: (progress: number) => void) {
       },
       resolve,
     )
+  })
+}
+
+export function unloadAll(assets: any) {
+  const allAssets = getAllAssets(assets)
+  allAssets.forEach((asset) => {
+    cc.loader.release(asset)
   })
 }
 

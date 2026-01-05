@@ -1,4 +1,4 @@
-import { BaseComponentProps, ComponentX, render } from '..'
+import { BaseComponentProps, ComponentX, registerSystem, render, Vec2 } from '..'
 import { SkeletonAnimation } from './spine-cocos/CCSkeletonAnimation'
 
 export interface SpineData {
@@ -31,11 +31,32 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponent
     }
   }
 
-  // setSkeletonData(data: string) {
-  //   const skel = this.node.instance
-  //   const atlas = data.replace('.json', '.atlas')
-  //   skel.initWithArgs(data, atlas, this.node.scale)
-  // }
+  setSkeletonData(data: SpineData) {
+    const skel = this.node.instance
+    const atlas = data.atlas
+    skel.initWithArgs(data.skeleton, atlas, this.props.timeScale)
+  }
 }
 
 Object.defineProperty(SpineSkeleton.prototype, 'render', { value: render })
+
+interface SpineBonesControlComponentProps extends BaseComponentProps<SpineBonesControlComponent> {
+  posList: Vec2[]
+  bonesName: string[]
+}
+export class SpineBonesControlComponent extends ComponentX<SpineBonesControlComponentProps, SkeletonAnimation> {
+  start() {
+    const skel = this.node.getComponent(SpineSkeleton)!.node.instance
+    const { bonesName = [], posList = [] } = this.props
+    bonesName.forEach((boneName: string, index: number) => {
+      const bone = skel._skeleton.findBone(boneName)
+      if (bone) {
+        const pos = posList[index]
+        bone.x = pos.x
+        bone.y = pos.y
+      }
+    })
+  }
+}
+
+registerSystem(SpineBonesControlComponent)
