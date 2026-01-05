@@ -68,11 +68,16 @@ export function loadAll(assets: any, cb?: (progress: number) => void) {
   const allAssets = []
   Object.values(assets).forEach((value: any) => {
     if (value.skeleton) {
-      allAssets.push(value.skeleton)
-    } else if (value.atlas) {
-      allAssets.push(value.atlas)
-    } else if (value.texture) {
-      allAssets.push(value.texture)
+      allAssets.push(value.skeleton, value.atlas)
+      if (value.texture) {
+        if (Array.isArray(value.texture)) {
+          allAssets.push(...value.texture)
+        } else {
+          allAssets.push(value.texture)
+        }
+      } else {
+        allAssets.push(value.atlas.replace('.atlas', '.png'))
+      }
     } else if (value.endsWith('.ttf')) {
       allAssets.push({
         type: 'font',
