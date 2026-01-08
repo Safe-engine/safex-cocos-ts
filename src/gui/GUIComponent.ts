@@ -106,6 +106,13 @@ export class InputComp extends ComponentX<InputCompProps & BaseComponentProps<In
     return this.node.instance.getString()
   }
 }
+interface WidgetCompProps {
+  top?: Integer
+  right?: Integer
+  bottom?: Integer
+  left?: Integer
+}
+export class WidgetComp extends ComponentX<WidgetCompProps & BaseComponentProps<WidgetComp>, cc.Node> {}
 
 Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })

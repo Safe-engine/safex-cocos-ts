@@ -142,9 +142,9 @@ export class NodeComp<C extends cc.Node = cc.Node> {
       return
     }
     this._active = val
-    if (this.instance instanceof ccui.Widget) {
-      this.instance.setEnabled(val)
-    }
+    // if (this.instance instanceof ccui.Widget) {
+    //   this.instance.setEnabled(val)
+    // }
     this.instance.setVisible(val)
   }
 

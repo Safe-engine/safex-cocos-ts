@@ -2,7 +2,7 @@ import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-
 import { NodeComp } from '../core/NodeComp'
 import { TouchEventRegister } from '../norender'
 import { Vec2 } from '../polyfills'
-import { ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp } from './GUIComponent'
+import { ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp, WidgetComp } from './GUIComponent'
 
 export class GUISystem implements System {
   static defaultFont: string
@@ -12,6 +12,7 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, WidgetComp, this.onAddWidgetComp)
   }
 
   private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
@@ -95,6 +96,23 @@ export class GUISystem implements System {
     textField.setMaxLength(maxLength)
     textField.setPasswordEnabled(isPassword)
     textInput.node = entity.assign(new NodeComp(textField, entity))
+  }
+
+  private onAddWidgetComp: EventReceiveCallback<WidgetComp> = ({ entity, component }) => {
+    const { top, right, bottom, left } = component.props
+    const nodeComp = entity.getComponent(NodeComp)
+    if (top !== undefined) {
+      nodeComp.instance.y = cc.winSize.height - top - nodeComp.instance.height * (1 - nodeComp.instance.anchorY)
+    }
+    if (right !== undefined) {
+      nodeComp.instance.x = cc.winSize.width - right - nodeComp.instance.width * (1 - nodeComp.instance.anchorX)
+    }
+    if (bottom !== undefined) {
+      nodeComp.instance.y = bottom + nodeComp.instance.height * nodeComp.instance.anchorY
+    }
+    if (left !== undefined) {
+      nodeComp.instance.x = left + nodeComp.instance.width * nodeComp.instance.anchorX
+    }
   }
 
   // update(entities: EntityManager, events: EventManager, dt: number)
