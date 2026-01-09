@@ -33,7 +33,7 @@ export function tileToPixel(map, tx, ty) {
         const x0 = tx * (tw / 2)
         const y0 = ty * th + offset
         const x = x0 + tw / 2
-        const y = map.height * th - y0 - th / 2
+        const y = -y0 - th / 2
         return { x, y }
       } else {
         const odd = staggerindex === 'odd'
@@ -41,7 +41,7 @@ export function tileToPixel(map, tx, ty) {
         const x0 = tx * tw + offset
         const y0 = ty * (th / 2)
         const x = x0 + tw / 2
-        const y = map.height * th - y0 - th / 2
+        const y = -y0 - th / 2
         return { x, y }
       }
     }
@@ -86,7 +86,7 @@ export function loadIsometricMap(mapUrl: string) {
       const frame = new cc.SpriteFrame(tilesetTexture, cc.rect(frameX, frameY, tileW, tileH))
       const sprite = new cc.Sprite(frame)
       sprite.x = x
-      sprite.y = y - cc.winSize.height
+      sprite.y = y
       // console.log('x,y', x, y)
       tileLayer.addChild(sprite)
     }
