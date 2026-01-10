@@ -33,8 +33,7 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponent
 
   setSkeletonData(data: SpineData) {
     const skel = this.node.instance
-    const atlas = data.atlas
-    skel.initWithArgs(data.skeleton, atlas, this.props.timeScale)
+    skel.initWithArgs(data.skeleton, data.atlas)
   }
 }
 
