@@ -50,9 +50,12 @@ export function instantiate<T extends ComponentX>(ComponentType: Constructor<T>,
   }
   return instance.render()
 }
-export function loadScene<T extends SceneComponent>(ComponentType: Constructor<T>) {
+export async function loadScene<T extends SceneComponent>(ComponentType: Constructor<T>) {
   const world = GameWorld.Instance
   world.entities.reset()
   const instance = new ComponentType()
+  if (instance.preLoad) {
+    await instance.preLoad()
+  }
   instance.render()
 }
