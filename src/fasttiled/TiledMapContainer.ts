@@ -19,8 +19,7 @@ export class TiledMapLayer extends cc.Node {
   getPositionAt(tx: number, ty: number) {
     // Use zero-based tile coordinates (no +1) and convert local tile position to world space
     const pos = tileToPixel(this.mapData, tx, ty)
-    const worldPoint = this.convertToWorldSpaceAR(cc.p(pos.x, pos.y))
-    return Vec2(worldPoint)
+    return Vec2(pos.x, pos.y)
   }
 
   getTileAt(tx: number, ty: number) {
