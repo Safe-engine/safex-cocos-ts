@@ -67,12 +67,13 @@ export class BoxCollider extends Collider<ColliderProps & BoxColliderProps> {
     const hh = height * 0.5
     const transform = getNodeToWorldTransformAR(this.node)
     const rect = cc.rect(x - hw, y - hh, width, height)
-    const rectTrs = cc.rectApplyAffineTransform(rect, transform)
-    // cc.log(rectTrs);
-    this._worldPoints[0] = Vec2(rectTrs.x, rectTrs.y)
-    this._worldPoints[1] = Vec2(rectTrs.x, rectTrs.y + rectTrs.height)
-    this._worldPoints[2] = Vec2(rectTrs.x + rectTrs.width, rectTrs.y + rectTrs.height)
-    this._worldPoints[3] = Vec2(rectTrs.x + rectTrs.width, rectTrs.y)
+    const tempPoints = [
+      Vec2(rect.x, rect.y),
+      Vec2(rect.x, rect.y + rect.height),
+      Vec2(rect.x + rect.width, rect.y + rect.height),
+      Vec2(rect.x + rect.width, rect.y),
+    ]
+    this._worldPoints = tempPoints.map((p) => cc.pointApplyAffineTransform(p, transform))
 
     const listX = this._worldPoints.map(({ x }) => x)
     const listY = this._worldPoints.map(({ y }) => y)
