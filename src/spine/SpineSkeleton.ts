@@ -13,7 +13,7 @@ interface SpineSkeletonProps {
   animation?: string
   timeScale?: number
   loop?: boolean
-  onAnimationComplete?
+  onAnimationComplete?: (animationName?: string, loopCount?: number) => void
 }
 export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponentProps<SpineSkeleton>, SkeletonAnimation> {
   set scaleX(flip: number) {
