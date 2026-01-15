@@ -29,7 +29,7 @@ export class DragonBonesSystem implements System {
       // armature.animation.gotoAndPlay('run', 0.2)
       node.armature.animation.timeScale = timeScale
       if (animation) {
-        const state = node.armature.animation.gotoAndPlayByTime(animation, 0, playTimes)
+        node.armature.animation.gotoAndPlayByTime(animation, 0, playTimes)
       }
       // console.log('state', state);
       // if (skin) {
@@ -40,7 +40,7 @@ export class DragonBonesSystem implements System {
         node.armature.eventDispatcher.addDBEventListener(
           EventObject.START,
           (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationStart()
+            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationStart(event.animationState.name)
           },
           dbComp,
         )
@@ -48,7 +48,7 @@ export class DragonBonesSystem implements System {
         node.armature.eventDispatcher.addDBEventListener(
           EventObject.COMPLETE,
           (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationEnd()
+            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationEnd(event.animationState.name)
           },
           dbComp,
         )
@@ -56,7 +56,8 @@ export class DragonBonesSystem implements System {
         node.armature.eventDispatcher.addDBEventListener(
           EventObject.LOOP_COMPLETE,
           (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationComplete()
+            if (dbComp.node.active && dbComp.enabled)
+              dbComp.props.onAnimationComplete(event.animationState.name, event.animationState.currentPlayTimes)
           },
           dbComp,
         )
