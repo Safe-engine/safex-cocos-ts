@@ -1,4 +1,4 @@
-import { BaseComponentProps, ColorSource } from '..'
+import { BaseComponentProps, ColorSource, registerSystem } from '..'
 import { ComponentX, render } from '../core/decorator'
 import { Size, Vec2 } from '../polyfills'
 
@@ -115,7 +115,33 @@ interface WidgetCompProps {
 }
 export class WidgetComp extends ComponentX<WidgetCompProps & BaseComponentProps<WidgetComp>, cc.Node> {}
 
+interface GridLayoutCompProps {
+  top?: Integer
+  left?: Integer
+  spaceX?: Integer
+  spaceY?: Integer
+  columns?: Integer
+}
+export class GridLayoutComp extends ComponentX<GridLayoutCompProps & BaseComponentProps<GridLayoutComp>, cc.Node> {
+  start() {
+    this.doLayout()
+  }
+
+  doLayout() {
+    const { columns = 5, spaceX = 0, spaceY = 0, left = 0, top = 0 } = this.props
+    const children = this.node.instance.children
+    children.forEach((child, index) => {
+      const row = Math.floor(index / columns)
+      const column = index % columns
+      const x = left + column * (child.width + spaceX) + child.width / 2
+      const y = -top - row * (child.height + spaceY) - child.height / 2
+      child.setPosition(x, y)
+    })
+  }
+}
+
 Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })
 Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })
 Object.defineProperty(InputComp.prototype, 'render', { value: render })
+registerSystem(GridViewComp)
