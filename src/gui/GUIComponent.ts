@@ -1,4 +1,4 @@
-import { BaseComponentProps, ColorSource, registerSystem } from '..'
+import { BaseComponentProps, ColorSource } from '..'
 import { ComponentX, render } from '../core/decorator'
 import { Size, Vec2 } from '../polyfills'
 
@@ -144,4 +144,3 @@ Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })
 Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })
 Object.defineProperty(InputComp.prototype, 'render', { value: render })
-registerSystem(GridLayoutComp)

@@ -2,7 +2,7 @@ import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-
 import { NodeComp } from '../core/NodeComp'
 import { TouchEventRegister } from '../norender'
 import { Vec2 } from '../polyfills'
-import { ButtonComp, FillType, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp, WidgetComp } from './GUIComponent'
+import { ButtonComp, FillType, GridLayoutComp, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp, WidgetComp } from './GUIComponent'
 
 export class GUISystem implements System {
   static defaultFont: string
@@ -13,6 +13,7 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, WidgetComp, this.onAddWidgetComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, GridLayoutComp, this.onAddGridLayoutComp)
   }
 
   private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
@@ -113,6 +114,10 @@ export class GUISystem implements System {
     if (left !== undefined) {
       nodeComp.instance.x = left + nodeComp.instance.width * nodeComp.instance.anchorX
     }
+  }
+
+  private onAddGridLayoutComp: EventReceiveCallback<GridLayoutComp> = ({ component }) => {
+    component.doLayout()
   }
 
   // update(entities: EntityManager, events: EventManager, dt: number)
