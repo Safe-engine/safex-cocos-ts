@@ -14,6 +14,7 @@ interface ButtonCompProps {
   normalImage?: string
   selectedImage?: string
   disableImage?: string
+  param?: string
   zoomScale?: number
   onPress?: (target: ButtonComp) => void
 }
