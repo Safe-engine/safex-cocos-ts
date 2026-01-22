@@ -43,9 +43,15 @@ varying lowp vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 varying vec4 v_fragmentColor;
 #endif
+uniform vec2 u_scale;
+uniform vec2 u_size;
 
 void main() {
-    gl_Position = CC_PMatrix * a_position;
+    vec2 pivot = u_size * 0.5;
+    vec4 pos = a_position;
+    // pos.xy *= u_scale;   // scale hình ảnh
+    pos.xy = (pos.xy - pivot) * u_scale + pivot;
+    gl_Position = CC_PMatrix * pos;
     v_texCoord = a_texCoord;
     v_fragmentColor = a_color;
 }

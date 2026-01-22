@@ -116,7 +116,8 @@ export class GUISystem implements System {
     }
   }
 
-  private onAddGridLayoutComp: EventReceiveCallback<GridLayoutComp> = ({ component }) => {
+  private onAddGridLayoutComp: EventReceiveCallback<GridLayoutComp> = ({ entity, component }) => {
+    component.node = entity.getComponent(NodeComp)
     component.doLayout()
   }
 
