@@ -12,14 +12,14 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@esotericsoftware/spine-core':
-        specifier: ^4.2.94
-        version: 4.2.94
+        specifier: ^4.2.98
+        version: 4.2.98
       box2d-wasm:
         specifier: ^7.0.0
         version: 7.0.0
       cocos-html5-ts:
-        specifier: ^2.1.5
-        version: 2.1.5
+        specifier: ^2.1.6
+        version: 2.1.6
       entityx-ts:
         specifier: ^2.3.1
         version: 2.3.1
@@ -33,17 +33,17 @@ packages:
   '@cocos/dragonbones-js@1.0.2':
     resolution: {integrity: sha512-QeTxZwLr4OeOZDo7ENJfdmwmv9mb68iNNGXUSGqazy/kHTXpBwe2thWvYwxJyM+8+RTsVFkyEhxRkCIfulfN7g==}
 
-  '@esotericsoftware/spine-core@4.2.94':
-    resolution: {integrity: sha512-VzW3sipqJMdpehVPxP6F3KKb9PtvV7J2D64+8NRbZ7+TwIdgycLgrYN8rD+/bAtTEx1XuLUmimKLOhR+243dFw==}
+  '@esotericsoftware/spine-core@4.2.98':
+    resolution: {integrity: sha512-TFGFdzTsIgcQcFcWMFtTl9VGtfdD6RH8puTrCcemH8wNVaEneR2LQl6EY3l0JlccjHIAnc7CSzOd0KSfsxTiLw==}
 
-  '@types/emscripten@1.41.4':
-    resolution: {integrity: sha512-ECf0qTibhAi2Z0K6FIY96CvBTVkVIuVunOfbTUgbaAmGmbwsc33dbK9KZPROWsmzHotddy6C5pIqYqOmsBoJEw==}
+  '@types/emscripten@1.41.5':
+    resolution: {integrity: sha512-cMQm7pxu6BxtHyqJ7mQZ2kXWV5SLmugybFdHCBbJ5eHzOo6VhBckEgAT3//rP5FwPHNPeEiq4SmQ5ucBwsOo4Q==}
 
   box2d-wasm@7.0.0:
     resolution: {integrity: sha512-6KbPoYDjm259fTh/3dw/HgP0tbqIBtKTNy2shtphWjMYgHOlYpmygHSLl6qOT79ObSiscVdkL8bYuH95bbLSSw==}
 
-  cocos-html5-ts@2.1.5:
-    resolution: {integrity: sha512-jgz91UmmfFSh9GqvTpEriimlHc5CouAdixQgA7qYKY55jU4xXmPfzVtYVVNaSKN0rm6LjDak21mperlknMZpIQ==}
+  cocos-html5-ts@2.1.6:
+    resolution: {integrity: sha512-8ZCWI0KNSmkwemo5Te5+QrsfvUj9m+ElHQWJNZvfXwC2A6bRDcAFCXilAds6C6DzlQZOgn6AlhZWdPrJNGxAcw==}
 
   entityx-ts@2.3.1:
     resolution: {integrity: sha512-y4wEkwO44+xwtFU1R2Nq4+xiUowp8TH91EFd2RXEDu4C11SXeU8L3x3S3ORZy7pSoIUdQ4TaxkgiRuitk/XFMQ==}
@@ -57,15 +57,15 @@ snapshots:
 
   '@cocos/dragonbones-js@1.0.2': {}
 
-  '@esotericsoftware/spine-core@4.2.94': {}
+  '@esotericsoftware/spine-core@4.2.98': {}
 
-  '@types/emscripten@1.41.4': {}
+  '@types/emscripten@1.41.5': {}
 
   box2d-wasm@7.0.0:
     dependencies:
-      '@types/emscripten': 1.41.4
+      '@types/emscripten': 1.41.5
 
-  cocos-html5-ts@2.1.5: {}
+  cocos-html5-ts@2.1.6: {}
 
   entityx-ts@2.3.1: {}
 

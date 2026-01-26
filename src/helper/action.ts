@@ -24,7 +24,7 @@ export function rotateTo(t: number, x: number, y?: number) {
 }
 
 export function progressTo(t: number, p: number) {
-  return (cc as any).progressTo(t, p)
+  return cc.progressTo(t, p)
 }
 
 export function callFunc(cb: () => void, target?, data?) {
