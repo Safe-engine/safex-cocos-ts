@@ -23,12 +23,13 @@ export class GUISystem implements System {
     const lastScaleX = nodeComp.scaleX
     const lastScaleY = nodeComp.scaleY
     const touchComp = entity.assign(new TouchEventRegister())
-    touchComp.props.onTouchStart = function (touch) {
+    touchComp.props.onTouchStart = function (touch, item) {
       const p = touch.getLocation()
       // console.log('onTouchBegan', p, lastScaleX, lastScaleY)
-      const rect = nodeComp.getBoundingBox()
-      const nodeSpaceLocation = nodeComp.parent.convertToNodeSpace(p)
-      if (rect.contains(nodeSpaceLocation) && button.enabled && nodeComp.active) {
+      const { width, height } = nodeComp.contentSize
+      const rect = cc.rect(0, 0, width, height)
+      const nodeSpaceLocation = item.convertToNodeSpace(p)
+      if (cc.rectContainsPoint(rect, nodeSpaceLocation) && button.enabled && nodeComp.active) {
         const scale = cc.scaleTo(0.3, zoomScale * lastScaleX, lastScaleY * zoomScale)
         nodeComp.runAction(scale)
         button.props.onPress(button)
