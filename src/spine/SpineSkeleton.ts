@@ -34,6 +34,11 @@ export class SpineSkeleton extends ComponentX<SpineSkeletonProps & BaseComponent
   setSkeletonData(data: SpineData) {
     const skel = this.node.instance
     skel.initWithArgs(data.skeleton, data.atlas)
+    if (this.props.onAnimationComplete) {
+      skel.setCompleteListener((track, loopCount) => {
+        this.props.onAnimationComplete(track.animation.name, loopCount)
+      })
+    }
   }
 }
 
