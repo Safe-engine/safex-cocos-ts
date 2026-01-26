@@ -75,10 +75,10 @@ export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<La
 }
 
 export enum ScrollViewDirection {
-  NONE = ccui.ScrollView.DIR_NONE,
-  HORIZONTAL = ccui.ScrollView.DIR_HORIZONTAL,
-  VERTICAL = ccui.ScrollView.DIR_VERTICAL,
-  BOTH = ccui.ScrollView.DIR_BOTH,
+  NONE = cc.SCROLLVIEW_DIRECTION_NONE,
+  HORIZONTAL = cc.SCROLLVIEW_DIRECTION_HORIZONTAL,
+  VERTICAL = cc.SCROLLVIEW_DIRECTION_VERTICAL,
+  BOTH = cc.SCROLLVIEW_DIRECTION_BOTH,
 }
 interface ScrollViewProps {
   viewSize: Size
@@ -87,7 +87,7 @@ interface ScrollViewProps {
   isScrollToTop?: boolean
   isBounced?: boolean
 }
-export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, ccui.ScrollView> {
+export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, cc.ScrollView> {
   zoom(scale: number) {
     if (this.node.instance instanceof cc.ScrollView) {
       this.node.instance.getContainer().setScale(scale)
