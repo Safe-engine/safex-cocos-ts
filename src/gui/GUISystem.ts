@@ -1,8 +1,17 @@
 import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 import { NodeComp } from '../core/NodeComp'
-import { TouchEventRegister } from '../norender'
 import { Vec2 } from '../polyfills'
-import { ButtonComp, FillType, GridLayoutComp, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp, WidgetComp } from './GUIComponent'
+import {
+  ButtonComp,
+  FillType,
+  GridLayoutComp,
+  InputComp,
+  LabelComp,
+  ListViewComp,
+  ProgressTimerComp,
+  ScrollViewComp,
+  WidgetComp,
+} from './GUIComponent'
 
 export class GUISystem implements System {
   static defaultFont: string
@@ -11,35 +20,35 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, ProgressTimerComp, this.onAddProgressTimerComp)
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
+    event_manager.subscribe(EventTypes.ComponentAdded, ListViewComp, this.onAddListViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, WidgetComp, this.onAddWidgetComp)
     event_manager.subscribe(EventTypes.ComponentAdded, GridLayoutComp, this.onAddGridLayoutComp)
   }
 
   private onAddButtonComp: EventReceiveCallback<ButtonComp> = ({ entity, component: button }) => {
-    const nodeComp = entity.getComponent(NodeComp)
-    const { zoomScale = 1.2 } = button.props
-    button.node = nodeComp
-    const lastScaleX = nodeComp.scaleX
-    const lastScaleY = nodeComp.scaleY
-    const touchComp = entity.assign(new TouchEventRegister())
-    touchComp.props.onTouchStart = function (touch, item) {
-      const p = touch.getLocation()
-      // console.log('onTouchBegan', p, lastScaleX, lastScaleY)
-      const { width, height } = nodeComp.contentSize
-      const rect = cc.rect(0, 0, width, height)
-      const nodeSpaceLocation = item.convertToNodeSpace(p)
-      if (cc.rectContainsPoint(rect, nodeSpaceLocation) && button.enabled && nodeComp.active) {
-        const scale = cc.scaleTo(0.3, zoomScale * lastScaleX, lastScaleY * zoomScale)
-        nodeComp.runAction(scale)
-        button.props.onPress(button)
-      }
+    const { zoomScale = 1.2, capInsets, spriteFrame, selectedImage, disableImage, onPress } = button.props
+    const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
+    const textureType = !frame ? ccui.Widget.LOCAL_TEXTURE : ccui.Widget.PLIST_TEXTURE
+    // console.log('onAddButtonComp', spriteFrame, textureType, ccui.Widget.PLIST_TEXTURE)
+    const node: any = new ccui.Button(spriteFrame, selectedImage, disableImage, textureType)
+    node.setZoomScale(0)
+    if (onPress) {
+      const lastScale = node.scale
+      node.addTouchEventListener((sender, type) => {
+        if (type === ccui.Widget.TOUCH_BEGAN) {
+          sender.setScale(zoomScale * lastScale)
+        } else if (type === ccui.Widget.TOUCH_ENDED || type === ccui.Widget.TOUCH_CANCELED) {
+          sender.setScale(lastScale)
+          onPress(button)
+        }
+      })
     }
-    touchComp.props.onTouchEnd = function () {
-      const scale = cc.scaleTo(0.3, lastScaleX, lastScaleY)
-      nodeComp.runAction(scale)
+    if (capInsets) {
+      node.setScale9Enabled(true)
+      node.setCapInsets(cc.rect(...capInsets))
     }
-    touchComp.props.onTouchCancel = touchComp.props.onTouchEnd
+    button.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onAddProgressTimerComp: EventReceiveCallback<ProgressTimerComp> = ({ entity, component: bar }) => {
@@ -76,68 +85,27 @@ export class GUISystem implements System {
   }
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {
-    const { viewSize, contentSize, isScrollToTop, isBounced, direction = ccui.ScrollView.DIR_VERTICAL } = scrollView.props
-    const node: any = new ccui.ScrollView()
+    const { viewSize, contentSize, isScrollToTop, isBounced, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
+    const node = new cc.ScrollView(viewSize)
+    node.setViewSize(viewSize)
+    node.setContentSize(contentSize)
+    node.setDirection(direction as number)
+    if (isScrollToTop !== undefined) node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
+    // node.setTouchEnabled(false)
+    node.setBounceable(isBounced !== undefined)
+    scrollView.node = entity.assign(new NodeComp(node, entity))
+  }
+
+  private onAddListViewComp: EventReceiveCallback<ListViewComp> = ({ entity, component: listView }) => {
+    const { viewSize, contentSize, isScrollToTop, isBounced, direction = ccui.ScrollView.DIR_VERTICAL } = listView.props
+    const node = new ccui.ScrollView()
     node.setContentSize(viewSize)
     node.setInnerContainerSize(contentSize)
     node.setDirection(direction as number)
     if (isScrollToTop) node.scrollToTop(0, true)
-    node.setTouchEnabled(false)
+    // node.setTouchEnabled(false)
     node.setBounceEnabled(isBounced !== undefined)
-    scrollView.node = entity.assign(new NodeComp(node, entity))
-    let moved = false
-    const container = (node as any)._innerContainer
-    // console.log('ccui.ScrollView', container)
-    cc.eventManager.addListener(
-      {
-        event: cc.EventListener.TOUCH_ONE_BY_ONE,
-        swallowTouches: false, // để ScrollView vẫn scroll
-
-        onTouchBegan(touch, event) {
-          moved = false
-          return node.onTouchBegan(touch, event)
-        },
-
-        onTouchMoved(touch, event) {
-          node.onTouchMoved(touch, event)
-          const delta = touch.getDelta()
-          if (Math.abs(delta.y) > 5) moved = true
-        },
-
-        onTouchEnded(touch, event) {
-          node.onTouchEnded(touch, event)
-          if (moved) return
-          const local = container.convertToNodeSpace(touch.getLocation())
-          const items = scrollView.node.children
-          items.forEach((item) => {
-            const itemPos = item.position
-            const itemSize = item.contentSize
-            const rect = cc.rect(
-              itemPos.x - itemSize.width * item.anchorX,
-              itemPos.y - itemSize.height * item.anchorY,
-              itemSize.width,
-              itemSize.height,
-            )
-            if (cc.rectContainsPoint(rect, local)) {
-              // console.log('Clicked item', item, item.entity)
-              const buttonComp = item.getComponent(ButtonComp)
-              if (buttonComp && buttonComp.props.onPress) {
-                const { zoomScale = 1.2 } = buttonComp.props
-                const lastScaleX = buttonComp.node.scaleX
-                const lastScaleY = buttonComp.node.scaleY
-                const scale = cc.scaleTo(0.15, zoomScale * lastScaleX, lastScaleY * zoomScale)
-                const scaleBack = cc.scaleTo(0.15, lastScaleX, lastScaleY)
-                const seq = cc.sequence(scale, scaleBack)
-                buttonComp.node.runAction(seq)
-                buttonComp.props.onPress(buttonComp)
-              }
-            }
-          })
-          // console.log('onTouchEnded', touch.getLocation(), local, items)
-        },
-      },
-      container,
-    )
+    listView.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {
