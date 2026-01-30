@@ -14,7 +14,6 @@ interface ButtonCompProps {
   spriteFrame: string
   selectedImage?: string
   disableImage?: string
-  param?: string
   zoomScale?: number
   capInsets?: [number, number, number, number]
   onPress?: (target: ButtonComp) => void

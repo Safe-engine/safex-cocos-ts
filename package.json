@@ -1,6 +1,6 @@
 {
   "name": "@safe-engine/cocos",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "safe-engine with cocos renderer support",
   "type": "module",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "@cocos/dragonbones-js": "^1.0.2",
     "@esotericsoftware/spine-core": "^4.2.98",
     "box2d-wasm": "^7.0.0",
-    "cocos-html5-ts": "^2.1.6",
+    "cocos-html5-ts": "^2.1.7",
     "entityx-ts": "^2.3.1"
   },
   "author": "",

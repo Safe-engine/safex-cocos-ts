@@ -31,7 +31,7 @@ export class GUISystem implements System {
     const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
     const textureType = !frame ? ccui.Widget.LOCAL_TEXTURE : ccui.Widget.PLIST_TEXTURE
     // console.log('onAddButtonComp', spriteFrame, textureType, ccui.Widget.PLIST_TEXTURE)
-    const node: any = new ccui.Button(spriteFrame, selectedImage, disableImage, textureType)
+    const node = new ccui.Button(spriteFrame, selectedImage, disableImage, textureType)
     node.setZoomScale(0)
     if (onPress) {
       const lastScale = node.scale
