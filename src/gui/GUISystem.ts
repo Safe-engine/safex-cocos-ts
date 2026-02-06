@@ -1,17 +1,7 @@
 import { EventManager, EventReceiveCallback, EventTypes, System } from 'entityx-ts'
 import { NodeComp } from '../core/NodeComp'
 import { Vec2 } from '../polyfills'
-import {
-  ButtonComp,
-  FillType,
-  GridLayoutComp,
-  InputComp,
-  LabelComp,
-  ListViewComp,
-  ProgressTimerComp,
-  ScrollViewComp,
-  WidgetComp,
-} from './GUIComponent'
+import { ButtonComp, FillType, GridLayoutComp, InputComp, LabelComp, ProgressTimerComp, ScrollViewComp, WidgetComp } from './GUIComponent'
 
 export class GUISystem implements System {
   static defaultFont: string
@@ -20,7 +10,6 @@ export class GUISystem implements System {
     event_manager.subscribe(EventTypes.ComponentAdded, ProgressTimerComp, this.onAddProgressTimerComp)
     event_manager.subscribe(EventTypes.ComponentAdded, LabelComp, this.onAddLabelComp)
     event_manager.subscribe(EventTypes.ComponentAdded, ScrollViewComp, this.onAddScrollViewComp)
-    event_manager.subscribe(EventTypes.ComponentAdded, ListViewComp, this.onAddListViewComp)
     event_manager.subscribe(EventTypes.ComponentAdded, InputComp, this.onAddInputComp)
     event_manager.subscribe(EventTypes.ComponentAdded, WidgetComp, this.onAddWidgetComp)
     event_manager.subscribe(EventTypes.ComponentAdded, GridLayoutComp, this.onAddGridLayoutComp)
@@ -86,18 +75,6 @@ export class GUISystem implements System {
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {
     const { viewSize, contentSize, isScrollToTop, isBounced, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL } = scrollView.props
-    const node = new cc.ScrollView(viewSize)
-    node.setViewSize(viewSize)
-    node.setContentSize(contentSize)
-    node.setDirection(direction as number)
-    if (isScrollToTop !== undefined) node.setContentOffset(cc.p(0, viewSize.height - contentSize.height))
-    // node.setTouchEnabled(false)
-    node.setBounceable(isBounced !== undefined)
-    scrollView.node = entity.assign(new NodeComp(node, entity))
-  }
-
-  private onAddListViewComp: EventReceiveCallback<ListViewComp> = ({ entity, component: listView }) => {
-    const { viewSize, contentSize, isScrollToTop, isBounced, direction = ccui.ScrollView.DIR_VERTICAL } = listView.props
     const node = new ccui.ScrollView()
     node.setContentSize(viewSize)
     node.setInnerContainerSize(contentSize)
@@ -105,7 +82,7 @@ export class GUISystem implements System {
     if (isScrollToTop) node.scrollToTop(0, true)
     // node.setTouchEnabled(false)
     node.setBounceEnabled(isBounced !== undefined)
-    listView.node = entity.assign(new NodeComp(node, entity))
+    scrollView.node = entity.assign(new NodeComp(node, entity))
   }
 
   private onAddInputComp: EventReceiveCallback<InputComp> = ({ entity, component: textInput }) => {

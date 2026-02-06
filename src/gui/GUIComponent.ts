@@ -83,10 +83,10 @@ export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<La
 }
 
 export enum ScrollViewDirection {
-  NONE = cc.SCROLLVIEW_DIRECTION_NONE,
-  HORIZONTAL = cc.SCROLLVIEW_DIRECTION_HORIZONTAL,
-  VERTICAL = cc.SCROLLVIEW_DIRECTION_VERTICAL,
-  BOTH = cc.SCROLLVIEW_DIRECTION_BOTH,
+  NONE = ccui.ScrollView.DIR_NONE,
+  HORIZONTAL = ccui.ScrollView.DIR_HORIZONTAL,
+  VERTICAL = ccui.ScrollView.DIR_VERTICAL,
+  BOTH = ccui.ScrollView.DIR_BOTH,
 }
 interface ScrollViewProps {
   viewSize: Size
@@ -95,28 +95,13 @@ interface ScrollViewProps {
   isScrollToTop?: boolean
   isBounced?: boolean
 }
-export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, cc.ScrollView> {
+export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, ccui.ScrollView> {
   zoom(scale: number) {
-    if (this.node.instance instanceof cc.ScrollView) {
-      this.node.instance.getContainer().setScale(scale)
+    if (this.node.instance instanceof ccui.ScrollView) {
+      ;(this.node.instance as any)._innerContainer.setScale(scale)
     }
   }
 }
-
-export enum ListViewDirection {
-  NONE = ccui.ScrollView.DIR_NONE,
-  HORIZONTAL = ccui.ScrollView.DIR_HORIZONTAL,
-  VERTICAL = ccui.ScrollView.DIR_VERTICAL,
-  BOTH = ccui.ScrollView.DIR_BOTH,
-}
-interface ListViewProps {
-  viewSize: Size
-  contentSize: Size
-  direction?: ListViewDirection
-  isScrollToTop?: boolean
-  isBounced?: boolean
-}
-export class ListViewComp extends ComponentX<ListViewProps & BaseComponentProps<ListViewComp>, ccui.ScrollView> {}
 
 interface InputCompProps {
   placeHolder?: string
@@ -166,6 +151,5 @@ export class GridLayoutComp extends ComponentX<GridLayoutCompProps & BaseCompone
 Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })
 Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })
-Object.defineProperty(ListViewComp.prototype, 'render', { value: render })
 Object.defineProperty(InputComp.prototype, 'render', { value: render })
 Object.defineProperty(ButtonComp.prototype, 'render', { value: render })
