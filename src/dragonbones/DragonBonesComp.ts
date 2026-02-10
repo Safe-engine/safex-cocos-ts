@@ -15,9 +15,9 @@ interface DragonBonesProps {
   playTimes?: Integer
   timeScale?: Float
 
-  onAnimationStart?: () => void
-  onAnimationEnd?: () => void
-  onAnimationComplete?: () => void
+  onAnimationStart?: (animationName?: string) => void
+  onAnimationEnd?: (animationName?: string) => void
+  onAnimationComplete?: (animationName?: string, loopCount?: number) => void
 }
 
 export class DragonBonesComp extends ComponentX<DragonBonesProps & BaseComponentProps<DragonBonesComp>, CocosArmatureDisplay> {

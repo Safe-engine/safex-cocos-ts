@@ -8,8 +8,9 @@ interface RigidBodyProps {
   density?: Float
   restitution?: Float
   friction?: Float
-  gravityScale?: Float
+  // gravityScale?: Float
   isSensor?: boolean
+  isLockRotate?: boolean
   tag?: number
   onBeginContact?: (other: RigidBody) => void
   onEndContact?: (other: RigidBody) => void

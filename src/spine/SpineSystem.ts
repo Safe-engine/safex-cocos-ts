@@ -28,7 +28,7 @@ export class SpineSystem implements System {
     if (onAnimationComplete) {
       node.setCompleteListener((track, loopCount) => {
         // console.log(track, loopCount)
-        onAnimationComplete(track, loopCount)
+        onAnimationComplete(track.animation.name, loopCount)
       })
     }
   }

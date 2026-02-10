@@ -5,6 +5,8 @@ import {
   Physics,
   RegionAttachment,
   Skeleton,
+  SkeletonBinary,
+  SkeletonData,
   SkeletonJson,
   TextureAtlas,
   Utils,
@@ -62,7 +64,6 @@ export class CCSkeleton extends cc.Node {
   _debugBones = false
   _premultipliedAlpha = false
   _ownsSkeletonData: any = null
-  _renderCmd: any
   _state: AnimationState
   _ownsAnimationStateData = false
   _listener: any
@@ -131,7 +132,7 @@ export class CCSkeleton extends cc.Node {
     return this._timeScale
   }
 
-  initWithArgs(skeletonDataFile: any, atlasFile: any, scale: any) {
+  initWithArgs(skeletonDataFile: string, atlasFile: string, scale = 1) {
     const argSkeletonFile = skeletonDataFile
     const argAtlasFile = atlasFile
     let skeletonData, atlas, ownsSkeletonData
@@ -149,12 +150,18 @@ export class CCSkeleton extends cc.Node {
       scale = scale || 1 / cc.director.getContentScaleFactor()
 
       const attachmentLoader = new AtlasAttachmentLoader(atlas)
-      const skeletonJsonReader = new SkeletonJson(attachmentLoader)
-      skeletonJsonReader.scale = scale
-
       const skeletonJson = cc.loader.getRes(argSkeletonFile)
-      skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
-      atlas.dispose(skeletonJsonReader)
+      if (argSkeletonFile.endsWith('.json')) {
+        const skeletonJsonReader = new SkeletonJson(attachmentLoader)
+        skeletonJsonReader.scale = scale
+        skeletonData = skeletonJsonReader.readSkeletonData(skeletonJson)
+        atlas.dispose(skeletonJsonReader)
+      } else {
+        const skeletonBinaryReader = new SkeletonBinary(attachmentLoader)
+        skeletonBinaryReader.scale = scale
+        skeletonData = skeletonBinaryReader.readSkeletonData(skeletonJson)
+        atlas.dispose(skeletonBinaryReader)
+      }
       ownsSkeletonData = true
     } else {
       skeletonData = skeletonDataFile
@@ -258,7 +265,7 @@ export class CCSkeleton extends cc.Node {
     return this._premultipliedAlpha
   }
 
-  setSkeletonData(skeletonData: any, ownsSkeletonData: any) {
+  setSkeletonData(skeletonData: SkeletonData, ownsSkeletonData: any) {
     if (skeletonData.width != null && skeletonData.height != null)
       this.setContentSize(
         skeletonData.width / cc.director.getContentScaleFactor(),

@@ -23,6 +23,10 @@ export function rotateTo(t: number, x: number, y?: number) {
   return cc.rotateTo(t, x, y)
 }
 
+export function progressTo(t: number, p: number) {
+  return cc.progressTo(t, p)
+}
+
 export function callFunc(cb: () => void, target?, data?) {
   return cc.callFunc(cb, target, data)
 }

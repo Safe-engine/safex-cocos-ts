@@ -11,17 +11,26 @@ export const FillType = {
 // type Values = (typeof FillType)[Keys]
 
 interface ButtonCompProps {
-  normalImage?: string
+  spriteFrame: string
   selectedImage?: string
   disableImage?: string
   zoomScale?: number
+  capInsets?: [number, number, number, number]
   onPress?: (target: ButtonComp) => void
 }
-export class ButtonComp extends ComponentX<ButtonCompProps> {
-  // clickEvents = []
-  // setOnPress(cb: (target: ButtonComp) => void) {
-  //   this.props.onPress = cb
-  // }
+export class ButtonComp extends ComponentX<ButtonCompProps & BaseComponentProps<ButtonComp>, ccui.Button> {
+  get spriteFrame() {
+    return this.props.spriteFrame
+  }
+
+  set spriteFrame(spriteFrame) {
+    this.props.spriteFrame = spriteFrame
+    if (this.node && this.node.instance instanceof ccui.Button) {
+      const frame = cc.spriteFrameCache.getSpriteFrame(spriteFrame)
+      const textureType = !frame ? ccui.Widget.LOCAL_TEXTURE : ccui.Widget.PLIST_TEXTURE
+      this.node.instance.loadTextureNormal(spriteFrame, textureType)
+    }
+  }
 }
 
 interface ProgressTimerProps {
@@ -74,10 +83,10 @@ export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<La
 }
 
 export enum ScrollViewDirection {
-  NONE = cc.SCROLLVIEW_DIRECTION_NONE,
-  HORIZONTAL = cc.SCROLLVIEW_DIRECTION_HORIZONTAL,
-  VERTICAL = cc.SCROLLVIEW_DIRECTION_VERTICAL,
-  BOTH = cc.SCROLLVIEW_DIRECTION_BOTH,
+  NONE = ccui.ScrollView.DIR_NONE,
+  HORIZONTAL = ccui.ScrollView.DIR_HORIZONTAL,
+  VERTICAL = ccui.ScrollView.DIR_VERTICAL,
+  BOTH = ccui.ScrollView.DIR_BOTH,
 }
 interface ScrollViewProps {
   viewSize: Size
@@ -86,10 +95,10 @@ interface ScrollViewProps {
   isScrollToTop?: boolean
   isBounced?: boolean
 }
-export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, cc.ScrollView> {
+export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, ccui.ScrollView> {
   zoom(scale: number) {
-    if (this.node.instance instanceof cc.ScrollView) {
-      this.node.instance.getContainer().setScale(scale)
+    if (this.node.instance instanceof ccui.ScrollView) {
+      ;(this.node.instance as any)._innerContainer.setScale(scale)
     }
   }
 }
@@ -106,8 +115,41 @@ export class InputComp extends ComponentX<InputCompProps & BaseComponentProps<In
     return this.node.instance.getString()
   }
 }
+interface WidgetCompProps {
+  top?: Integer
+  right?: Integer
+  bottom?: Integer
+  left?: Integer
+}
+export class WidgetComp extends ComponentX<WidgetCompProps & BaseComponentProps<WidgetComp>, cc.Node> {}
+
+interface GridLayoutCompProps {
+  top?: Integer
+  left?: Integer
+  spaceX?: Integer
+  spaceY?: Integer
+  columns?: Integer
+}
+export class GridLayoutComp extends ComponentX<GridLayoutCompProps & BaseComponentProps<GridLayoutComp>, cc.Node> {
+  start() {
+    this.doLayout()
+  }
+
+  doLayout() {
+    const { columns = 5, spaceX = 0, spaceY = 0, left = 0, top = 0 } = this.props
+    const children = this.node.instance.children
+    children.forEach((child, index) => {
+      const row = Math.floor(index / columns)
+      const column = index % columns
+      const x = left + column * (child.width + spaceX) + child.width / 2
+      const y = -top - row * (child.height + spaceY) - child.height / 2
+      child.setPosition(x, y)
+    })
+  }
+}
 
 Object.defineProperty(ProgressTimerComp.prototype, 'render', { value: render })
 Object.defineProperty(LabelComp.prototype, 'render', { value: render })
 Object.defineProperty(ScrollViewComp.prototype, 'render', { value: render })
 Object.defineProperty(InputComp.prototype, 'render', { value: render })
+Object.defineProperty(ButtonComp.prototype, 'render', { value: render })
