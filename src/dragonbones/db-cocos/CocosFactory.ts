@@ -36,6 +36,7 @@ import {
 import { CocosArmatureDisplay } from './CocosArmatureDisplay'
 import { CocosSlot } from './CocosSlot'
 import { CocosTextureAtlasData, CocosTextureData } from './CocosTextureAtlasData'
+import { SimpleMeshNode } from './SimpleMeshNode'
 
 /**
  * - The Cocos factory.
@@ -132,7 +133,7 @@ export class CocosFactory extends BaseFactory {
 
   protected _buildSlot(_dataPackage: BuildArmaturePackage, slotData: SlotData, armature: DisplayData[]): Slot {
     const slot = BaseObject.borrowObject(CocosSlot)
-    slot.init(slotData, armature, new cc.Sprite(), new cc.Sprite())
+    slot.init(slotData, armature, new cc.Sprite(), new SimpleMeshNode())
 
     return slot
   }

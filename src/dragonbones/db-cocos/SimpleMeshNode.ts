@@ -5,7 +5,7 @@
 //   const node = new SimpleMeshNode(texture, verts, uvs, inds);
 //   node.setPosition(x,y); node.setRotation(angleDeg); node.setScale(s);
 
-export class SimpleMeshNode extends cc.Node {
+export class SimpleMeshNode extends cc.Sprite {
   // public mesh data (Float32Array / Uint16Array)
   _texture: any = null
   _vertices: Float32Array | null = null
