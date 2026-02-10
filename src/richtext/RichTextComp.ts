@@ -8,6 +8,7 @@ interface RichTextCompProps {
   font?: string
   string?: string
   size?: number
+  isAdaptWithSize?: boolean
 }
 
 export class RichTextComp extends ComponentX<RichTextCompProps & BaseComponentProps<RichTextComp>, ccui.RichText> {

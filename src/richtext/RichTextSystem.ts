@@ -9,11 +9,11 @@ export class RichTextSystem implements System {
   }
 
   private onAddRichTextComp: EventReceiveCallback<RichTextComp> = ({ entity, component: rich }) => {
-    const { string = '' } = rich.props
+    const { string = '', isAdaptWithSize } = rich.props
     const node = new ccui.RichText()
-    node.width = 500
-    node.height = 300
-    node.ignoreContentAdaptWithSize(false)
+    // node.width = 500
+    // node.height = 300
+    node.ignoreContentAdaptWithSize(!isAdaptWithSize)
     rich.node = entity.assign(new NodeComp(node, entity))
     rich.string = string
   }

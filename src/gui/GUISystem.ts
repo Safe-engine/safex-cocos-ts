@@ -57,7 +57,7 @@ export class GUISystem implements System {
   }
 
   private onAddLabelComp: EventReceiveCallback<LabelComp> = ({ entity, component: label }) => {
-    const { string = '', font = GUISystem.defaultFont, size = 64, outline, shadow } = label.props
+    const { string = '', font = GUISystem.defaultFont, size = 64, outline, shadow, isAdaptWithSize } = label.props
     const fontName = cc.path.basename(font, '.ttf')
     const node = new ccui.Text(string, fontName, size)
     node.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
@@ -69,7 +69,7 @@ export class GUISystem implements System {
       const [color, blur, offset] = shadow
       node.enableShadow(color, offset, blur)
     }
-    node.ignoreContentAdaptWithSize(true)
+    node.ignoreContentAdaptWithSize(!isAdaptWithSize)
     label.node = entity.assign(new NodeComp(node, entity))
   }
 

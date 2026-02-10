@@ -67,6 +67,7 @@ interface LabelCompProps {
   size?: number
   outline?: [ColorSource, number]
   shadow?: [ColorSource, number, Size]
+  isAdaptWithSize?: boolean
 }
 
 export class LabelComp extends ComponentX<LabelCompProps & BaseComponentProps<LabelComp>, ccui.Text> {
