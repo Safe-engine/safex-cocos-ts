@@ -69,7 +69,7 @@ export class GUISystem implements System {
       const [color, blur, offset] = shadow
       node.enableShadow(color, offset, blur)
     }
-    node.ignoreContentAdaptWithSize(false)
+    node.ignoreContentAdaptWithSize(true)
     label.node = entity.assign(new NodeComp(node, entity))
   }
 
