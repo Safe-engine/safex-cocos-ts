@@ -40,7 +40,7 @@ export class DragonBonesSystem implements System {
         node.armature.eventDispatcher.addDBEventListener(
           EventObject.START,
           (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationStart(event.animationState.name)
+            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationStart(event.animationState?.name)
           },
           dbComp,
         )
@@ -48,7 +48,7 @@ export class DragonBonesSystem implements System {
         node.armature.eventDispatcher.addDBEventListener(
           EventObject.COMPLETE,
           (event: EventObject) => {
-            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationEnd(event.animationState.name)
+            if (dbComp.node.active && dbComp.enabled) dbComp.props.onAnimationEnd(event.animationState?.name)
           },
           dbComp,
         )
@@ -57,7 +57,7 @@ export class DragonBonesSystem implements System {
           EventObject.LOOP_COMPLETE,
           (event: EventObject) => {
             if (dbComp.node.active && dbComp.enabled)
-              dbComp.props.onAnimationComplete(event.animationState.name, event.animationState.currentPlayTimes)
+              dbComp.props.onAnimationComplete(event.animationState?.name, event.animationState?.currentPlayTimes)
           },
           dbComp,
         )
