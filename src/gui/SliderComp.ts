@@ -8,6 +8,12 @@ interface SliderCompProps extends BaseComponentProps<SliderComp> {
 }
 
 export class SliderComp extends ComponentX<SliderCompProps, ccui.Slider> {
+  set percent(val: number) {
+    this.node.instance.setPercent(val)
+  }
+  get percent(): number {
+    return this.node.instance.getPercent()
+  }
   render() {
     const { barTextureName, normalBallTextureName, percent } = this.props
     const frame = cc.spriteFrameCache.getSpriteFrame(barTextureName)
@@ -15,7 +21,7 @@ export class SliderComp extends ComponentX<SliderCompProps, ccui.Slider> {
     const slider = new ccui.Slider(barTextureName, normalBallTextureName, textureType)
     if (percent !== undefined) slider.setPercent(percent)
     slider.addEventListener((sender, type) => {
-      console.log('SliderComp onChange', type, sender)
+      // console.log('SliderComp onChange', type, sender)
       if (type === ccui.Slider.EVENT_PERCENT_CHANGED) {
         const percent = sender.getPercent()
         this.props.onChange(percent)
