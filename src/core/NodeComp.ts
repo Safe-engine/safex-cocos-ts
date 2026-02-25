@@ -11,7 +11,6 @@ export class NodeComp<C extends cc.Node = cc.Node> {
   instance: C
   parent: NodeComp
   children: NodeComp[] = []
-  name: string
   private _active = true
 
   constructor(instance: C, entity: Entity) {
@@ -170,6 +169,22 @@ export class NodeComp<C extends cc.Node = cc.Node> {
 
   set zIndex(val) {
     this.instance.zIndex = val
+  }
+
+  get name() {
+    return this.instance.getName()
+  }
+
+  set name(val) {
+    this.instance.setName(val)
+  }
+
+  get tag() {
+    return this.instance.getTag()
+  }
+
+  set tag(val) {
+    this.instance.setTag(val)
   }
 
   get childrenCount() {
