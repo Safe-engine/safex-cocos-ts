@@ -1,8 +1,10 @@
 import { BaseComponentProps, ComponentX, GameWorld, NodeComp, registerSystem } from '..'
 
 interface SliderCompProps extends BaseComponentProps<SliderComp> {
-  barTextureName: string
-  normalBallTextureName: string
+  barBackground: string
+  normalBall: string
+  pressedBall?: string
+  disabledBall?: string
   percent?: number
   onChange: (percent: number) => void
 }
@@ -15,10 +17,12 @@ export class SliderComp extends ComponentX<SliderCompProps, ccui.Slider> {
     return this.node.instance.getPercent()
   }
   render() {
-    const { barTextureName, normalBallTextureName, percent } = this.props
-    const frame = cc.spriteFrameCache.getSpriteFrame(barTextureName)
+    const { barBackground, normalBall, pressedBall, disabledBall, percent } = this.props
+    const frame = cc.spriteFrameCache.getSpriteFrame(normalBall)
     const textureType = !frame ? ccui.Widget.LOCAL_TEXTURE : ccui.Widget.PLIST_TEXTURE
-    const slider = new ccui.Slider(barTextureName, normalBallTextureName, textureType)
+    const slider = new ccui.Slider(barBackground, normalBall, textureType)
+    slider.loadSlidBallTexturePressed(pressedBall || normalBall, textureType)
+    slider.loadSlidBallTextureDisabled(disabledBall || normalBall, textureType)
     if (percent !== undefined) slider.setPercent(percent)
     slider.addEventListener((sender, type) => {
       // console.log('SliderComp onChange', type, sender)

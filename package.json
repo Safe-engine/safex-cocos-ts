@@ -24,7 +24,7 @@
     "@cocos/dragonbones-js": "^1.0.2",
     "@esotericsoftware/spine-core": "^4.2.104",
     "box2d-wasm": "^7.0.0",
-    "cocos-html5-ts": "^2.1.10",
+    "cocos-html5-ts": "^2.1.11",
     "entityx-ts": "^2.3.1"
   },
   "author": "",

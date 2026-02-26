@@ -85,7 +85,7 @@ export class SimpleMeshNode extends cc.Sprite {
   }
 
   // override visit to draw mesh at correct point in scene graph
-  visit(ctx?: unknown): void {
+  visit(ctx?: cc.Node): void {
     // normal visit to draw children etc.
     super.visit(ctx)
 
