@@ -23,13 +23,21 @@ export class GUISystem implements System {
     const node = new ccui.Button(spriteFrame, selectedImage, disableImage, textureType)
     node.setZoomScale(0)
     if (onPress) {
-      const lastScale = node.scale
+      let lastScale: number
+      let startPos: cc.Point
       node.addTouchEventListener((sender, type) => {
+        // console.log('Button touch event', lastScale)
         if (type === ccui.Widget.TOUCH_BEGAN) {
-          sender.setScale(zoomScale * lastScale)
+          lastScale = node.scale
+          sender.setScale(zoomScale)
+          startPos = sender.getTouchBeganPosition()
         } else if (type === ccui.Widget.TOUCH_ENDED || type === ccui.Widget.TOUCH_CANCELED) {
+          const endPos = sender.getTouchEndPosition()
+          const distance = cc.pDistance(startPos, endPos)
           sender.setScale(lastScale)
-          onPress(button)
+          if (distance < 10) {
+            onPress(button)
+          }
         }
       })
     }
