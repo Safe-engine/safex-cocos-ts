@@ -3,6 +3,10 @@ import { EnhancedComponent } from './EnhancedComponent'
 import { NodeComp } from './NodeComp'
 
 export class ComponentX<Props = object, C extends cc.Node = cc.Node> extends EnhancedComponent<Props, NodeComp<C>> {
+  getRenderNode(): C {
+    return this.node.instance
+  }
+
   render?(): this
 }
 
