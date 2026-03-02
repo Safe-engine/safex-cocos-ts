@@ -107,6 +107,10 @@ export class GraphicsRender extends ComponentX<GraphicsRenderProps & BaseCompone
   //   this.node.instance.fill(color)
   // }
 
+  visit() {
+    this.node.instance.visit()
+  }
+
   clear() {
     if (this.node.instance instanceof cc.DrawNode) {
       this.node.instance.clear()
