@@ -133,6 +133,11 @@ export function Color4B(r: number, g: number, b: number, a: number) {
 }
 export type Color4B = ReturnType<typeof Color4B>
 
+export function Color4F(r: number, g: number, b: number, a: number) {
+  return cc.color(r * 255, g * 255, b * 255, a * 255)
+}
+export type Color4F = ReturnType<typeof Color4F>
+
 class _Size {
   width: number
   height: number
@@ -165,4 +170,11 @@ export class Touch extends cc.Touch {
 
 export function getWinSize(): Size {
   return cc.director.getWinSize()
+}
+
+export class BlendFunc {
+  static ADDITIVE = { src: cc.SRC_ALPHA, dst: cc.ONE }
+  static DISABLE = { src: cc.ONE, dst: cc.ZERO }
+  static ALPHA_NON_PREMULTIPLIED = { src: cc.SRC_ALPHA, dst: cc.ONE_MINUS_SRC_ALPHA }
+  static ALPHA_PREMULTIPLIED = { src: cc.ONE, dst: cc.ONE_MINUS_SRC_ALPHA }
 }
