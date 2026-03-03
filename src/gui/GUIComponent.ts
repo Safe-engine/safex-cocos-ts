@@ -95,6 +95,7 @@ interface ScrollViewProps {
   direction?: ScrollViewDirection
   isScrollToTop?: boolean
   isBounced?: boolean
+  onScroll?: (offset: Vec2) => void
 }
 export class ScrollViewComp extends ComponentX<ScrollViewProps & BaseComponentProps<ScrollViewComp>, ccui.ScrollView> {
   zoom(scale: number) {
