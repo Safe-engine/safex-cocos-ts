@@ -102,7 +102,7 @@ export type Vec2 = _Vec2
 export function Vec2(x?: number | object, y?: number): Vec2 {
   return new _Vec2(x, y)
 }
-Vec2.ZERO = Vec2.ZERO = Object.freeze(Vec2(0, 0))
+Vec2.ZERO = Object.freeze(Vec2(0, 0))
 
 export enum SpriteType {
   SIMPLE,
