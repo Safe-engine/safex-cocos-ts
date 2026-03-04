@@ -83,7 +83,7 @@ export class GUISystem implements System {
 
   private onAddScrollViewComp: EventReceiveCallback<ScrollViewComp> = ({ entity, component: scrollView }) => {
     const { viewSize, contentSize, isScrollToTop, isBounced, direction = cc.SCROLLVIEW_DIRECTION_VERTICAL, onScroll } = scrollView.props
-    const node: any = new ccui.ScrollView()
+    const node = new ccui.ScrollView()
     node.setContentSize(viewSize)
     node.setInnerContainerSize(contentSize)
     node.setDirection(direction as number)
@@ -91,10 +91,10 @@ export class GUISystem implements System {
     // node.setTouchEnabled(false)
     node.setBounceEnabled(isBounced !== undefined)
     if (onScroll) {
-      node.addEventListener((target, event) => {
+      node.addEventListener((target: ccui.ScrollView, event: number) => {
         // console.log('ScrollView event', event, target)
-        if ((ccui.ScrollView as any).EVENT_CONTAINER_MOVED === event) {
-          const offset = target.getInnerContainerPosition()
+        if (ccui.ScrollView.EVENT_CONTAINER_MOVED === event) {
+          const offset = Vec2(target.getInnerContainerPosition())
           onScroll(offset)
         }
       })
