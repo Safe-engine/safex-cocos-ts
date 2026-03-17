@@ -7,7 +7,7 @@ export class ComponentX<Props = object, C extends cc.Node = cc.Node> extends Enh
     return this.node.instance
   }
 
-  render?(): this
+  render?()
 }
 
 export function render() {
